@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartments</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+    <h1>Rental App</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/apartments.html">Apartments</a>
+        <a href="/bookings.html">Bookings</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Apartments</h2>
+
+    <div class="search-form">
+        <h3>Search Apartments</h3>
+        <form id="searchForm">
+            <input type="text" id="location" placeholder="Location">
+            <input type="number" id="minPrice" placeholder="Min Price">
+            <input type="number" id="maxPrice" placeholder="Max Price">
+            <input type="number" id="bedrooms" placeholder="Bedrooms">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="create-form">
+        <h3>Add New Apartment</h3>
+        <form id="apartmentForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <textarea id="description" placeholder="Description" required></textarea>
+            <input type="text" id="apartmentLocation" placeholder="Location" required>
+            <input type="number" id="price" placeholder="Price per night" required>
+            <input type="number" id="bedroomsCount" placeholder="Bedrooms" required>
+            <input type="number" id="bathrooms" placeholder="Bathrooms" required>
+            <input type="text" id="amenities" placeholder="Amenities (comma separated)">
+            <label>
+                <input type="checkbox" id="isAvailable" checked> Available
+            </label>
+            <button type="submit">Create Apartment</button>
+        </form>
+    </div>
+
+    <div id="apartmentsList">
+        <!-- Apartments will be loaded here -->
+    </div>
+</main>
+
+<script src="/script.js"></script>
+</body>
+</html> 
