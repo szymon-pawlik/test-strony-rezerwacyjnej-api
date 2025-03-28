@@ -5,7 +5,6 @@ public record Apartment(
     string Name,
     string Description,
     string Location,
-    double PricePerNight,
     int NumberOfBedrooms,
     int NumberOfBathrooms,
     List<string> Amenities,
