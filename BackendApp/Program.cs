@@ -31,6 +31,7 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddValidatorsFromAssemblyContaining<ApartmentValidator>();
 
@@ -65,9 +66,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddHttpClient("ReviewServiceClient", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5007/api/");
+    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+});
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AuthenticatedUserPolicy", policy => policy.RequireAuthenticatedUser());
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole(BackendApp.Models.UserRoles.Admin)); // Upewnij się, że ta polityka jest
+    // options.AddPolicy("UserPolicy", policy => policy.RequireRole(BackendApp.Models.UserRoles.User)); // Ta też może być przydatna
 });
 
 builder.Services
@@ -114,6 +123,42 @@ var api = app.MapGroup("/api");
 
 api.MapGet("/test", () => "API group test OK");
 
+api.MapPost("/users/register", async (RegisterUserDto registerDto, IUserService userService, IValidator<RegisterUserDto> validator) =>
+{
+    if (registerDto.Password != registerDto.ConfirmPassword)
+    {
+        // Ten błąd można by też zwrócić w bardziej strukturalny sposób, np. przez listę błędów
+        return Results.BadRequest(new { Message = "Passwords do not match." });
+    }
+
+    var (user, errorMessage) = await userService.RegisterUserAsync(registerDto);
+
+    if (user == null || !string.IsNullOrEmpty(errorMessage))
+    {
+        // Zwróć błąd, jeśli rejestracja się nie powiodła
+        // Możemy rozróżnić typy błędów, np. 409 Conflict dla zajętego emaila
+        if (errorMessage == "Email already exists.")
+        {
+            return Results.Conflict(new { Message = errorMessage }); // HTTP 409
+        }
+        return Results.BadRequest(new { Message = errorMessage ?? "Registration failed." }); // HTTP 400
+    }
+
+    // Sukces - zwracamy dane nowo utworzonego użytkownika (bez hasła!)
+    // Możesz stworzyć UserDto, aby nie zwracać całego obiektu User z PasswordHash
+    var userResponse = new 
+    {
+        user.Id,
+        user.Name,
+        user.Email
+    };
+    // Zwracamy 201 Created z lokalizacją (opcjonalnie) i obiektem użytkownika
+    return Results.Created($"/api/users/{user.Id}", userResponse);
+})
+.WithName("RegisterUser")
+.WithOpenApi()
+.AllowAnonymous();
+
 api.MapPost("/users/login", async (LoginRequestDto loginRequest, ITokenService tokenService, AppDbContext dbContext, ILogger<Program> logger) =>
 {
     logger.LogInformation("Login attempt for email: {Email} with received password: {Password}", loginRequest.Email, loginRequest.Password);
@@ -143,11 +188,12 @@ api.MapGet("/apartments/{id}", async (Guid id, IApartmentService apartmentServic
     return apartment is not null ? Results.Ok(apartment) : Results.NotFound();
 })
 .WithName("GetApartmentById")
-.WithOpenApi();
+.WithOpenApi()
+.RequireAuthorization();
 
 
 api.MapPost("/apartments", async (ApartmentDTO apartmentDto, IApartmentService apartmentService, IValidator<ApartmentDTO> validator) =>
-{
+    {
     var validationResult = await validator.ValidateAsync(apartmentDto);
     if (!validationResult.IsValid)
     {
@@ -169,7 +215,7 @@ api.MapPost("/apartments", async (ApartmentDTO apartmentDto, IApartmentService a
 })
 .WithName("CreateApartment")
 .WithOpenApi()
-.RequireAuthorization();
+.RequireAuthorization("AdminPolicy"); 
 
 
 api.MapPost("/bookings", async (BookingDTO bookingDto, IBookingService bookingService, IValidator<BookingDTO> validator, ClaimsPrincipal claimsPrincipal) =>

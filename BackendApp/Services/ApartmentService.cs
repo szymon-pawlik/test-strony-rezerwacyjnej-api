@@ -1,6 +1,7 @@
 ﻿using BackendApp.Data;
 using BackendApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging; // Dodaj ten using
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,48 +11,55 @@ namespace BackendApp.Services
     public class ApartmentService : IApartmentService
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<ApartmentService> _logger; // Dodane pole loggera
 
-        public ApartmentService(AppDbContext context)
+        // Zmodyfikowany konstruktor do wstrzyknięcia ILogger
+        public ApartmentService(AppDbContext context, ILogger<ApartmentService> logger)
         {
             _context = context;
+            _logger = logger; // Przypisanie loggera
         }
 
         public async Task<Apartment?> GetApartmentByIdAsync(Guid id)
         {
-            return await _context.Apartments.FindAsync(id);
+            _logger.LogInformation("[ApartmentService] Attempting to fetch apartment with ID: {ApartmentId}", id);
+            var apartment = await _context.Apartments.FindAsync(id);
+            if (apartment == null)
+            {
+                _logger.LogWarning("[ApartmentService] Apartment with ID {ApartmentId} NOT FOUND in BackendApp's database.", id);
+            }
+            else
+            {
+                _logger.LogInformation("[ApartmentService] Apartment with ID {ApartmentId} FOUND: {ApartmentName}", id, apartment.Name);
+            }
+            return apartment;
         }
 
         public async Task<IEnumerable<Apartment>> GetAllApartmentsAsync()
         {
+            _logger.LogInformation("[ApartmentService] Fetching all apartments.");
             return await _context.Apartments.ToListAsync();
         }
 
         public async Task<Apartment> CreateApartmentAsync(Apartment apartment)
         {
+            _logger.LogInformation("[ApartmentService] Creating new apartment: {ApartmentName}", apartment.Name);
             _context.Apartments.Add(apartment);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("[ApartmentService] Apartment created with ID: {ApartmentId}", apartment.Id);
             return apartment;
         }
 
         public async Task<Apartment?> UpdateApartmentAsync(Guid id, Apartment apartment)
         {
+            _logger.LogInformation("[ApartmentService] Attempting to update apartment with ID: {ApartmentId}", id);
             var existingApartment = await _context.Apartments.FindAsync(id);
             if (existingApartment == null)
             {
+                _logger.LogWarning("[ApartmentService] Update failed. Apartment with ID {ApartmentId} NOT FOUND.", id);
                 return null;
             }
 
-            // Aktualizujemy wartości z 'apartment' do 'existingApartment'
-            // Używając 'with' expression dla rekordów, jeśli chcemy stworzyć nową instancję
-            // lub bezpośrednio modyfikując, jeśli EF Core śledzi zmiany.
-            // Dla uproszczenia i śledzenia przez EF Core, użyjemy SetValues.
-            // Upewnij się, że apartment.Id jest takie samo jak id, lub obsłuż to inaczej.
-            // Rekordy są niemutowalne, więc musimy stworzyć nowy lub użyć EF Core do śledzenia.
-            // _context.Entry(existingApartment).CurrentValues.SetValues(apartment);
-            // Powyższe może nie działać idealnie z rekordami init-only, jeśli EF Core nie jest skonfigurowany.
-
-            // Bezpieczniejsza metoda dla rekordów, jeśli nie chcemy polegać na SetValues
-            // lub jeśli niektóre pola nie powinny być kopiowane (np. ID)
             var updatedApartment = existingApartment with
             {
                 Name = apartment.Name,
@@ -59,24 +67,23 @@ namespace BackendApp.Services
                 Location = apartment.Location,
                 NumberOfBedrooms = apartment.NumberOfBedrooms,
                 NumberOfBathrooms = apartment.NumberOfBathrooms,
-                Amenities = apartment.Amenities, // Uwaga: to przypisuje referencję listy
+                Amenities = apartment.Amenities,
                 IsAvailable = apartment.IsAvailable,
                 PricePerNight = apartment.PricePerNight
             };
-            // Jeśli EF Core nie śledzi 'updatedApartment' jako tej samej encji co 'existingApartment',
-            // może być potrzebne bardziej zaawansowane podejście.
-            // Najprościej:
-            _context.Entry(existingApartment).State = EntityState.Detached; // Przestań śledzić stary
-            updatedApartment = updatedApartment with { Id = id }; // Upewnij się, że ID jest poprawne
-            _context.Apartments.Update(updatedApartment); // Zacznij śledzić nowy jako zaktualizowany
-
+            
+            _context.Entry(existingApartment).State = EntityState.Detached;
+            updatedApartment = updatedApartment with { Id = id };
+            _context.Apartments.Update(updatedApartment);
 
             try
             {
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("[ApartmentService] Apartment with ID {ApartmentId} updated successfully.", id);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                _logger.LogError(ex, "[ApartmentService] Concurrency exception while updating apartment ID {ApartmentId}.", id);
                 if (!await _context.Apartments.AnyAsync(e => e.Id == id))
                 {
                     return null;
@@ -86,22 +93,27 @@ namespace BackendApp.Services
                     throw;
                 }
             }
-            return updatedApartment; // Zwracamy zaktualizowany rekord
+            return updatedApartment;
         }
 
         public async Task<bool> DeleteApartmentAsync(Guid id)
         {
+            _logger.LogInformation("[ApartmentService] Attempting to delete apartment with ID: {ApartmentId}", id);
             var apartment = await _context.Apartments.FindAsync(id);
             if (apartment == null)
             {
+                _logger.LogWarning("[ApartmentService] Delete failed. Apartment with ID {ApartmentId} NOT FOUND.", id);
                 return false;
             }
 
             _context.Apartments.Remove(apartment);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("[ApartmentService] Apartment with ID {ApartmentId} deleted successfully.", id);
             return true;
         }
 
+        // Synchroniczne metody - pozostawiam bez logowania dla zwięzłości,
+        // ale w razie potrzeby można dodać analogicznie
         public IEnumerable<Apartment> GetAllApartments()
         {
             return _context.Apartments.ToList();

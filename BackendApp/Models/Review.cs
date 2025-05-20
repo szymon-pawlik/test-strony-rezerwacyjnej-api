@@ -1,4 +1,5 @@
-﻿using System; // Upewnij się, że ten using jest obecny
+﻿// W BackendApp/Models/Review.cs
+using System;
 
 namespace BackendApp.Models
 {
@@ -10,7 +11,17 @@ namespace BackendApp.Models
         string Comment,
         DateTime ReviewDate)
     {
-        public Apartment? Apartment { get; set; } 
-        public User? User { get; set; }       
+        public Review() : this(
+            Guid.Empty,       
+            Guid.Empty,       
+            Guid.Empty,       
+            0,                
+            string.Empty,     
+            DateTime.MinValue) 
+        {
+        }
+
+        public Apartment? Apartment { get; set; }
+        public User? User { get; set; }
     }
 }

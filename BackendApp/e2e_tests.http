@@ -1,0 +1,39 @@
+### Krok 1: Zaloguj się do BackendApp (np. na porcie 5235)
+# @name loginUserInBackendApp
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+### Krok 2: Przechwyć token z odpowiedzi
+# Ta linia jest specyficzna dla Ridera/IntelliJ i musi być zaraz po żądaniu, z którego pobiera
+@userAuthToken = {{loginUserInBackendApp.response.body.token}}
+
+### Krok 3: Wykonaj mutację addReview w BackendApp (GraphQL na porcie 5235)
+# Ta mutacja powinna wewnętrznie wywołać ReviewServiceApp (np. na porcie 5007)
+# używając przechwyconego tokenu.
+POST http://localhost:5235/graphql
+Content-Type: application/json
+Authorization: Bearer {{userAuthToken}} # Używamy przechwyconego tokenu
+
+{
+  "query": "mutation DodajRecenzjePrzezGraphQL ($input: AddReviewInput!) { addReview(input: $input) { review { id comment rating reviewDate user { id name } apartment { id name } } errors { message code } } }",
+  "variables": {
+    "input": {
+      "apartmentId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "rating": 4,
+      "comment": "Test recenzji przez GraphQL -> BackendApp -> ReviewServiceApp z tokenem!"
+    }
+  }
+}
+
+### Krok 4 (Opcjonalnie): Sprawdź recenzje dla mieszkania bezpośrednio w ReviewServiceApp
+# Możesz to zrobić, aby potwierdzić, że recenzja została dodana.
+# Ten endpoint w ReviewServiceApp może nie wymagać tokenu (jeśli jest publiczny).
+GET http://localhost:5007/api/reviews/apartment/f47ac10b-58cc-4372-a567-0e02b2c3d479
+Accept: application/json
+
+###

@@ -1,0 +1,22 @@
+### Krok 1: Zaloguj się do BackendApp, aby uzyskać token
+# @name loginToBackendApp
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+### Create a new Review in ReviewServiceApp (MANUAL TOKEN)
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI3ZGY0ZmU4NS0wNzE0LTQ1NTEtOWVmZC1jN2IwNzk3ZWRmNzQiLCJuYmYiOjE3NDc3NjI0NzAsImV4cCI6MTc0Nzc2NjA3MCwiaWF0IjoxNzQ3NzYyNDcwLCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.9GrEu23QJWxq9fYT7hh6_ar4V8JfwcBLJfyt4dpQwHI
+
+{
+  "apartmentId": "F47AC10B-58CC-4372-A567-0E02B2C3D479",
+  "rating": 3,
+  "comment": "shitty with manual token"
+}
+
+###

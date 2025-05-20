@@ -42,7 +42,9 @@ namespace BackendApp.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Standardowy claim dla ID użytkownika
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Name, user.Name),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unikalny identyfikator tokenu
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unikalny identyfikator tokenu
+                new Claim(ClaimTypes.Role, user.Role)
+                
                 // Możesz dodać więcej claims, np. role użytkownika
                 // new Claim(ClaimTypes.Role, "Admin"),
                 // new Claim(ClaimTypes.Role, "User"),

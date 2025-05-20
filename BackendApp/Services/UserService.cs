@@ -1,65 +1,142 @@
 using BackendApp.Data;
 using BackendApp.Models;
-using BackendApp.GraphQL.Mutations.Inputs; // Dodaj ten using
-using Microsoft.EntityFrameworkCore; // Dla AnyAsync, jeśli będziesz sprawdzał unikalność emaila
+using BackendApp.GraphQL.Mutations.Inputs;
+using BackendApp.DTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
-// using System.Linq; // Jeśli będziesz używał Linq np. do sprawdzania unikalności emaila
+using Microsoft.Extensions.Logging;
 
 namespace BackendApp.Services
 {
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(AppDbContext context)
+        public UserService(AppDbContext context, ILogger<UserService> logger)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<User?> GetUserByIdAsync(Guid id)
         {
-            return await _context.Users.FindAsync(id);
+            _logger.LogInformation("[UserService] Attempting to fetch user with ID: {UserId}", id);
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                _logger.LogWarning("[UserService] User with ID {UserId} NOT FOUND.", id);
+            }
+            else
+            {
+                _logger.LogInformation("[UserService] User with ID {UserId} FOUND: {UserName}", id, user.Name);
+            }
+            return user;
         }
 
-        // --- NOWA METODA ---
-        public async Task<User?> UpdateUserProfileAsync(Guid userId, UpdateUserProfileInput input)
+        public async Task<(User? User, string? ErrorMessage)> UpdateUserProfileAsync(Guid userId, UpdateUserProfileInput input)
         {
+            _logger.LogInformation("[UserService] Attempting to update profile for UserID: {UserId}", userId);
             var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
             {
-                return null; // Użytkownik nie znaleziony
+                _logger.LogWarning("[UserService] Update failed. User with ID {UserId} NOT FOUND.", userId);
+                return (null, "User not found.");
             }
 
             bool changed = false;
 
-            // Aktualizuj tylko te pola, które zostały przekazane w inpucie
-            if (input.Name.HasValue)
+            if (input.Name.HasValue && user.Name != input.Name.Value)
             {
                 user = user with { Name = input.Name.Value };
                 changed = true;
+                _logger.LogInformation("[UserService] Name updated for UserID: {UserId}", userId);
             }
 
-            if (input.Email.HasValue)
+            if (input.Email.HasValue && user.Email != input.Email.Value)
             {
-                
-                // np. if (await _context.Users.AnyAsync(u => u.Email == input.Email.Value && u.Id != userId))
-                //     { throw new ApplicationException("Email already taken."); } // Lub zwróć błąd w inny sposób
-                user = user with { Email = input.Email.Value };
-                changed = true;
-            }
+                var newEmail = input.Email.Value;
+                _logger.LogInformation("[UserService] UserID: {UserId} attempting to update email to {NewEmail}", userId, newEmail);
 
-            // Dodaj aktualizację innych pól z UpdateUserProfileInput, jeśli je zdefiniowałeś
-            // np. if (input.Bio.HasValue) { user = user with { Bio = input.Bio.Value }; changed = true; }
+                var emailExists = await _context.Users.AnyAsync(u => u.Email == newEmail && u.Id != userId);
+                if (emailExists)
+                {
+                    _logger.LogWarning("[UserService] Email update failed for UserID: {UserId}. Email {NewEmail} is already taken.", userId, newEmail);
+                    return (null, "Email already taken."); // Zwracamy błąd
+                }
+                user = user with { Email = newEmail };
+                changed = true;
+                _logger.LogInformation("[UserService] Email updated for UserID: {UserId} to {NewEmail}", userId, newEmail);
+            }
 
             if (changed)
             {
-                _context.Users.Update(user); // EF Core śledzi zmiany dla rekordów
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("[UserService] Profile updated successfully for UserID: {UserId}", userId);
+                    return (user, null); // Sukces, zwracamy zaktualizowanego użytkownika
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                     _logger.LogError(ex, "[UserService] Concurrency exception while updating profile for UserID {UserId}.", userId);
+                    return (null, "A concurrency error occurred while updating the profile.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "[UserService] Error updating profile for UserID {UserId}.", userId);
+                    return (null, "An error occurred while updating the profile.");
+                }
+            }
+            else
+            {
+                _logger.LogInformation("[UserService] No changes detected for profile update for UserID: {UserId}. Returning original user.", userId);
+                return (user, null); // Brak zmian, zwracamy oryginalnego użytkownika (lub można by zwrócić błąd "no changes")
+            }
+        }
+
+        public async Task<(User? User, string? ErrorMessage)> RegisterUserAsync(RegisterUserDto registerDto)
+        {
+            _logger.LogInformation("[UserService] Attempting to register user with email: {Email}", registerDto.Email);
+
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == registerDto.Email);
+            if (existingUser != null)
+            {
+                _logger.LogWarning("[UserService] Registration failed: Email {Email} already exists.", registerDto.Email);
+                return (null, "Email already exists.");
             }
 
-            return user;
+            if (registerDto.Password != registerDto.ConfirmPassword)
+            {
+                _logger.LogWarning("[UserService] Registration failed: Passwords do not match for email: {Email}", registerDto.Email);
+                return (null, "Passwords do not match.");
+            }
+
+            var hashedPassword = PasswordHasher.HashPassword(registerDto.Password);
+
+            var newUser = new User(
+                Guid.NewGuid(),
+                registerDto.Name,
+                registerDto.Email,
+                hashedPassword,
+                Models.UserRoles.User
+            );
+
+            try
+            {
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("[UserService] User registered successfully with ID: {UserId} and Email: {Email}, Role: {Role}", newUser.Id, newUser.Email, newUser.Role);
+                return (newUser, null);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[UserService] Error occurred while saving new user with email: {Email}", registerDto.Email);
+                return (null, "An error occurred during registration.");
+            }
         }
     }
 }

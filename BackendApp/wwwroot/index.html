@@ -1,26 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rental App</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title>Frontend dla BackendApp</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
-    <h1>Rental App</h1>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/apartments.html">Apartments</a>
-        <a href="/bookings.html">Bookings</a>
-    </nav>
+    <h1>Platforma Rezerwacyjna (Test API)</h1>
 </header>
 
 <main>
-    <h2>Welcome to our Rental App</h2>
-    <p>Find your perfect apartment today!</p>
+    <div id="loginSectionContainer" class="container"> <h2>Logowanie (REST API)</h2>
+        <div>
+            <label for="loginEmail">Email:</label><br>
+            <input type="email" id="loginEmail" value="jan.kowalski@example.com"><br>
+            <label for="loginPassword">Hasło:</label><br>
+            <input type="password" id="loginPassword" value="PasswordJan123!"><br>
+            <button id="loginButton" onclick="loginUser()">Zaloguj</button> </div>
+        <h3>Odpowiedź Logowania (JSON):</h3>
+        <pre id="loginResponseRaw">Tutaj pojawi się surowa odpowiedź logowania...</pre>
+    </div>
+    <div class="container" id="authStatusContainer">
+        <p>Status: <strong id="loginStatus">Niezalogowany</strong></p>
+        <p>Rola: <strong id="userRoleDisplay">-</strong></p> <button id="logoutButton" onclick="logoutUser()" class="hidden-section action-button-secondary">Wyloguj</button>
+    </div>
+
+
+    <div id="registerSection" class="container"> <h2>Rejestracja Użytkownika (REST API)</h2>
+        <form id="registerForm">
+            <div>
+                <label for="registerName">Imię/Nazwa:</label><br>
+                <input type="text" id="registerName" required><br>
+            </div>
+            <div>
+                <label for="registerEmail">Email:</label><br>
+                <input type="email" id="registerEmail" required><br>
+            </div>
+            <div>
+                <label for="registerPassword">Hasło (min. 6 znaków):</label><br>
+                <input type="password" id="registerPassword" required><br>
+            </div>
+            <div>
+                <label for="registerConfirmPassword">Potwierdź Hasło:</label><br>
+                <input type="password" id="registerConfirmPassword" required><br>
+            </div>
+            <button type="button" onclick="submitRegistration()">Zarejestruj</button>
+        </form>
+        <h3>Odpowiedź - Rejestracja:</h3>
+        <pre id="registerResponse">Tutaj pojawi się odpowiedź rejestracji...</pre>
+    </div>
+
+    <div id="addApartmentSection" class="container hidden-section">
+        <h2>Dodaj Nowe Mieszkanie (GraphQL - Admin)</h2>
+        <form id="addApartmentForm">
+            <div>
+                <label for="apartmentName">Nazwa Mieszkania:</label><br>
+                <input type="text" id="apartmentName" required><br>
+            </div>
+            <div>
+                <label for="apartmentDescription">Opis:</label><br>
+                <textarea id="apartmentDescription" rows="3" required></textarea><br>
+            </div>
+            <div>
+                <label for="apartmentLocation">Lokalizacja:</label><br>
+                <input type="text" id="apartmentLocation" required><br>
+            </div>
+            <div>
+                <label for="apartmentBedrooms">Liczba Sypialni:</label><br>
+                <input type="number" id="apartmentBedrooms" min="0" value="1" required><br>
+            </div>
+            <div>
+                <label for="apartmentBathrooms">Liczba Łazienek:</label><br>
+                <input type="number" id="apartmentBathrooms" min="0" value="1" required><br>
+            </div>
+            <div>
+                <label for="apartmentAmenities">Udogodnienia (oddzielone przecinkami):</label><br>
+                <input type="text" id="apartmentAmenities" value="WiFi,Kuchnia,TV"><br>
+            </div>
+            <div>
+                <label for="apartmentIsAvailable">Dostępne:</label><br>
+                <input type="checkbox" id="apartmentIsAvailable" checked><br>
+            </div>
+            <div>
+                <label for="apartmentPrice">Cena za Noc:</label><br>
+                <input type="number" id="apartmentPrice" step="0.01" min="0" value="100" required><br>
+            </div>
+            <button type="button" onclick="submitNewApartment()">Dodaj Mieszkanie</button>
+        </form>
+        <h3>Odpowiedź - Dodawanie Mieszkania:</h3>
+        <pre id="addApartmentResponse">Tutaj pojawi się odpowiedź dodawania mieszkania...</pre>
+    </div>
+
+    <div id="addReviewSection" class="container hidden-section">
+        <h2>Dodaj Recenzję (GraphQL)</h2>
+        <form id="addReviewForm">
+            <div>
+                <label for="reviewApartmentSelect">Wybierz Mieszkanie:</label><br>
+                <select id="reviewApartmentSelect" required>
+                    <option value="">Ładowanie mieszkań...</option>
+                </select><br>
+            </div>
+            <div>
+                <label for="reviewRating">Ocena (1-5):</label><br>
+                <input type="number" id="reviewRating" min="1" max="5" value="5" required><br>
+            </div>
+            <div>
+                <label for="reviewComment">Komentarz:</label><br>
+                <textarea id="reviewComment" rows="3">To jest świetne mieszkanie z frontendu!</textarea><br>
+            </div>
+            <button type="button" onclick="submitReview()">Dodaj Recenzję</button>
+        </form>
+        <h3>Odpowiedź - Dodawanie Recenzji:</h3>
+        <pre id="addReviewResponse">Tutaj pojawi się odpowiedź dodawania recenzji...</pre>
+    </div>
+
+    <div id="myProfileSection" class="container hidden-section">
+        <h2>Mój Profil (GraphQL)</h2>
+        <button onclick="fetchMyProfile()">Pobierz Mój Profil</button>
+        <div id="myProfileFormatted"></div>
+        <h3>Odpowiedź - Mój Profil (JSON):</h3>
+        <pre id="myProfileResponseRaw">Tutaj pojawi się surowy profil użytkownika...</pre>
+    </div>
+
+    <div class="container">
+        <h2>Lista Mieszkań (GraphQL)</h2>
+        <button onclick="fetchApartments()">Pobierz Mieszkania</button>
+        <div id="apartmentsListFormatted">
+        </div>
+        <h3>Odpowiedź - Mieszkania (JSON):</h3>
+        <pre id="apartmentsResponseRaw">Tutaj pojawi się surowa lista mieszkań...</pre>
+    </div>
 </main>
 
-<script src="/script.js"></script>
+<footer>
+    <p>&copy; 2025 Platforma Rezerwacyjna</p>
+</footer>
+
+<script src="scripts.js"></script>
 </body>
-</html> 
+</html>

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendApp", "BackendApp\BackendApp.csproj", "{49E24A8B-310F-4F0F-A1E7-9F4C7FFED1C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewServiceApp", "ReviewServiceApp\ReviewServiceApp.csproj", "{B63AF9E8-3F8A-4DA5-8BD8-C14240711051}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{49E24A8B-310F-4F0F-A1E7-9F4C7FFED1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49E24A8B-310F-4F0F-A1E7-9F4C7FFED1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49E24A8B-310F-4F0F-A1E7-9F4C7FFED1C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B63AF9E8-3F8A-4DA5-8BD8-C14240711051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B63AF9E8-3F8A-4DA5-8BD8-C14240711051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B63AF9E8-3F8A-4DA5-8BD8-C14240711051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B63AF9E8-3F8A-4DA5-8BD8-C14240711051}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

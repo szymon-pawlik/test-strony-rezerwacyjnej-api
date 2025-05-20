@@ -1,5 +1,6 @@
 using BackendApp.Models;
-using BackendApp.GraphQL.Mutations.Inputs; // Dodaj ten using dla UpdateUserProfileInput
+using BackendApp.GraphQL.Mutations.Inputs; // Dla UpdateUserProfileInput
+using BackendApp.DTOs; // Dla RegisterUserDto
 using System;
 using System.Threading.Tasks;
 
@@ -8,9 +9,7 @@ namespace BackendApp.Services
     public interface IUserService
     {
         Task<User?> GetUserByIdAsync(Guid id);
-
-        // --- NOWA METODA ---
-        Task<User?> UpdateUserProfileAsync(Guid userId, UpdateUserProfileInput input);
-        // --- KONIEC NOWEJ METODY ---
+        Task<(User? User, string? ErrorMessage)> RegisterUserAsync(RegisterUserDto registerDto);
+        Task<(User? User, string? ErrorMessage)> UpdateUserProfileAsync(Guid userId, UpdateUserProfileInput input); // ZMIENIONA SYGNATURA
     }
 }

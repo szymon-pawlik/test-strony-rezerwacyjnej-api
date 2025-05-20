@@ -1,25 +1,39 @@
 using BackendApp.Models;
 using BackendApp.Services;
 using BackendApp.GraphQL.Mutations.Inputs;
-using BackendApp.GraphQL.Payloads; // Dodaj ten using dla UserPayload
+using BackendApp.GraphQL.Payloads;
 using HotChocolate;
 using HotChocolate.Types;
-using HotChocolate.AspNetCore.Authorization; // Dodaj ten using dla [Authorize]
+using HotChocolate.AspNetCore.Authorization;
 using System;
-using System.Security.Claims; // Dodaj ten using dla ClaimsPrincipal
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization; // Dodaj ten using dla List<UserError>
-
+using BackendApp.DTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendApp.GraphQL.Mutations
 {
     public class Mutation
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<Mutation> _logger;
+
+        public Mutation(IHttpContextAccessor httpContextAccessor, ILogger<Mutation> logger)
+        {
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        [Authorize(BackendApp.Models.UserRoles.Admin)]
         public async Task<Apartment> AddApartmentAsync(
             AddApartmentInput input,
             [Service] IApartmentService apartmentService)
         {
+            _logger.LogInformation("AddApartmentAsync: Mutation called by an authorized user.");
             var apartment = new Apartment(
                 Guid.NewGuid(),
                 input.Name,
@@ -34,10 +48,12 @@ namespace BackendApp.GraphQL.Mutations
             return await apartmentService.CreateApartmentAsync(apartment);
         }
 
+        [Authorize(BackendApp.Models.UserRoles.Admin)]
         public async Task<Apartment?> UpdateApartmentAsync(
             UpdateApartmentInput input,
             [Service] IApartmentService apartmentService)
         {
+            _logger.LogInformation("UpdateApartmentAsync: Mutation called by an authorized user for ApartmentId {ApartmentId}", input.Id);
             var existingApartment = await apartmentService.GetApartmentByIdAsync(input.Id);
             if (existingApartment == null) return null;
 
@@ -55,44 +71,80 @@ namespace BackendApp.GraphQL.Mutations
             return await apartmentService.UpdateApartmentAsync(input.Id, updated);
         }
 
+        [Authorize(BackendApp.Models.UserRoles.Admin)]
         public async Task<bool> DeleteApartmentAsync(
             Guid id,
             [Service] IApartmentService apartmentService)
         {
+             _logger.LogInformation("DeleteApartmentAsync: Mutation called by an authorized user for ApartmentId {ApartmentId}", id);
             return await apartmentService.DeleteApartmentAsync(id);
         }
 
-        public async Task<Booking> AddBookingAsync(
+        [Authorize]
+        public async Task<BookingPayload> AddBookingAsync(
             AddBookingInput input,
-            [Service] IBookingService bookingService)
+            [Service] IBookingService bookingService,
+            ClaimsPrincipal claimsPrincipal)
         {
+            var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
+            {
+                 return new BookingPayload(new BookingError("User not authenticated or token is invalid.", "AUTH_ERROR_ID"));
+            }
             var booking = new Booking(
                 Guid.NewGuid(),
                 input.ApartmentId,
-                input.UserId,
+                authenticatedUserId, 
                 input.CheckInDate,
                 input.CheckOutDate,
                 input.TotalPrice,
                 DateTime.UtcNow
             );
-            return await bookingService.CreateBookingAsync(booking);
+            var createdBooking =  await bookingService.CreateBookingAsync(booking);
+            if (createdBooking == null) {
+                return new BookingPayload(new BookingError("Failed to create booking.", "BOOKING_CREATION_FAILED"));
+            }
+            return new BookingPayload(createdBooking);
         }
 
-        public async Task<Review> AddReviewAsync(
+        [Authorize]
+        public async Task<ReviewPayload> AddReviewAsync(
             AddReviewInput input,
-            [Service] IReviewService reviewService)
+            [Service] IReviewService reviewService,
+            ClaimsPrincipal claimsPrincipal)
         {
-            var review = new Review(
-                Guid.NewGuid(),
+            _logger.LogInformation("AddReviewAsync: Resolver started. User authenticated: {IsAuth}", claimsPrincipal.Identity?.IsAuthenticated);
+            var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            _logger.LogInformation("AddReviewAsync: userIdString from claim '{ClaimTypeToFind}': '{UserIdStringFound}'", ClaimTypes.NameIdentifier, userIdString);
+
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
+            {
+                _logger.LogError("AddReviewAsync: Failed to get/parse authenticated user ID from claim '{ClaimTypeToFind}'. userIdString: '{UserIdString}'", ClaimTypes.NameIdentifier, userIdString);
+                return new ReviewPayload(new ReviewError("User not authenticated or token is invalid (cannot get user ID).", "AUTH_ERROR_ID"));
+            }
+
+            HttpContext? httpContext = _httpContextAccessor.HttpContext;
+            string? accessToken = httpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                _logger.LogWarning("AddReviewAsync: Access token is missing from HttpContext for microservice call.");
+                return new ReviewPayload(new ReviewError("Authorization token is missing for microservice call.", "AUTH_TOKEN_MISSING_INJECTED"));
+            }
+
+            var reviewDtoForBackendService = new CreateReviewDtoInBackendApp(
                 input.ApartmentId,
-                input.UserId,
                 input.Rating,
-                input.Comment,
-                DateTime.UtcNow
+                input.Comment
             );
-            return await reviewService.CreateReviewAsync(review);
+            var createdReview = await reviewService.CreateReviewAsync(reviewDtoForBackendService, accessToken);
+            if (createdReview == null)
+            {
+                return new ReviewPayload(new ReviewError("Failed to create review via microservice.", "REVIEW_CREATION_FAILED"));
+            }
+            return new ReviewPayload(createdReview);
         }
-        
+
         [Authorize]
         public async Task<UserPayload> UpdateUserProfileAsync(
             UpdateUserProfileInput input,
@@ -101,20 +153,39 @@ namespace BackendApp.GraphQL.Mutations
         {
             if (claimsPrincipal.Identity == null || !claimsPrincipal.Identity.IsAuthenticated)
             {
-                return new UserPayload(new UserError("User not authenticated.", "AUTH_NOT_AUTHENTICATED"));
+                return new UserPayload(new UserError("User not authenticated (identity missing).", "AUTH_ERROR_IDENTITY"));
             }
-
             var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
             {
-                return new UserPayload(new UserError("Invalid user identifier.", "AUTH_INVALID_USER_ID"));
+                return new UserPayload(new UserError("Invalid user identifier in token.", "AUTH_INVALID_ID"));
             }
 
-            var updatedUser = await userService.UpdateUserProfileAsync(userId, input);
+            var (updatedUser, errorMessage) = await userService.UpdateUserProfileAsync(userId, input);
 
-            if (updatedUser == null)
+            if (!string.IsNullOrEmpty(errorMessage))
             {
-                return new UserPayload(new UserError("User not found or update failed.", "USER_UPDATE_FAILED"));
+                // Możesz chcieć bardziej specyficznych kodów błędów na podstawie komunikatu
+                string errorCode = "UPDATE_PROFILE_ERROR";
+                if (errorMessage.Contains("Email already taken"))
+                {
+                    errorCode = "EMAIL_TAKEN";
+                }
+                else if (errorMessage.Contains("User not found"))
+                {
+                    errorCode = "USER_NOT_FOUND";
+                }
+                return new UserPayload(new UserError(errorMessage, errorCode));
+            }
+            
+            // updatedUser może być null, jeśli nie było zmian, a serwis tak to obsługuje.
+            // Jeśli UpdateUserProfileAsync zwraca (user, null) gdy nie było zmian,
+            // to poniższy warunek jest OK. Jeśli zwraca (null, null) gdy nie było zmian,
+            // to trzeba by to inaczej obsłużyć. Zakładamy, że zwraca (user, null)
+            // nawet jeśli nie było zmian, lub (updatedUserPoZmianach, null)
+            if (updatedUser == null) // Dodatkowe sprawdzenie, na wypadek gdyby serwis zwrócił null bez błędu
+            {
+                 return new UserPayload(new UserError("User not found or update failed.", "USER_UPDATE_FAILED"));
             }
 
             return new UserPayload(updatedUser);

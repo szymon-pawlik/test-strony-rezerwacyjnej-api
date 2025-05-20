@@ -3,12 +3,33 @@ POST http://localhost:5235/api/users/login
 Content-Type: application/json
 
 {
-  "email": "jan.kowalski@example.com",
-  "password": "PasswordJan123!"
+  "email": "avatar22321@gmail.com",
+  "password": "Admin123!"
 }
 
 ### Get All Apartments (z tokenem wklejonym bezpośrednio)
-GET http://localhost:5235/api/apartments
+POST http://localhost:5235/api/users/login
 Authorization: Bearer eyJhbGciOiJIUzI1NifdfsfsdfIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI0OTJhNjNmOS00OTAxLTRlYjItYjgzYi1iNDNlOTMzOTcwY2UiLCJuYmYiOjE3NDc3NTQ1MDYsImV4cCI6MTc0Nzc1ODEwNiwiaWF0IjoxNzQ3NzU0NTA2LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.in0ULhaPU08dtxtCh1gUydJW1Awmpth0rDKBknatZXw
-Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "avatar22321@gmail.com",
+  "password": "Admin123!"
+}
+###
+
+### Create a new Review in ReviewServiceApp (using token from BackendApp)
+# Wklej tutaj token uzyskany z BackendApp
+@authTokenFromBackendApp = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI2ZjQ0MjhiOS0wMGRjLTRmOTItODY5NC1iMmNlZTNlOThjYWIiLCJuYmYiOjE3NDc3NTY0NzcsImV4cCI6MTc0Nzc2MDA3NywiaWF0IjoxNzQ3NzU2NDc3LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.qCnTJNsY6mp2334E8ZF55FOdsp8mNwuD-em4awLG7y0
+
+POST http://localhost:5007/api/reviews # <-- Zwróć uwagę na PORT dla ReviewServiceApp
+Content-Type: application/json
+Authorization: Bearer {{authTokenFromBackendApp}}
+
+{
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "rating": 5,
+  "comment": "Testing protected endpoint in ReviewServiceApp with token from BackendApp"
+}
+
 ###
