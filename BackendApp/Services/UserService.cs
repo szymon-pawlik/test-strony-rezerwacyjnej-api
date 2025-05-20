@@ -43,7 +43,7 @@ namespace BackendApp.Services
 
             if (input.Email.HasValue)
             {
-                // TODO: Dodaj walidację unikalności emaila, jeśli jest wymagana
+                
                 // np. if (await _context.Users.AnyAsync(u => u.Email == input.Email.Value && u.Id != userId))
                 //     { throw new ApplicationException("Email already taken."); } // Lub zwróć błąd w inny sposób
                 user = user with { Email = input.Email.Value };
