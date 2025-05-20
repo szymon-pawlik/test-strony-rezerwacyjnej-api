@@ -1,0 +1,14 @@
+### Login User Test
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+### Get All Apartments (z tokenem wklejonym bezpośrednio)
+GET http://localhost:5235/api/apartments
+Authorization: Bearer eyJhbGciOiJIUzI1NifdfsfsdfIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI0OTJhNjNmOS00OTAxLTRlYjItYjgzYi1iNDNlOTMzOTcwY2UiLCJuYmYiOjE3NDc3NTQ1MDYsImV4cCI6MTc0Nzc1ODEwNiwiaWF0IjoxNzQ3NzU0NTA2LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.in0ULhaPU08dtxtCh1gUydJW1Awmpth0rDKBknatZXw
+Accept: application/json
+###

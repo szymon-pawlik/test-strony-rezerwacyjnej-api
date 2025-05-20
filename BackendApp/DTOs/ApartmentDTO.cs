@@ -7,4 +7,5 @@ public record ApartmentDTO(
     int NumberOfBedrooms,
     int NumberOfBathrooms,
     List<string> Amenities,
-    bool IsAvailable);
+    bool IsAvailable,
+    decimal PricePerNight); 

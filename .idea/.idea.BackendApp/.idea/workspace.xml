@@ -11,23 +11,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cc5fda0-ac0f-4d91-9a9b-e17a83355d0d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BackendApp/wwwroot/apartments.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/wwwroot/bookings.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/wwwroot/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/wwwroot/script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/wwwroot/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/DTOs/LoginRequestDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/ApartmentInputs.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/BookingInputs.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/ReviewInputs.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/UserInputs.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Mutation.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Payloads/UserPayloads.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Queries/Query.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ApartmentType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/BookingType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ReviewType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/UserType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/IApartmentService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/IBookingService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/IReviewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/IUserService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/PasswordHasher.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/TokenService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/Services/UserService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/requests.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/BackendApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/BackendApp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/BackendApp.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/ApartmentDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/ApartmentDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/BookingDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/BookingDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Data/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Migrations/20250328125352_InitialCreate.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Migrations/20250328125352_InitialCreate.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Migrations/AppDbContextModelSnapshot.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Models/Apartment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Apartment.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Models/Booking.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Booking.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Models/Review.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Review.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Properties/launchSettings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Services/ApartmentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/ApartmentService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Services/BookingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/BookingService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Validators/ApartmentValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Validators/ApartmentValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Validators/BookingValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Validators/BookingValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Services/ReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/ReviewService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,12 +66,17 @@
     &quot;assignee&quot;: &quot;szymon-pawlik&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/szymon-pawlik/BackendApp.git&quot;,
-    &quot;accountId&quot;: &quot;7126b494-eb3a-4363-8293-5ae550788322&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/szymon-pawlik/BackendApp.git",
+    "accountId": "6a86e50d-a984-451e-b5de-b1a22bfd5e50"
   }
-}</component>
+}]]></component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -64,30 +88,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.BackendApp: IIS Express.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.BackendApp: http.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;D:\\Users\\szymon.pawlik.WSEI\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;D:\\Users\\szymon.pawlik.WSEI\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
-      &quot;D:\\Users\\szymon.pawlik.WSEI\\AppData\\Local\\Symbols\\src&quot;
-    ]
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.BackendApp: IIS Express.executor": "Run",
+    ".NET Launch Settings Profile.BackendApp: http.executor": "Run",
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "HTTP Request.requests | Get All Apartments (z tokenem).executor": "Run",
+    "HTTP Request.requests | Login User Test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.BackendApp: http">
+    <configuration name="requests | Get All Apartments (z tokenem wklejonym bezpośrednio)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/BackendApp/requests.http" index="2" requestIdentifier="Get All Apartments (z tokenem wklejonym bezpośrednio)" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="requests | Get All Apartments (z tokenem)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/BackendApp/requests.http" index="2" requestIdentifier="Get All Apartments (z tokenem)" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="requests | Login User Test" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/BackendApp/requests.http" requestIdentifier="Login User Test" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <configuration name="BackendApp" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/BackendApp/BackendApp.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -148,6 +176,13 @@
         <option name="Build" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.requests | Get All Apartments (z tokenem wklejonym bezpośrednio)" />
+        <item itemvalue="HTTP Request.requests | Get All Apartments (z tokenem)" />
+        <item itemvalue="HTTP Request.requests | Login User Test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -159,13 +194,23 @@
       <updated>1742561342827</updated>
       <workItem from="1742561344643" duration="2705000" />
       <workItem from="1743165119066" duration="3663000" />
+      <workItem from="1747744331060" duration="10310000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="dotnet:Microsoft.Identity.Client" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="dotnet:Microsoft.EntityFrameworkCore.Abstractions" />
+    <option featureType="dependencySupport" implementationName="dotnet:Microsoft.EntityFrameworkCore.Relational" />
+    <option featureType="dependencySupport" implementationName="dotnet:Microsoft.EntityFrameworkCore" />
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
