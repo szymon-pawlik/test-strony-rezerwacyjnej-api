@@ -21,6 +21,28 @@ export interface GraphQLResponse<T> {
     data?: T;
     errors?: ApiError[]; // Używa zdefiniowanego ApiError
 }
+export interface ApartmentEdge { // Krawędź w połączeniu Relay
+    cursor: string;
+    node: Apartment;
+}
+
+export interface ApartmentsQueryData {
+    apartments: ApartmentsConnection; // Zamiast { nodes: Apartment[], totalCount: number }
+}
+
+export interface ApartmentsConnection { // Typ połączenia dla mieszkań
+    nodes?: Apartment[];          // Alternatywnie, jeśli nie używasz pełnej struktury krawędzi
+    edges?: ApartmentEdge[];      // Standardowo w Relay, krawędzie zawierają węzły i kursory
+    pageInfo: PageInfo;
+    totalCount: number;
+}
+
+export interface PageInfo {
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    startCursor?: string | null; // Kursor pierwszego elementu na stronie
+    endCursor?: string | null;   // Kursor ostatniego elementu na stronie
+}
 
 // --- Typy związane z Użytkownikiem i Autentykacją ---
 export interface DecodedJwtToken {
@@ -153,16 +175,24 @@ export interface Booking {
     };
 }
 
-export interface NewBookingRESTInput {
-    apartmentId: string; // UUID mieszkania (databaseId)
+export interface NewBookingRESTSuccessResponse { // Ten typ powinien odpowiadać BookingDto
+    id: string;
+    checkInDate: string; // Daty są zwykle stringami w formacie ISO
+    checkOutDate: string;
+    totalPrice: number;
+    bookingDate: string;
+    apartmentId: string;
+    apartmentName?: string | null;
+    userId: string;
+    userName?: string | null;
+    userEmail?: string | null;
+}
+
+export interface NewBookingRESTInput { // To jest odpowiednik CreateBookingDto
+    apartmentId: string;
     checkInDate: string;
     checkOutDate: string;
     totalPrice: number;
-}
-
-export interface NewBookingRESTSuccessResponse {
-    id: string; // UUID nowej rezerwacji (databaseId)
-    [key: string]: any;
 }
 
 export interface AllBookingsAdminQueryData {

@@ -117,63 +117,75 @@ namespace BackendApp.GraphQL.Mutations
 
         [Authorize]
         public async Task<ReviewPayload> AddReviewAsync(
-            AddReviewInput input,
-            [Service] IReviewService reviewService,
-            ClaimsPrincipal claimsPrincipal)
+        AddReviewInput input, // Twój typ wejściowy GraphQL
+        [Service] IReviewService reviewService, // ZMIANA: Używamy IReviewService
+        ClaimsPrincipal claimsPrincipal) // Do pobrania ID zalogowanego użytkownika
+    {
+        _logger.LogInformation("AddReviewAsync: Resolver started. User authenticated: {IsAuth}", claimsPrincipal.Identity?.IsAuthenticated);
+        var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        _logger.LogInformation("AddReviewAsync: userIdString from claim '{ClaimTypeToFind}': '{UserIdStringFound}'", ClaimTypes.NameIdentifier, userIdString);
+
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
         {
-            _logger.LogInformation("AddReviewAsync: Resolver started. User authenticated: {IsAuth}", claimsPrincipal.Identity?.IsAuthenticated);
-            var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            _logger.LogInformation("AddReviewAsync: userIdString from claim '{ClaimTypeToFind}': '{UserIdStringFound}'", ClaimTypes.NameIdentifier, userIdString);
-
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
-            {
-                _logger.LogError("AddReviewAsync: Failed to get/parse authenticated user ID from claim '{ClaimTypeToFind}'. userIdString: '{UserIdString}'", ClaimTypes.NameIdentifier, userIdString);
-                return new ReviewPayload(new ReviewError("User not authenticated or token is invalid (cannot get user ID).", "AUTH_ERROR_ID"));
-            }
-
-            HttpContext? httpContext = _httpContextAccessor.HttpContext;
-            string? accessToken = httpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                _logger.LogWarning("AddReviewAsync: Access token is missing from HttpContext for microservice call.");
-                return new ReviewPayload(new ReviewError("Authorization token is missing for microservice call.", "AUTH_TOKEN_MISSING_INJECTED"));
-            }
-
-            var reviewDtoForBackendService = new CreateReviewDtoInBackendApp(
-                input.ApartmentId,
-                input.Rating,
-                input.Comment
-            );
-            var createdReview = await reviewService.CreateReviewAsync(reviewDtoForBackendService, accessToken);
-            if (createdReview == null)
-            {
-                return new ReviewPayload(new ReviewError("Failed to create review via microservice.", "REVIEW_CREATION_FAILED"));
-            }
-            return new ReviewPayload(createdReview);
+            _logger.LogError("AddReviewAsync: Failed to get/parse authenticated user ID from claim '{ClaimTypeToFind}'. userIdString: '{UserIdString}'", ClaimTypes.NameIdentifier, userIdString);
+            return new ReviewPayload(new ReviewError("User not authenticated or token is invalid (cannot get user ID).", "AUTH_ERROR_ID"));
         }
-        
-        [Authorize(BackendApp.Models.UserRoles.Admin)]
-        public async Task<bool> DeleteReview(
-            [ID(nameof(Review))] Guid id, 
-            [Service] IReviewService reviewService
-        )
+
+        // Utwórz DTO dla serwisu (zakładając, że CreateReviewDto jest zdefiniowane w BackendApp.Services)
+        var reviewDto = new BackendApp.Services.CreateReviewDto(
+            ApartmentId: input.ApartmentId, // Zakładając, że AddReviewInput ma te pola
+            Rating: input.Rating,
+            Comment: input.Comment
+        );
+
+        _logger.LogInformation("AddReviewAsync: Calling reviewService.CreateReviewAsync for ApartmentId: {ApartmentId} by UserId: {UserId}",
+            reviewDto.ApartmentId, authenticatedUserId);
+
+        // Wywołaj metodę z serwisu IReviewService, przekazując ID użytkownika
+        Review? createdReview = await reviewService.CreateReviewAsync(reviewDto, authenticatedUserId);
+
+        if (createdReview == null)
         {
-            // Jeśli ClaimsPrincipal jest nadal potrzebny (np. do logowania kto usuwa):
-            var claimsPrincipal = _httpContextAccessor.HttpContext?.User; // Pobierz ClaimsPrincipal z HttpContext
-            var adminName = claimsPrincipal?.Identity?.Name ?? "Unknown Admin";
-            _logger.LogInformation("GraphQL Mutation DeleteReview called for decoded local ReviewId: {ReviewId} by Admin: {AdminName}", id, adminName);
-
-            string? adminAccessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-            if (string.IsNullOrEmpty(adminAccessToken))
-            {
-                _logger.LogWarning("DeleteReview: Admin access token is missing from HttpContext (this shouldn't happen if [Authorize] works).");
-                return false; 
-            }
-        
-            return await reviewService.DeleteReviewAsync(id, adminAccessToken);
+            _logger.LogWarning("AddReviewAsync: reviewService.CreateReviewAsync returned null for ApartmentId: {ApartmentId}", reviewDto.ApartmentId);
+            return new ReviewPayload(new ReviewError("Failed to create review.", "REVIEW_CREATION_FAILED"));
         }
+
+        _logger.LogInformation("AddReviewAsync: Review created successfully with ID: {ReviewId}", createdReview.Id);
+        return new ReviewPayload(createdReview);
+    }
+
+    // Użycie BackendApp.Models.UserRoles.Admin zakłada, że masz stałą lub enum UserRoles
+    // i że Twoja konfiguracja autoryzacji potrafi to zinterpretować.
+    // Standardowo dla HotChocolate byłoby to [Authorize(Roles = new[] { "Admin" })]
+    // lub [Authorize(Policy = "AdminPolicy")]
+    [Authorize(BackendApp.Models.UserRoles.Admin)]
+    public async Task<bool> DeleteReviewAsync(
+        [ID(nameof(Review))] Guid id,       // ID recenzji do usunięcia
+        [Service] IReviewService reviewService, // ZMIANA: Używamy IReviewService
+        ClaimsPrincipal claimsPrincipal)    // Do logowania i ewentualnej dodatkowej weryfikacji
+    {
+        var adminName = claimsPrincipal?.Identity?.Name ?? "Unknown Admin";
+        var adminId = claimsPrincipal?.FindFirstValue(ClaimTypes.NameIdentifier) ?? "Unknown Admin ID";
+
+        _logger.LogInformation(
+            "GraphQL Mutation DeleteReviewAsync called for ReviewId: {ReviewId} by Admin: {AdminName} (ID: {AdminId})",
+            id, adminName, adminId);
+
+        bool success = await reviewService.DeleteReviewAsync(id);
+
+        if (!success)
+        {
+            _logger.LogWarning("DeleteReviewAsync: reviewService.DeleteReviewAsync returned false for ReviewId: {ReviewId}", id);
+            // Możesz rzucić GraphQLRequestException, jeśli chcesz, aby błąd był bardziej widoczny w odpowiedzi GraphQL
+            // np. throw new HotChocolate.GraphQLRequestException(ErrorBuilder.New().SetMessage($"Failed to delete review with ID {id}. It might not exist.").SetCode("DELETE_FAILED").Build());
+        }
+        else
+        {
+            _logger.LogInformation("DeleteReviewAsync: Review with ID: {ReviewId} successfully deleted by service.", id);
+        }
+
+        return success;
+    }
         
         [Authorize(BackendApp.Models.UserRoles.Admin)]
         public async Task<bool> DeleteBooking(

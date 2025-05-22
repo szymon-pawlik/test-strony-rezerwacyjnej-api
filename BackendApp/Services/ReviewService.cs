@@ -1,246 +1,152 @@
-﻿using BackendApp.Models;
-using BackendApp.DTOs;
+﻿// Plik: BackendApp/Services/ReviewService.cs
+using BackendApp.Data;     // Dla AppDbContext
+using BackendApp.Models;   // Dla Review
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json; // Potrzebne dla JsonSerializerOptions i JsonSerializer
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace BackendApp.Services
 {
-    public class ReviewService : IReviewService
+    public class ReviewService : IReviewService // Implementuje IReviewService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly AppDbContext _context;
         private readonly ILogger<ReviewService> _logger;
-        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-        public ReviewService(IHttpClientFactory httpClientFactory, ILogger<ReviewService> logger)
+        public ReviewService(AppDbContext context, ILogger<ReviewService> logger)
         {
-            _httpClientFactory = httpClientFactory;
+            _context = context;
             _logger = logger;
-            _jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true // Ważne dla mapowania camelCase JSON na PascalCase C#
-            };
         }
 
         public async Task<IEnumerable<Review>> GetReviewsByApartmentIdAsync(Guid apartmentId)
         {
-            var httpClient = _httpClientFactory.CreateClient("ReviewServiceClient");
-            _logger.LogInformation("Fetching reviews for apartment {ApartmentId} from ReviewServiceApp", apartmentId);
+            _logger.LogInformation("Fetching reviews for apartment {ApartmentId} directly from AppDbContext", apartmentId);
             try
             {
-                var response = await httpClient.GetAsync($"reviews/apartment/{apartmentId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    _logger.LogInformation("Raw JSON response from ReviewServiceApp for ApartmentId {ApartmentId}: {JsonResponse}", apartmentId, responseString);
-
-                    try
-                    {
-                        var reviews = JsonSerializer.Deserialize<List<Review>>(responseString, _jsonSerializerOptions);
-                        if (reviews != null)
-                        {
-                            _logger.LogInformation("Successfully deserialized {Count} reviews for ApartmentId {ApartmentId}.", reviews.Count, apartmentId);
-                            foreach (var review in reviews)
-                            {
-                                _logger.LogInformation("Deserialized Review (for ApartmentId {AptId}) - ID: {ReviewId}, ApartmentId: {ReviewAptId}, UserId: {ReviewUserId}, Rating: {Rating}",
-                                    apartmentId, review.Id, review.ApartmentId, review.UserId, review.Rating);
-                            }
-                        }
-                        else
-                        {
-                            _logger.LogWarning("Deserialized reviews list is null for ApartmentId {ApartmentId}.", apartmentId);
-                        }
-                        return reviews ?? new List<Review>();
-                    }
-                    catch (JsonException jsonEx)
-                    {
-                        _logger.LogError(jsonEx, "JSON Deserialization failed for reviews for ApartmentId {ApartmentId}. Response: {JsonResponse}", apartmentId, responseString);
-                        return new List<Review>();
-                    }
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError("Failed to fetch reviews from ReviewServiceApp for apartment {ApartmentId}. Status: {StatusCode}, Response: {ErrorContent}", apartmentId, response.StatusCode, errorContent);
-                    return new List<Review>();
-                }
+                var reviews = await _context.Reviews
+                                            .Where(r => r.ApartmentId == apartmentId)
+                                            .OrderByDescending(r => r.ReviewDate)
+                                            .ToListAsync();
+                _logger.LogInformation("Successfully fetched {Count} reviews for ApartmentId {ApartmentId} from AppDbContext.",
+                    reviews?.Count ?? 0, apartmentId);
+                return reviews ?? new List<Review>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred while fetching reviews from ReviewServiceApp for apartment {ApartmentId}", apartmentId);
+                _logger.LogError(ex, "Exception occurred while fetching reviews from AppDbContext for apartment {ApartmentId}", apartmentId);
                 throw;
             }
         }
 
-        public async Task<Review?> CreateReviewAsync(CreateReviewDtoInBackendApp reviewDto, string? userToken)
+        public async Task<Review?> CreateReviewAsync(CreateReviewDto reviewDto, Guid authenticatedUserId)
         {
-            if (string.IsNullOrEmpty(userToken))
+            if (reviewDto == null)
             {
-                _logger.LogWarning("Cannot create review: userToken is missing for ReviewServiceApp call.");
+                _logger.LogWarning("CreateReviewAsync called with null reviewDto for user {UserId}.", authenticatedUserId);
+                throw new ArgumentNullException(nameof(reviewDto));
+            }
+            if (reviewDto.ApartmentId == Guid.Empty || reviewDto.Rating < 1 || reviewDto.Rating > 5)
+            {
+                _logger.LogWarning("Invalid review data. ApartmentId: {ApartmentId}, Rating: {Rating}, UserId: {UserId}",
+                    reviewDto.ApartmentId, reviewDto.Rating, authenticatedUserId);
                 return null;
             }
-            var httpClient = _httpClientFactory.CreateClient("ReviewServiceClient");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
-            _logger.LogInformation("Creating review via ReviewServiceApp for apartment {ApartmentId}", reviewDto.ApartmentId);
+            _logger.LogInformation("Attempting to create review in AppDbContext for apartment {ApartmentId} by user {UserId}",
+                reviewDto.ApartmentId, authenticatedUserId);
             try
             {
-                var serviceDto = new {
+                var apartmentExists = await _context.Apartments.AnyAsync(a => a.Id == reviewDto.ApartmentId);
+                if (!apartmentExists)
+                {
+                    _logger.LogWarning("Apartment with ID {ApartmentId} not found. Cannot create review for user {UserId}.",
+                        reviewDto.ApartmentId, authenticatedUserId);
+                    return null;
+                }
+                var review = new Review
+                {
+                    Id = Guid.NewGuid(),
                     ApartmentId = reviewDto.ApartmentId,
+                    UserId = authenticatedUserId,
                     Rating = reviewDto.Rating,
-                    Comment = reviewDto.Comment
+                    Comment = reviewDto.Comment,
+                    ReviewDate = DateTime.UtcNow
                 };
-                var response = await httpClient.PostAsJsonAsync("reviews", serviceDto);
-                if (response.IsSuccessStatusCode)
-                {
-                    // Używamy JsonSerializerOptions również tutaj dla spójności, jeśli serwer zwraca niestandardowy casing
-                    var createdReview = await response.Content.ReadFromJsonAsync<Review>(_jsonSerializerOptions);
-                    return createdReview;
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError("Failed to create review via ReviewServiceApp. Status: {StatusCode}, Response: {ErrorContent}", response.StatusCode, errorContent);
-                    return null;
-                }
+                _context.Reviews.Add(review);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Review created successfully in AppDbContext with ID {ReviewId} for ApartmentId {ApartmentId} by User {UserId}",
+                    review.Id, review.ApartmentId, authenticatedUserId);
+                return review;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred while creating review via ReviewServiceApp for apartment {ApartmentId}", reviewDto.ApartmentId);
+                _logger.LogError(ex, "Exception occurred while creating review in AppDbContext for apartment {ApartmentId} by user {UserId}",
+                    reviewDto.ApartmentId, authenticatedUserId);
                 throw;
             }
         }
 
-        public async Task<Review?> GetReviewByIdAsync(Guid reviewId, string? userToken)
+        public async Task<Review?> GetReviewByIdAsync(Guid reviewId)
         {
-            var httpClient = _httpClientFactory.CreateClient("ReviewServiceClient");
-            _logger.LogInformation("Fetching review {ReviewId} from ReviewServiceApp", reviewId);
-
-            if (!string.IsNullOrEmpty(userToken))
-            {
-                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
-            }
-
+            _logger.LogInformation("Fetching review {ReviewId} directly from AppDbContext", reviewId);
             try
             {
-                var response = await httpClient.GetAsync($"reviews/{reviewId}");
-                if (response.IsSuccessStatusCode)
+                var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == reviewId);
+                if (review == null)
                 {
-                    var review = await response.Content.ReadFromJsonAsync<Review>(_jsonSerializerOptions);
-                    return review;
+                    _logger.LogInformation("Review {ReviewId} not found in AppDbContext.", reviewId);
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    _logger.LogWarning("Review {ReviewId} not found in ReviewServiceApp.", reviewId);
-                    return null;
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError("Failed to fetch review {ReviewId} from ReviewServiceApp. Status: {StatusCode}, Response: {ErrorContent}", reviewId, response.StatusCode, errorContent);
-                    return null;
-                }
+                return review;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred while fetching review {ReviewId} from ReviewServiceApp", reviewId);
+                _logger.LogError(ex, "Exception occurred while fetching review {ReviewId} from AppDbContext", reviewId);
                 throw;
             }
         }
 
-        public async Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid userId, string? userToken)
+        public async Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid userId, string? token)
         {
-            var httpClient = _httpClientFactory.CreateClient("ReviewServiceClient");
-            _logger.LogInformation("Fetching reviews for user {UserId} from ReviewServiceApp", userId);
-
-            if (string.IsNullOrEmpty(userToken))
-            {
-                _logger.LogWarning("Cannot fetch reviews for user {UserId}: userToken is missing for ReviewServiceApp call (endpoint might be protected).", userId);
-                return new List<Review>(); 
-            }
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userToken);
-
+            _logger.LogInformation("Fetching reviews for user {UserId} directly from AppDbContext", userId);
             try
             {
-                var response = await httpClient.GetAsync($"reviews/user/{userId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    _logger.LogInformation("Raw JSON response from ReviewServiceApp for UserId {UserId}: {JsonResponse}", userId, responseString);
-                    
-                    try
-                    {
-                        var reviews = JsonSerializer.Deserialize<List<Review>>(responseString, _jsonSerializerOptions);
-                        if (reviews != null)
-                        {
-                            _logger.LogInformation("Successfully deserialized {Count} reviews for UserId {UserId}.", reviews.Count, userId);
-                            foreach (var review in reviews)
-                            {
-                                _logger.LogInformation("Deserialized Review (for UserId {UsrId}) - ID: {ReviewId}, ApartmentId: {ReviewAptId}, UserId: {ReviewUserId}, Rating: {Rating}",
-                                    userId, review.Id, review.ApartmentId, review.UserId, review.Rating);
-                            }
-                        }
-                        else
-                        {
-                            _logger.LogWarning("Deserialized reviews list is null for UserId {UserId}.", userId);
-                        }
-                        return reviews ?? new List<Review>();
-                    }
-                    catch (JsonException jsonEx)
-                    {
-                         _logger.LogError(jsonEx, "JSON Deserialization failed for reviews for UserId {UserId}. Response: {JsonResponse}", userId, responseString);
-                        return new List<Review>();
-                    }
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError("Failed to fetch reviews for user {UserId} from ReviewServiceApp. Status: {StatusCode}, Response: {ErrorContent}", userId, response.StatusCode, errorContent);
-                    return new List<Review>();
-                }
+                var reviews = await _context.Reviews
+                                            .Where(r => r.UserId == userId)
+                                            .OrderByDescending(r => r.ReviewDate)
+                                            .ToListAsync();
+                _logger.LogInformation("Successfully fetched {Count} reviews for UserId {UserId} from AppDbContext.",
+                    reviews?.Count ?? 0, userId);
+                return reviews ?? new List<Review>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred while fetching reviews for user {UserId} from ReviewServiceApp", userId);
+                _logger.LogError(ex, "Exception occurred while fetching reviews for user {UserId} from AppDbContext", userId);
                 throw;
             }
         }
-        public async Task<bool> DeleteReviewAsync(Guid reviewId, string? adminUserToken)
+
+        public async Task<bool> DeleteReviewAsync(Guid reviewId)
         {
-            if (string.IsNullOrEmpty(adminUserToken))
-            {
-                _logger.LogWarning("Cannot delete review: adminUserToken is missing for ReviewServiceApp call.");
-                return false;
-            }
-
-            var httpClient = _httpClientFactory.CreateClient("ReviewServiceClient");
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", adminUserToken);
-
-            _logger.LogInformation("Attempting to delete review {ReviewId} via ReviewServiceApp by admin", reviewId);
-
+            _logger.LogInformation("Attempting to delete review {ReviewId} from AppDbContext", reviewId);
             try
             {
-                var response = await httpClient.DeleteAsync($"reviews/{reviewId}");
-                if (response.IsSuccessStatusCode) // Oczekujemy 204 No Content lub 200 OK
+                var review = await _context.Reviews.FindAsync(reviewId);
+                if (review == null)
                 {
-                    _logger.LogInformation("Review {ReviewId} deleted successfully via ReviewServiceApp.", reviewId);
-                    return true;
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError("Failed to delete review {ReviewId} via ReviewServiceApp. Status: {StatusCode}, Response: {ErrorContent}", reviewId, response.StatusCode, errorContent);
+                    _logger.LogWarning("Review {ReviewId} not found in AppDbContext for deletion.", reviewId);
                     return false;
                 }
+                _context.Reviews.Remove(review);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Review {ReviewId} deleted successfully from AppDbContext.", reviewId);
+                return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred while deleting review {ReviewId} via ReviewServiceApp", reviewId);
-                return false; // Lub rzuć wyjątek
+                _logger.LogError(ex, "Exception occurred while deleting review {ReviewId} from AppDbContext", reviewId);
+                throw;
             }
         }
     }

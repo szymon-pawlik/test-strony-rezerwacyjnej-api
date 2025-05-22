@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using HotChocolate;
+using HotChocolate.Types; 
 
 namespace BackendApp.GraphQL.Mutations.Inputs
 {
+
     public record AddApartmentInput(
         string Name,
         string Description,
@@ -12,8 +13,9 @@ namespace BackendApp.GraphQL.Mutations.Inputs
         int NumberOfBathrooms,
         List<string> Amenities,
         bool IsAvailable,
-        decimal PricePerNight);
-
+        decimal PricePerNight
+    );
+    
     public record UpdateApartmentInput(
         Guid Id,
         Optional<string> Name,
@@ -23,5 +25,6 @@ namespace BackendApp.GraphQL.Mutations.Inputs
         Optional<int> NumberOfBathrooms,
         Optional<List<string>> Amenities,
         Optional<bool> IsAvailable,
-        Optional<decimal> PricePerNight);
+        Optional<decimal> PricePerNight
+    );
 }

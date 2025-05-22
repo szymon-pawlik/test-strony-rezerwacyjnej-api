@@ -7,5 +7,5 @@ namespace BackendApp.GraphQL.Mutations.Inputs
         Guid UserId,
         DateTime CheckInDate,
         DateTime CheckOutDate,
-        double TotalPrice);
+        decimal TotalPrice);
 }

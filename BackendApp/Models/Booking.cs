@@ -9,7 +9,7 @@ namespace BackendApp.Models
         public Guid UserId { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         public DateTime BookingDate { get; set; }
 
         public Apartment? Apartment { get; set; }
@@ -18,7 +18,7 @@ namespace BackendApp.Models
 
         public Booking() { }
 
-        public Booking(Guid id, Guid apartmentId, Guid userId, DateTime checkInDate, DateTime checkOutDate, double totalPrice, DateTime bookingDate)
+        public Booking(Guid id, Guid apartmentId, Guid userId, DateTime checkInDate, DateTime checkOutDate, decimal totalPrice, DateTime bookingDate)
         {
             Id = id;
             ApartmentId = apartmentId;

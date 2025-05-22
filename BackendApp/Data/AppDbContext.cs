@@ -32,122 +32,164 @@ namespace BackendApp.Data
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Apartment)
-                .WithMany() // Jeśli Apartment nie ma kolekcji Bookings
+                .WithMany(u => u.Bookings)
                 .HasForeignKey(b => b.ApartmentId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.User)
-                .WithMany() // Jeśli User nie ma kolekcji Bookings
+                .WithMany(u => u.Bookings)
                 .HasForeignKey(b => b.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Apartment)
-                .WithMany() // Jeśli Review nie ma kolekcji Reviews
+                .WithMany(a => a.Reviews) // Jeśli Review nie ma kolekcji Reviews
                 .HasForeignKey(r => r.ApartmentId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
-                .WithMany() // Jeśli Review nie ma kolekcji Reviews
+                .WithMany(u => u.Reviews) // Jeśli Review nie ma kolekcji Reviews
                 .HasForeignKey(r => r.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            var apartmentId1 = Guid.Parse("123e4567-e89b-12d3-a456-426614174000");
-            var apartmentId2 = Guid.Parse("f47ac10b-58cc-4372-a567-0e02b2c3d479");
-            var apartmentId3 = Guid.Parse("98f1b22d-6f82-4c07-9e13-29a2a20d3b41");
+            var apartmentId1 = Guid.NewGuid();
+            var apartmentId2 = Guid.NewGuid();
+            var apartmentId3 = Guid.NewGuid();
+            var apartmentId4 = Guid.NewGuid();
+            var apartmentId5 = Guid.NewGuid();
+            var apartmentId6 = Guid.NewGuid();
+            var apartmentId7 = Guid.NewGuid();
+            var apartmentId8 = Guid.NewGuid();
+            var apartmentId9 = Guid.NewGuid();
+            var apartmentId10 = Guid.NewGuid();
+
 
             var userId1 = Guid.Parse("0d8d8a90-9d14-4c6f-84e8-ea278e7a2311"); // Jan
-            var userId2 = Guid.Parse("b9c5d3b0-3d1c-4c6f-8e4d-1a2b3c4d5e6f"); // Anna
 
             var baseDate = new DateTime(2024, 5, 1, 10, 0, 0, DateTimeKind.Utc);
 
-            var bookingId1 = Guid.Parse("e1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6");
-            var bookingId2 = Guid.Parse("f2b3c4d5-e6f7-a8b9-c0d1-e2f3a4b5c6d7");
-            var bookingId3 = Guid.Parse("a3b4c5d6-e7f8-a9b0-c1d2-e3f4a5b6c7d8");
+            var bookingId1 = Guid.NewGuid();
+            var bookingId2 = Guid.NewGuid();
+            var bookingId3 = Guid.NewGuid();
+            var bookingId4 = Guid.NewGuid();
 
-            var reviewId1 = Guid.Parse("b4c5d6e7-f8a9-b0c1-d2e3-f4a5b6c7d8e9");
-            var reviewId2 = Guid.Parse("c5d6e7f8-a9b0-c1d2-e3f4-a5b6c7d8e9f0");
-            var reviewId3 = Guid.Parse("d6e7f8a9-b0c1-d2e3-f4a5-b6c7d8e9f0a1");
+            var reviewId1 = Guid.NewGuid();
+            var reviewId2 = Guid.NewGuid();
+            var reviewId3 = Guid.NewGuid();
+            var reviewId4 = Guid.NewGuid();
 
-            modelBuilder.Entity<Apartment>().HasData(
-                new Apartment(apartmentId1, "Cozy Studio in Downtown", "A cozy studio apartment in the heart of the city.", "New York, NY", 1, 1, new List<string> { "WiFi", "Kitchen", "TV" }, true, 120m),
-                new Apartment(apartmentId2, "Sunny Loft with River View", "Spacious and bright loft with a beautiful view of the river.", "Brooklyn, NY", 2, 2, new List<string> { "WiFi", "Air Conditioning", "Balcony", "Gym Access" }, true, 250m),
-                new Apartment(apartmentId3, "Charming Cottage by the Lake", "A peaceful cottage perfect for a weekend getaway.", "Lake Placid, NY", 3, 1, new List<string> { "WiFi", "Fireplace", "Lake Access", "Pet-friendly" }, false, 180m)
-            );
+modelBuilder.Entity<Apartment>().HasData(
+    new Apartment(apartmentId1, "Słoneczne Studio w Centrum Warszawy", "Nowoczesne i jasne studio w samym sercu Warszawy, idealne dla singla lub pary.", "Warszawa, mazowieckie", 1, 1, new List<string> { "WiFi", "Kuchnia", "Pralka", "Winda" }, true, 2500m),
+    new Apartment(apartmentId2, "Przestronne Mieszkanie na Starym Mieście w Krakowie", "Klimatyczne, dwupokojowe mieszkanie w zabytkowej kamienicy, kilka kroków od Rynku Głównego.", "Kraków, małopolskie", 2, 1, new List<string> { "WiFi", "Kuchnia", "Telewizor", "Zmywarka", "Widok na dziedziniec" }, true, 3200m),
+    new Apartment(apartmentId3, "Nowoczesny Apartament z Balkonem w Gdańsku", "Komfortowy apartament z trzema sypialniami i dużym balkonem, blisko morza.", "Gdańsk, pomorskie", 3, 2, new List<string> { "WiFi", "Klimatyzacja", "Balkon", "Garaż", "Ochrona" }, false, 4100m),
+    new Apartment(apartmentId4, "Przytulna Kawalerka na Jeżycach w Poznaniu", "Urocza kawalerka po remoncie, w modnej dzielnicy Poznania, blisko parków i kawiarni.", "Poznań, wielkopolskie", 1, 1, new List<string> { "WiFi", "Aneks kuchenny", "Prysznic", "Miejsce parkingowe" }, true, 1900m),
+    new Apartment(apartmentId5, "Loft z Antresolą we Wrocławiu", "Stylowy loft z wysokimi sufitami i antresolą sypialnianą, w odrestaurowanej fabryce.", "Wrocław, dolnośląskie", 2, 1, new List<string> { "WiFi", "Kuchnia", "Ogrzewanie podłogowe", "Smart TV" }, true, 2800m),
+    new Apartment(apartmentId6, "Rodzinne Mieszkanie z Ogrodem w Katowicach", "Duże, czteropokojowe mieszkanie na parterze z dostępem do prywatnego ogródka, idealne dla rodziny z dziećmi.", "Katowice, śląskie", 4, 2, new List<string> { "WiFi", "Kuchnia", "Ogród", "Plac zabaw w pobliżu", "Piwnica" }, true, 3500m),
+    new Apartment(apartmentId7, "Elegancki Apartament z Widokiem na Rzekę w Toruniu", "Luksusowy apartament z dwiema sypialniami i panoramicznym widokiem na Wisłę.", "Toruń, kujawsko-pomorskie", 2, 2, new List<string> { "WiFi", "Klimatyzacja", "Taras", "Sauna", "Siłownia w budynku" }, false, 4500m),
+    new Apartment(apartmentId8, "Kompaktowe Studio Studenckie w Lublinie", "Funkcjonalne studio w pobliżu uczelni, w pełni umeblowane i wyposażone.", "Lublin, lubelskie", 1, 1, new List<string> { "WiFi", "Aneks kuchenny", "Biurko", "Szybki internet" }, true, 1700m),
+    new Apartment(apartmentId9, "Mieszkanie z Dwoma Balkonami w Rzeszowie", "Jasne i przestronne mieszkanie z dwoma balkonami, w spokojnej, zielonej okolicy.", "Rzeszów, podkarpackie", 3, 1, new List<string> { "WiFi", "Kuchnia", "Balkon x2", "Komórka lokatorska", "Winda" }, true, 2900m),
+    new Apartment(apartmentId10, "Tradycyjne Mieszkanie w Kamienicy w Łodzi", "Przestronne mieszkanie z oryginalnymi detalami w odnowionej łódzkiej kamienicy, blisko Piotrkowskiej.", "Łódź, łódzkie", 2, 1, new List<string> { "WiFi", "Kuchnia", "Wanna", "Wysokie sufity", "Parkowanie na podwórzu" }, true, 2300m)
+);
             
             var janPasswordHash = "$2a$11$wC7o2pHNhMGQ1cLDpseDoOMy/7ZZsGLt/QzqcWCjuKwculby4dCVO";
-            var annaPasswordHash = "$2a$11$vGyDothgKdabB30rloShAusA8AxUCtg5FMg.dxzs3Jmm.MVbfKNAW";
 
             modelBuilder.Entity<User>().HasData(
-                new User(userId1, "Jan Kowalski", "jan.kowalski@example.com", janPasswordHash, Models.UserRoles.Admin), // Jan jako User
-                new User(userId2, "Anna Nowak", "anna.nowak@example.com", annaPasswordHash, Models.UserRoles.User)  // Anna jako Admin
+                new User(userId1, "Jan Kowalski", "jan.kowalski@example.com", janPasswordHash, Models.UserRoles.Admin) // Jan jako User
             );
-
-            // Poprawiona sekcja HasData dla Booking i Review
-            // Zakładając, że Booking i Review to teraz klasy z publicznymi właściwościami i konstruktorem bezparametrowym
-            // lub używamy konstruktora parametryzowanego, jeśli został zdefiniowany
+            
             modelBuilder.Entity<Booking>().HasData(
-                new Booking {
+                new Booking
+                {
                     Id = bookingId1,
                     ApartmentId = apartmentId1,
                     UserId = userId1,
-                    CheckInDate = new DateTime(2025, 7, 10, 0,0,0, DateTimeKind.Utc), 
-                    CheckOutDate = new DateTime(2025, 7, 15, 0,0,0, DateTimeKind.Utc), 
-                    TotalPrice = 600.0, 
-                    BookingDate = baseDate.AddDays(-30)
+                    CheckInDate = new DateTime(2025, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+                    CheckOutDate = new DateTime(2025, 7, 15, 0, 0, 0, DateTimeKind.Utc), // 5 nocy
+                    TotalPrice = 600.0m, // np. 120 za noc
+                    BookingDate = baseDate.AddDays(-30) // Rezerwacja zrobiona 30 dni przed baseDate
                 },
-                new Booking {
+                new Booking
+                {
                     Id = bookingId2,
                     ApartmentId = apartmentId2,
-                    UserId = userId2,
-                    CheckInDate = new DateTime(2025, 8, 1, 0,0,0, DateTimeKind.Utc),
-                    CheckOutDate = new DateTime(2025, 8, 7, 0,0,0, DateTimeKind.Utc),
-                    TotalPrice = 1500.0,
-                    BookingDate = baseDate.AddDays(-15)
+                    UserId = userId1,
+                    CheckInDate = new DateTime(2025, 8, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CheckOutDate = new DateTime(2025, 8, 8, 0, 0, 0, DateTimeKind.Utc), // 7 nocy
+                    TotalPrice = 1750.0m, // np. 250 za noc
+                    BookingDate = baseDate.AddDays(-15) // Rezerwacja zrobiona 15 dni przed baseDate
                 },
-                new Booking {
+                new Booking
+                {
                     Id = bookingId3,
-                    ApartmentId = apartmentId1,
-                    UserId = userId2,
-                    CheckInDate = new DateTime(2025, 9, 5, 0,0,0, DateTimeKind.Utc),
-                    CheckOutDate = new DateTime(2025, 9, 10, 0,0,0, DateTimeKind.Utc),
-                    TotalPrice = 600.0,
-                    BookingDate = baseDate.AddDays(-5)
+                    ApartmentId = apartmentId3,
+                    UserId = userId1, // Ten sam użytkownik co w pierwszej rezerwacji, ale inny apartament
+                    CheckInDate = new DateTime(2025, 9, 5, 0, 0, 0, DateTimeKind.Utc),
+                    CheckOutDate = new DateTime(2025, 9, 10, 0, 0, 0, DateTimeKind.Utc), // 5 nocy
+                    TotalPrice = 900.0m, // np. 180 za noc
+                    BookingDate = baseDate.AddDays(-5) // Rezerwacja zrobiona 5 dni przed baseDate
+                },
+                new Booking
+                {
+                    Id = bookingId4,
+                    ApartmentId = apartmentId1, // Ten sam apartament co w pierwszej, ale inny użytkownik i daty
+                    UserId = userId1,
+                    CheckInDate = new DateTime(2025, 10, 20, 0, 0, 0, DateTimeKind.Utc),
+                    CheckOutDate = new DateTime(2025, 10, 23, 0, 0, 0, DateTimeKind.Utc), // 3 noce
+                    TotalPrice = 360.0m, // np. 120 za noc
+                    BookingDate = baseDate.AddDays(-1) // Rezerwacja zrobiona 1 dzień przed baseDate
                 }
             );
 
-            modelBuilder.Entity<Review>().HasData(
-                new Review {
-                    Id = reviewId1,
-                    ApartmentId = apartmentId1,
-                    UserId = userId1,
-                    Rating = 5,
-                    Comment = "Fantastic studio, great location and very clean. Highly recommended!",
-                    ReviewDate = baseDate.AddDays(-25)
-                },
-                new Review {
-                    Id = reviewId2,
-                    ApartmentId = apartmentId2,
-                    UserId = userId2,
-                    Rating = 4,
-                    Comment = "Loved the view and the space. The gym was a nice bonus. A bit noisy at times.",
-                    ReviewDate = baseDate.AddDays(-10)
-                },
-                new Review {
-                    Id = reviewId3,
-                    ApartmentId = apartmentId1,
-                    UserId = userId2,
-                    Rating = 4,
-                    Comment = "Good value for money, perfect for a short stay.",
-                    ReviewDate = baseDate.AddDays(-2)
-                }
-            );
+modelBuilder.Entity<Review>().HasData(
+    new Review
+    {
+        Id = reviewId1,
+        ApartmentId = apartmentId1, // Recenzja dla Słonecznego Studia w Centrum Warszawy
+        UserId = userId1,           // Użytkownik, który dokonał rezerwacji bookingId1
+        Rating = 5,
+        Comment = "Fantastyczne studio, świetna lokalizacja i bardzo czysto. Gorąco polecam!",
+        ReviewDate = baseDate.AddDays(-25) // Data recenzji, np. po pobycie (booking1 kończył się 15.07.2025, baseDate to 01.06.2025)
+                                           // Jeśli booking był w lipcu, to data recenzji powinna być po dacie wymeldowania.
+                                           // Dla przykładu, powiążmy z bookingiem1 (CheckOutDate = 2025, 7, 15)
+                                           // ReviewDate = new DateTime(2025, 7, 20, 0,0,0, DateTimeKind.Utc)
+    },
+    new Review
+    {
+        Id = reviewId2,
+        ApartmentId = apartmentId2, // Recenzja dla Przestronnego Mieszkania na Starym Mieście w Krakowie
+        UserId = userId1,           // Inny użytkownik
+        Rating = 4,
+        Comment = "Bardzo dobre mieszkanie w świetnej okolicy. Jedyny minus to trochę głośno wieczorami od ulicy, ale poza tym super.",
+        // Zakładając, że rezerwacja tego użytkownika (np. bookingId2) zakończyła się 08.08.2025
+        ReviewDate = new DateTime(2025, 8, 10, 0,0,0, DateTimeKind.Utc)
+    },
+    new Review
+    {
+        Id = reviewId3,
+        ApartmentId = apartmentId1, // Kolejna recenzja dla Słonecznego Studia w Warszawie, ale od innego użytkownika
+        UserId = userId1,
+        Rating = 5,
+        Comment = "Wszystko zgodnie z opisem, apartament dobrze wyposażony. Kontakt z właścicielem bezproblemowy. Na pewno wrócę!",
+        // Zakładając, że rezerwacja tego użytkownika (np. bookingId4) zakończyła się 23.10.2025
+        ReviewDate = new DateTime(2025, 10, 25, 0,0,0, DateTimeKind.Utc)
+    },
+    new Review
+    {
+        Id = reviewId4,
+        ApartmentId = apartmentId3, // Recenzja dla Nowoczesnego Apartamentu z Balkonem w Gdańsku
+        UserId = userId1,           // Ten sam użytkownik co w reviewId1, ale ocenia inny apartament
+        Rating = 3,
+        Comment = "Lokalizacja dobra, ale czystość mogłaby być lepsza. Balkon na plus.",
+        // Zakładając, że rezerwacja tego użytkownika (np. bookingId3) zakończyła się 10.09.2025
+        ReviewDate = new DateTime(2025, 9, 12, 0,0,0, DateTimeKind.Utc)
+    }
+);
         }
     }
 }

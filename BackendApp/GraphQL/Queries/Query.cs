@@ -58,17 +58,40 @@ namespace BackendApp.GraphQL.Queries
             await bookingService.GetBookingByIdAsync(id);
 
         public async Task<Review?> GetReviewById(
-            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay
+            [ID(nameof(Review))] Guid id, // Atrybut [ID] z HotChocolate sugeruje, że 'id' będzie już zdekodowanym Guid
+            // jeśli IdField w ReviewType wskazuje na Guid.
+            // Jeśli 'id' jest tutaj stringiem (globalnym ID Relay),
+            // będziesz musiał go zdekodować na Guid przed przekazaniem do serwisu.
+            // Dla uproszczenia zakładam, że 'id' jest już poprawnym Guid.
             [Service] IReviewService reviewService)
         {
-            string? userToken = null;
-            HttpContext? httpContext = _httpContextAccessor.HttpContext;
+            _logger.LogInformation("GraphQL Query GetReviewById called for ReviewId: {ReviewId}", id);
 
-            if (httpContext?.User?.Identity != null && httpContext.User.Identity.IsAuthenticated)
+            // Logika związana z userToken i HttpContext nie jest już potrzebna
+            // do wywołania reviewService.GetReviewByIdAsync, ponieważ ta metoda
+            // w serwisie została uproszczona i nie przyjmuje już tokenu.
+
+            // Jeśli ID jest puste, można dodać walidację
+            if (id == Guid.Empty)
             {
-                userToken = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                _logger.LogWarning("GetReviewById: Received an empty Guid for ReviewId.");
+                // Możesz rzucić błąd GraphQL lub zwrócić null
+                // throw new HotChocolate.GraphQLRequestException("Review ID cannot be empty.");
+                return null;
             }
-            return await reviewService.GetReviewByIdAsync(id, userToken);
+
+            Review? review = await reviewService.GetReviewByIdAsync(id); // Wywołanie z jednym argumentem
+
+            if (review == null)
+            {
+                _logger.LogInformation("GetReviewById: Review with ID {ReviewId} not found by service.", id);
+            }
+            else
+            {
+                _logger.LogInformation("GetReviewById: Review with ID {ReviewId} found.", id);
+            }
+
+            return review;
         }
 
         [Authorize(Policy = "AuthenticatedUserPolicy")]

@@ -50,10 +50,11 @@ namespace BackendApp.Services
 
             if (input.Name.HasValue && user.Name != input.Name.Value)
             {
-                user = user with { Name = input.Name.Value };
+                user.Name = input.Name.Value;
                 changed = true;
                 _logger.LogInformation("[UserService] Name updated for UserID: {UserId}", userId);
             }
+
 
             if (input.Email.HasValue && user.Email != input.Email.Value)
             {
@@ -66,7 +67,8 @@ namespace BackendApp.Services
                     _logger.LogWarning("[UserService] Email update failed for UserID: {UserId}. Email {NewEmail} is already taken.", userId, newEmail);
                     return (null, "Email already taken."); // Zwracamy błąd
                 }
-                user = user with { Email = newEmail };
+                user.Email = newEmail;
+
                 changed = true;
                 _logger.LogInformation("[UserService] Email updated for UserID: {UserId} to {NewEmail}", userId, newEmail);
             }

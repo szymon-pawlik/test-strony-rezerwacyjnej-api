@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackendApp.Models
 {
@@ -16,10 +17,14 @@ namespace BackendApp.Models
     {
         public Apartment() : this(Guid.Empty, "", "", "", 0, 0, new List<string>(), false, 0m) { }
         
+        [NotMapped]
         public Guid DatabaseId => Id;
+        
+        [NotMapped]
         public Guid LocalDatabaseId => Id;
-
-        public ICollection<Review>? Reviews { get; set; } // Zakładając, że masz tu nawigacje
-        public ICollection<Booking>? Bookings { get; set; }
+        
+        public virtual ICollection<Review>? Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<Booking>? Bookings { get; set; } = new List<Booking>(); // Jeśli również dla rezerwacji
+        
     }
 }

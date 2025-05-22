@@ -35,19 +35,39 @@ namespace BackendApp.GraphQL.Types
 
             // Dopiero na końcu definiujemy implementację interfejsu Node
             descriptor.ImplementsNode()
-                .IdField(r => r.Id) // Mówi, że właściwość C# 'Id' jest podstawą dla globalnego ID
-                .ResolveNode(async (ctx, localId) =>
+                .IdField(r => r.Id) // Zakładamy, że Review.Id to Guid i jest to lokalne ID
+                .ResolveNode(async (ctx, id) => // 'id' powinno być tutaj przekazane przez HotChocolate jako Guid
                 {
                     var reviewService = ctx.Service<IReviewService>();
-                    string? userToken = null;
-                    // Poniższe pobieranie tokenu jest opcjonalne, jeśli GetReviewByIdAsync go nie wymaga
-                    // lub jeśli endpoint w ReviewServiceApp dla GET /api/reviews/{id} jest publiczny.
-                    IHttpContextAccessor? httpContextAccessor = ctx.Service<IHttpContextAccessor>();
-                    if (httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated ?? false)
+                    // var logger = ctx.Service<ILogger<ReviewType>>(); // Opcjonalnie, dla logowania
+
+                    // Logika związana z userToken i HttpContext nie jest już potrzebna,
+                    // ponieważ GetReviewByIdAsync w serwisie nie wymaga tokenu.
+                    // Zakładamy, że jeśli recenzja istnieje, jest publicznie dostępna przez swój Node ID,
+                    // lub autoryzacja dostępu do konkretnej recenzji odbywa się na innym poziomie, jeśli jest wymagana.
+
+                    if (id is Guid reviewGuid)
                     {
-                        userToken = httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                        if (reviewGuid == Guid.Empty)
+                        {
+                            // logger?.LogWarning("ResolveNode for Review: Received an empty Guid.");
+                            // ctx.ReportError(...) // Opcjonalnie
+                            return null;
+                        }
+                        // logger?.LogDebug("ResolveNode for Review: Attempting to fetch review with Guid: {ReviewGuid}", reviewGuid);
+                        return await reviewService.GetReviewByIdAsync(reviewGuid); // Wywołanie z jednym argumentem
                     }
-                    return await reviewService.GetReviewByIdAsync(localId, userToken);
+                    else
+                    {
+                        string idType = id == null ? "null" : id.GetType().FullName ?? "unknown";
+
+                        ctx.ReportError(ErrorBuilder.New()
+                            .SetMessage($"Invalid node ID format for Review. Expected Guid, got {idType}.")
+                            .SetCode("INVALID_NODE_ID")
+                            .Build());
+
+                        return null;
+                    }
                 });
         }
 

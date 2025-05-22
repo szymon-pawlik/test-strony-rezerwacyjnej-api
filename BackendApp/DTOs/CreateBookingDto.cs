@@ -1,4 +1,5 @@
-﻿using System;
+﻿// In BackendApp/DTOs/CreateBookingDto.cs
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BackendApp.DTOs
@@ -11,7 +12,7 @@ namespace BackendApp.DTOs
         [Required]
         DateTime CheckOutDate,
         [Required]
-        [Range(0.01, double.MaxValue)]
-        double TotalPrice
+        [Range(0.01, 1000000.00)] // Use double literals for the range boundaries
+        decimal TotalPrice // Property remains decimal
     );
 }

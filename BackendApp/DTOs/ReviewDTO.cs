@@ -1,7 +1,7 @@
 ﻿namespace BackendApp.DTOs;
 
-public record ReviewDTO(
+public record CreateReviewDtoInBackendApp(
     Guid ApartmentId,
-    Guid UserId,
     int Rating,
-    string Comment);
+    string? Comment
+);

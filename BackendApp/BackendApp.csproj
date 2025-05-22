@@ -34,6 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="ClientApp\public\images\" />
       <Folder Include="wwwroot\js\" />
     </ItemGroup>
 
@@ -79,6 +80,14 @@
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
       <Content Update="ClientApp\src\utils.ts">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="ClientApp\public\index.html">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="ClientApp\public\styles.css">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
