@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging; // Upewnij się, że ten using jest obecny
 
 namespace ReviewServiceApp.Controllers
 {
@@ -17,12 +17,12 @@ namespace ReviewServiceApp.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly ReviewDbContext _context;
-        private readonly ILogger<ReviewsController> _logger;
+        private readonly ILogger<ReviewsController> _logger; // Deklaracja pola
 
-        public ReviewsController(ReviewDbContext context, ILogger<ReviewsController> logger)
+        public ReviewsController(ReviewDbContext context, ILogger<ReviewsController> logger) // Wstrzyknięcie loggera
         {
             _context = context;
-            _logger = logger;
+            _logger = logger; // Przypisanie do pola
         }
 
         [HttpGet("apartment/{apartmentId}")]
@@ -46,7 +46,7 @@ namespace ReviewServiceApp.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        [Authorize] 
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviewsForUser(Guid userId)
         {
             if (userId == Guid.Empty)
@@ -117,6 +117,23 @@ namespace ReviewServiceApp.Controllers
                 return NotFound();
             }
             return Ok(review);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteReview(Guid id)
+        {
+            _logger.LogInformation("Admin attempting to delete review with ID: {ReviewId}", id);
+            var review = await _context.Reviews.FindAsync(id);
+            if (review == null)
+            {
+                _logger.LogWarning("Admin delete failed. Review with ID {ReviewId} not found.", id);
+                return NotFound(new { Message = "Review not found." });
+            }
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Review with ID {ReviewId} deleted successfully by admin.", id);
+            return NoContent();
         }
     }
 }

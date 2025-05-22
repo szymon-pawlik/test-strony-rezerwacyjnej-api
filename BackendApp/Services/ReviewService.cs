@@ -209,5 +209,39 @@ namespace BackendApp.Services
                 throw;
             }
         }
+        public async Task<bool> DeleteReviewAsync(Guid reviewId, string? adminUserToken)
+        {
+            if (string.IsNullOrEmpty(adminUserToken))
+            {
+                _logger.LogWarning("Cannot delete review: adminUserToken is missing for ReviewServiceApp call.");
+                return false;
+            }
+
+            var httpClient = _httpClientFactory.CreateClient("ReviewServiceClient");
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", adminUserToken);
+
+            _logger.LogInformation("Attempting to delete review {ReviewId} via ReviewServiceApp by admin", reviewId);
+
+            try
+            {
+                var response = await httpClient.DeleteAsync($"reviews/{reviewId}");
+                if (response.IsSuccessStatusCode) // Oczekujemy 204 No Content lub 200 OK
+                {
+                    _logger.LogInformation("Review {ReviewId} deleted successfully via ReviewServiceApp.", reviewId);
+                    return true;
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("Failed to delete review {ReviewId} via ReviewServiceApp. Status: {StatusCode}, Response: {ErrorContent}", reviewId, response.StatusCode, errorContent);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while deleting review {ReviewId} via ReviewServiceApp", reviewId);
+                return false; // Lub rzuć wyjątek
+            }
+        }
     }
 }

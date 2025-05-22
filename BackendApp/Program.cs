@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using BackendApp.Data;
 using BackendApp.DTOs;
-using BackendApp.Models;
+using BackendApp.Models; // Upewnij się, że ten using jest i działa
 using BackendApp.Services;
 using BackendApp.Validators;
 using FluentValidation;
@@ -12,7 +12,6 @@ using BackendApp.GraphQL.Queries;
 using BackendApp.GraphQL.Mutations;
 using BackendApp.GraphQL.Types;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 
@@ -75,8 +74,8 @@ builder.Services.AddHttpClient("ReviewServiceClient", client =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AuthenticatedUserPolicy", policy => policy.RequireAuthenticatedUser());
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole(BackendApp.Models.UserRoles.Admin)); // Upewnij się, że ta polityka jest
-    // options.AddPolicy("UserPolicy", policy => policy.RequireRole(BackendApp.Models.UserRoles.User)); // Ta też może być przydatna
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole(UserRoles.Admin)); 
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole(UserRoles.User));   
 });
 
 builder.Services
@@ -88,6 +87,7 @@ builder.Services
     .AddType<BookingType>()
     .AddType<ReviewType>()
     .AddType<UserType>()
+    .AddType<NodeType>()  
     .AddGlobalObjectIdentification()
     .AddProjections()
     .AddFiltering()
@@ -125,34 +125,27 @@ api.MapGet("/test", () => "API group test OK");
 
 api.MapPost("/users/register", async (RegisterUserDto registerDto, IUserService userService, IValidator<RegisterUserDto> validator) =>
 {
-    if (registerDto.Password != registerDto.ConfirmPassword)
+    var validationResult = await validator.ValidateAsync(registerDto);
+    if (!validationResult.IsValid)
     {
-        // Ten błąd można by też zwrócić w bardziej strukturalny sposób, np. przez listę błędów
-        return Results.BadRequest(new { Message = "Passwords do not match." });
+        return Results.ValidationProblem(validationResult.ToDictionary());
     }
-
+    
     var (user, errorMessage) = await userService.RegisterUserAsync(registerDto);
 
     if (user == null || !string.IsNullOrEmpty(errorMessage))
     {
-        // Zwróć błąd, jeśli rejestracja się nie powiodła
-        // Możemy rozróżnić typy błędów, np. 409 Conflict dla zajętego emaila
         if (errorMessage == "Email already exists.")
         {
-            return Results.Conflict(new { Message = errorMessage }); // HTTP 409
+            return Results.Conflict(new { Message = errorMessage });
         }
-        return Results.BadRequest(new { Message = errorMessage ?? "Registration failed." }); // HTTP 400
+         if (errorMessage == "Passwords do not match.")
+        {
+            return Results.BadRequest(new { Message = errorMessage });
+        }
+        return Results.BadRequest(new { Message = errorMessage ?? "Registration failed." });
     }
-
-    // Sukces - zwracamy dane nowo utworzonego użytkownika (bez hasła!)
-    // Możesz stworzyć UserDto, aby nie zwracać całego obiektu User z PasswordHash
-    var userResponse = new 
-    {
-        user.Id,
-        user.Name,
-        user.Email
-    };
-    // Zwracamy 201 Created z lokalizacją (opcjonalnie) i obiektem użytkownika
+    var userResponse = new { user.Id, user.Name, user.Email, user.Role };
     return Results.Created($"/api/users/{user.Id}", userResponse);
 })
 .WithName("RegisterUser")
@@ -188,8 +181,7 @@ api.MapGet("/apartments/{id}", async (Guid id, IApartmentService apartmentServic
     return apartment is not null ? Results.Ok(apartment) : Results.NotFound();
 })
 .WithName("GetApartmentById")
-.WithOpenApi()
-.RequireAuthorization();
+.WithOpenApi();
 
 
 api.MapPost("/apartments", async (ApartmentDTO apartmentDto, IApartmentService apartmentService, IValidator<ApartmentDTO> validator) =>
@@ -218,30 +210,36 @@ api.MapPost("/apartments", async (ApartmentDTO apartmentDto, IApartmentService a
 .RequireAuthorization("AdminPolicy"); 
 
 
-api.MapPost("/bookings", async (BookingDTO bookingDto, IBookingService bookingService, IValidator<BookingDTO> validator, ClaimsPrincipal claimsPrincipal) =>
-{
-    var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-    if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
+api.MapPost("/bookings", async (CreateBookingDto createBookingDto, 
+        IBookingService bookingService, 
+        IValidator<CreateBookingDto> validator, 
+        ClaimsPrincipal claimsPrincipal) =>
     {
-        return Results.Unauthorized();
-    }
+        var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
+        {
+            return Results.Unauthorized();
+        }
 
-    var validationResult = await validator.ValidateAsync(bookingDto);
-    if (!validationResult.IsValid)
+        var validationResult = await validator.ValidateAsync(createBookingDto);
+        if (!validationResult.IsValid)
+        {
+            return Results.ValidationProblem(validationResult.ToDictionary());
+        }
+    
+    var (newBooking, errorMessage) = await bookingService.CreateBookingAsync(authenticatedUserId, createBookingDto);
+
+    if (!string.IsNullOrEmpty(errorMessage) || newBooking == null)
     {
-        return Results.ValidationProblem(validationResult.ToDictionary());
+
+        if (errorMessage == "The apartment is not available for the selected dates.")
+        {
+            return Results.Conflict(new { Message = errorMessage });
+        }
+        return Results.BadRequest(new { Message = errorMessage ?? "Failed to create booking." });
     }
-    var booking = new Booking(
-        Guid.NewGuid(),
-        bookingDto.ApartmentId,
-        authenticatedUserId,
-        bookingDto.CheckInDate,
-        bookingDto.CheckOutDate,
-        bookingDto.TotalPrice,
-        DateTime.UtcNow
-    );
-    var createdBooking = await bookingService.CreateBookingAsync(booking);
-    return Results.Created($"/api/bookings/{createdBooking.Id}", createdBooking);
+    
+    return Results.Created($"/api/bookings/{newBooking.Id}", newBooking); 
 })
 .WithName("CreateBooking")
 .WithOpenApi()
@@ -255,7 +253,7 @@ api.MapGet("/bookings/{userId}", async (Guid userId, IBookingService bookingServ
         return Results.Unauthorized();
     }
 
-    if (userId != authenticatedUserId)
+    if (userId != authenticatedUserId && !claimsPrincipal.IsInRole(UserRoles.Admin)) // POPRAWKA TUTAJ
     {
         return Results.Forbid();
     }

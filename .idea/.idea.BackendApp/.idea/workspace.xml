@@ -13,45 +13,57 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cc5fda0-ac0f-4d91-9a9b-e17a83355d0d" name="Changes" comment="wersja 1.0">
-      <change afterPath="$PROJECT_DIR$/BackendApp/DTOs/RegisterUserDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Payloads/BookingPayloads.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Payloads/ReviewPayloads.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/Models/UserRoles.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/Validators/RegisterUserDtoValidator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/e2e_tests.http" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ReviewServiceApp/Controllers/ReviewsController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ReviewServiceApp/Data/ReviewDbContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ReviewServiceApp/Models/Review.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ReviewServiceApp/reviews_tests.http" afterDir="false" />
+    <list default="true" id="7cc5fda0-ac0f-4d91-9a9b-e17a83355d0d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/public/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/apartmentService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/authService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/bookingService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/global.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/profileService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/reviewService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/router.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/state.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/uiService.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/utils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp.sln" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp.sln" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/BackendApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/BackendApp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Configurations/DatabaseConfig.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Configurations/JwtConfig.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Controllers/ReviewsController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/BookingDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/CreateBookingDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Data/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/ReviewInputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/ReviewInputs.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Mutation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Mutation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Queries/Query.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Queries/Query.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ApartmentType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ApartmentType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/BookingType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/BookingType.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ReviewType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ReviewType.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/UserType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/UserType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Models/Apartment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Apartment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Mappings/ApartmentProfile.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Mappings/BookingProfile.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Middleware/ExceptionHandlingMiddleware.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Models/Booking.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Booking.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Models/Review.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Review.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/User.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/ApartmentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/ApartmentService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Repositories/ApartmentRepository.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Repositories/BookingRepository.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Repositories/ReviewRepository.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Services/BookingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/BookingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Services/IBookingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/IBookingService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Services/IReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/IReviewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/IUserService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendApp/Services/ReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/ReviewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/TokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/requests.http" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/requests.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/apartments.html" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/wwwroot/apartments.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/bookings.html" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/wwwroot/bookings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/wwwroot/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/wwwroot/scripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/wwwroot/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Utilities/DateTimeExtensions.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Utilities/StringHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/Validators/BookingValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Validators/BookingValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/apartments.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/bookings.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/scripts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendApp/wwwroot/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReviewServiceApp/Controllers/ReviewsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ReviewServiceApp/Controllers/ReviewsController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +72,14 @@
   </component>
   <component name="DpaMonitoringSettings">
     <option name="autoShow" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -76,6 +96,9 @@
     &quot;accountId&quot;: &quot;6a86e50d-a984-451e-b5de-b1a22bfd5e50&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$APPLICATION_HOME_DIR$/lib/modules/intellij.rider.jar!/schemas/msbuild/Microsoft.Build.Commontypes.xsd" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -92,34 +115,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.BackendApp: IIS Express.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.BackendApp: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.ReviewServiceApp: http.executor&quot;: &quot;Debug&quot;,
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;HTTP Request.e2e_tests | Krok 3: Wykonaj mutację addReview w BackendApp (GraphQL na porcie 5235).executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.e2e_tests | loginUserInBackendApp.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.requests | #3.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.requests | Get All Apartments (z tokenem wklejonym bezpośrednio).executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.requests | Get All Apartments (z tokenem).executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.requests | Login User Test.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.reviews_tests | Create a new Review in ReviewServiceApp (MANUAL TOKEN).executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.reviews_tests | Krok 2: Stwórz nową recenzję w ReviewServiceApp używając tokenu.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.reviews_tests | createReview.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.reviews_tests | loginToBackendApp.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.BackendApp.executor": "Debug",
+    ".NET Launch Settings Profile.BackendApp: IIS Express.executor": "Run",
+    ".NET Launch Settings Profile.BackendApp: http.executor": "Run",
+    ".NET Launch Settings Profile.ReviewServiceApp: http.executor": "Run",
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "HTTP Request.e2e_tests | Krok 3: Wykonaj mutację addReview w BackendApp (GraphQL na porcie 5235).executor": "Run",
+    "HTTP Request.e2e_tests | loginUserInBackendApp.executor": "Run",
+    "HTTP Request.requests | #3.executor": "Run",
+    "HTTP Request.requests | Get All Apartments (z tokenem wklejonym bezpośrednio).executor": "Run",
+    "HTTP Request.requests | Get All Apartments (z tokenem).executor": "Run",
+    "HTTP Request.requests | Login User Test.executor": "Run",
+    "HTTP Request.reviews_tests | Create a new Review in ReviewServiceApp (MANUAL TOKEN).executor": "Run",
+    "HTTP Request.reviews_tests | Krok 2: Stwórz nową recenzję w ReviewServiceApp używając tokenu.executor": "Run",
+    "HTTP Request.reviews_tests | createReview.executor": "Run",
+    "HTTP Request.reviews_tests | loginToBackendApp.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\ClientApp\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.ReviewServiceApp: http">
+}]]></component>
+  <component name="RunManager" selected=".NET Launch Settings Profile.BackendApp">
     <configuration name="e2e_tests | Krok 3: Wykonaj mutację addReview w BackendApp (GraphQL na porcie 5235)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/BackendApp/e2e_tests.http" index="2" requestIdentifier="Krok 3: Wykonaj mutację addReview w BackendApp (GraphQL na porcie 5235)" runType="Run single request">
       <method v="2" />
     </configuration>
@@ -147,7 +173,12 @@
       <option name="SEND_DEBUG_REQUEST" value="1" />
       <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
       <method v="2">
-        <option name="Build" />
+        <option name="CleanProject" default="false" projectName="BackendApp" projectPath="$PROJECT_DIR$/BackendApp/BackendApp.csproj" />
+        <option name="CleanProject" default="false" projectName="ReviewServiceApp" projectPath="$PROJECT_DIR$/ReviewServiceApp/ReviewServiceApp.csproj" />
+        <option name="Build" default="false" projectName="BackendApp" projectPath="$PROJECT_DIR$/BackendApp/BackendApp.csproj" />
+        <option name="Build" default="false" projectName="ReviewServiceApp" projectPath="$PROJECT_DIR$/ReviewServiceApp/ReviewServiceApp.csproj" />
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="BackendApp: http" run_configuration_type="LaunchSettings" />
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="ReviewServiceApp: http" run_configuration_type="LaunchSettings" />
       </method>
     </configuration>
     <configuration name="BackendApp: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
@@ -240,6 +271,20 @@
         <option name="Build" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue=".NET Launch Settings Profile.BackendApp" />
+      <item itemvalue=".NET Launch Settings Profile.BackendApp: http" />
+      <item itemvalue=".NET Launch Settings Profile.BackendApp: https" />
+      <item itemvalue=".NET Launch Settings Profile.BackendApp: IIS Express" />
+      <item itemvalue=".NET Launch Settings Profile.ReviewServiceApp: http" />
+      <item itemvalue=".NET Launch Settings Profile.ReviewServiceApp: https" />
+      <item itemvalue=".NET Launch Settings Profile.ReviewServiceApp: IIS Express" />
+      <item itemvalue="HTTP Request.e2e_tests | Krok 3: Wykonaj mutację addReview w BackendApp (GraphQL na porcie 5235)" />
+      <item itemvalue="HTTP Request.e2e_tests | loginUserInBackendApp" />
+      <item itemvalue="HTTP Request.requests | Get All Apartments (z tokenem wklejonym bezpośrednio)" />
+      <item itemvalue="HTTP Request.requests | Login User Test" />
+      <item itemvalue="HTTP Request.reviews_tests | Create a new Review in ReviewServiceApp (MANUAL TOKEN)" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="HTTP Request.requests | Get All Apartments (z tokenem wklejonym bezpośrednio)" />
@@ -263,7 +308,14 @@
       <workItem from="1747744331060" duration="10725000" />
       <workItem from="1747755232617" duration="8095000" />
       <workItem from="1747763456311" duration="375000" />
-      <workItem from="1747763873472" duration="11940000" />
+      <workItem from="1747763873472" duration="11968000" />
+      <workItem from="1747777920801" duration="2083000" />
+      <workItem from="1747827768557" duration="12310000" />
+      <workItem from="1747866731099" duration="3779000" />
+      <workItem from="1747870615273" duration="999000" />
+      <workItem from="1747871989292" duration="2340000" />
+      <workItem from="1747874378440" duration="214000" />
+      <workItem from="1747874608865" duration="13106000" />
     </task>
     <task id="LOCAL-00001" summary="lab 5 i 6">
       <option name="closed" value="true" />
@@ -281,7 +333,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747754850511</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="wersja 1.0">
+      <option name="closed" value="true" />
+      <created>1747776015442</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747776015442</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

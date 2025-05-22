@@ -1,16 +1,16 @@
 using BackendApp.Models;
-using BackendApp.Services;
-using HotChocolate.AspNetCore.Authorization;
+using BackendApp.Services; // Upewnij się, że IBookingService, IApartmentService, IUserService, IReviewService są tutaj
 using HotChocolate.Types;
-using HotChocolate.Types.Relay;
+using HotChocolate.Types.Relay; // Dla [ID] jeśli używane, oraz UsePaging
 using System;
 using System.Collections.Generic;
-using System.Security.Claims; // Potrzebny dla ClaimTypes
+using System.Security.Claims;
 using System.Threading.Tasks;
-using HotChocolate;
+using HotChocolate; // Dla [Service]
 using Microsoft.AspNetCore.Http;
-// using System.IdentityModel.Tokens.Jwt; // JwtRegisteredClaimNames.Sub nie jest już potrzebne, jeśli używamy ClaimTypes.NameIdentifier
 using Microsoft.Extensions.Logging;
+using HotChocolate.Authorization;
+
 
 namespace BackendApp.GraphQL.Queries
 {
@@ -25,8 +25,7 @@ namespace BackendApp.GraphQL.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        [UsePaging(IncludeTotalCount = true)] // <-- POPRAWIONA KONFIGURACJA
-        //[UseProjection]
+        [UsePaging(IncludeTotalCount = true)]
         [UseFiltering]
         [UseSorting]
         public async Task<IEnumerable<Apartment>> GetApartments(
@@ -34,24 +33,32 @@ namespace BackendApp.GraphQL.Queries
             await apartmentService.GetAllApartmentsAsync();
 
         public async Task<Apartment?> GetApartmentById(
-            // Usunięto [ID] aby przyjmować Guid jako string, jeśli tak zdecydowałeś wcześniej.
-            // Jeśli chcesz używać globalnych ID Relay, przywróć [ID] i wysyłaj globalne ID.
-            Guid id,
+            Guid id, // Przyjmuje Guid bezpośrednio
             [Service] IApartmentService apartmentService) =>
             await apartmentService.GetApartmentByIdAsync(id);
+        
+        [UsePaging(IncludeTotalCount = true)] // Dla paginacji wyników
+        [UseFiltering] // Dla możliwości filtrowania po stronie klienta GraphQL
+        [UseSorting] // Dla możliwości sortowania po stronie klienta GraphQL
+        [Authorize(Roles = new[] { "Admin" })] // Tylko użytkownicy z rolą "Admin"
+        public async Task<IEnumerable<Booking>> AllBookingsForAdmin(
+            [Service] IBookingService bookingService) // Poprawne wstrzyknięcie IBookingService
+        {
+            return await bookingService.GetAllBookingsAsync();
+        }
 
         public async Task<User?> GetUserById(
-            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay do rozwiązywania
+            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay
             [Service] IUserService userService) =>
             await userService.GetUserByIdAsync(id);
 
         public async Task<Booking?> GetBookingById(
-            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay do rozwiązywania
+            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay
             [Service] IBookingService bookingService) =>
             await bookingService.GetBookingByIdAsync(id);
 
         public async Task<Review?> GetReviewById(
-            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay do rozwiązywania
+            [ID] Guid id, // Zakładamy, że to pole nadal ma używać globalnych ID Relay
             [Service] IReviewService reviewService)
         {
             string? userToken = null;
@@ -64,7 +71,7 @@ namespace BackendApp.GraphQL.Queries
             return await reviewService.GetReviewByIdAsync(id, userToken);
         }
 
-        [HotChocolate.Authorization.Authorize(Policy = "AuthenticatedUserPolicy")]
+        [Authorize(Policy = "AuthenticatedUserPolicy")]
         public string GetSecretMessage()
         {
             _logger.LogInformation("--- GetSecretMessage RESOLVER START ---");
@@ -80,7 +87,7 @@ namespace BackendApp.GraphQL.Queries
             return "This is a secret message for authenticated users!";
         }
 
-        [HotChocolate.Authorization.Authorize(Policy = "AuthenticatedUserPolicy")]
+        [Authorize(Policy = "AuthenticatedUserPolicy")]
         public async Task<User?> GetMyProfile(
             [Service] IUserService userService,
             ClaimsPrincipal claimsPrincipal)
@@ -106,8 +113,6 @@ namespace BackendApp.GraphQL.Queries
                 _logger.LogInformation("GetMyProfile: Claim - Type: {Type}, Value: {Value}, Issuer: {Issuer}", claim.Type, claim.Value, claim.Issuer);
             }
             
-            // --- POPRAWKA TUTAJ ---
-            // Używamy ClaimTypes.NameIdentifier, ponieważ logi pokazały, że ten claim zawiera ID użytkownika.
             var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier); 
             _logger.LogInformation("GetMyProfile: userIdString from claim '{ClaimTypeToFind}': '{UserIdStringFound}'", ClaimTypes.NameIdentifier, userIdString);
 

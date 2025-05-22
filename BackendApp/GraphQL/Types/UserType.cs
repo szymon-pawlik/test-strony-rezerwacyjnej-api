@@ -7,6 +7,7 @@ using HotChocolate.Types.Relay;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Http; // Dla HttpContext i IHttpContextAccessor
 
 namespace BackendApp.GraphQL.Types
@@ -30,8 +31,8 @@ namespace BackendApp.GraphQL.Types
 
             descriptor.Field<UserResolvers>(r => r.GetBookingsForUserAsync(default!, default!))
                 .Name("bookings")
-                .UsePaging<BookingType>()
-                .UseProjection()
+                .UsePaging<BookingType>(options: new PagingOptions { IncludeTotalCount = true })
+                //.UseProjection() 
                 .UseFiltering()
                 .UseSorting();
 

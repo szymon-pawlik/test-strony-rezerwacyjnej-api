@@ -6,6 +6,8 @@ using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http; // Dla IHttpContextAccessor, jeśli używany w ResolveNode
+using Microsoft.Extensions.Logging;
 
 namespace BackendApp.GraphQL.Types
 {
@@ -13,11 +15,12 @@ namespace BackendApp.GraphQL.Types
     {
         protected override void Configure(IObjectTypeDescriptor<Booking> descriptor)
         {
-            descriptor.ImplementsNode()
-                .IdField(b => b.Id)
-                .ResolveNode(async (ctx, id) =>
-                    await ctx.Service<IBookingService>().GetBookingByIdAsync(id));
+            // 1. Definicja pola "databaseId"
+            descriptor.Field(b => b.LocalDatabaseId)
+                .Name("databaseId")
+                .Type<NonNullType<UuidType>>();
 
+            // 2. Pozostałe pola
             descriptor.Field(b => b.CheckInDate).Type<NonNullType<DateTimeType>>();
             descriptor.Field(b => b.CheckOutDate).Type<NonNullType<DateTimeType>>();
             descriptor.Field(b => b.TotalPrice).Type<NonNullType<FloatType>>();
@@ -30,6 +33,15 @@ namespace BackendApp.GraphQL.Types
             descriptor.Field<BookingResolvers>(r => r.GetUserForBookingAsync(default!, default!))
                 .Name("user")
                 .Type<NonNullType<UserType>>();
+
+            // 3. Implementacja Node na końcu
+            descriptor.ImplementsNode()
+                .IdField(b => b.Id)
+                .ResolveNode(async (ctx, localId) =>
+                {
+                    var bookingService = ctx.Service<IBookingService>();
+                    return await bookingService.GetBookingByIdAsync(localId);
+                });
         }
 
         private class BookingResolvers

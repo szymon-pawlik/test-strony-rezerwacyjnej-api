@@ -1,13 +1,14 @@
 using BackendApp.Models;
 using BackendApp.Services;
-using BackendApp.GraphQL.Types; // Upewnij się, że ten using jest, jeśli UserType jest używany
+// Upewnij się, że masz using dla ApartmentType i UserType, jeśli są w innym namespace
+// Np. using BackendApp.GraphQL.Types;
 using HotChocolate;
 using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using System;
-using System.Threading.Tasks; // Dla Task
-using Microsoft.AspNetCore.Http; // Dla IHttpContextAccessor, jeśli jest używany w ResolveNode
-using Microsoft.Extensions.Logging; // Dla ILogger
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace BackendApp.GraphQL.Types
 {
@@ -15,19 +16,10 @@ namespace BackendApp.GraphQL.Types
     {
         protected override void Configure(IObjectTypeDescriptor<Review> descriptor)
         {
-            descriptor.ImplementsNode()
-                .IdField(r => r.Id)
-                .ResolveNode(async (ctx, id) =>
-                {
-                    var reviewService = ctx.Service<IReviewService>();
-                    string? userToken = null;
-                    IHttpContextAccessor? httpContextAccessor = ctx.Service<IHttpContextAccessor>();
-                    if (httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false)
-                    {
-                        userToken = httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                    }
-                    return await reviewService.GetReviewByIdAsync(id, userToken);
-                });
+            // Definiujemy wszystkie "zwykłe" pola obiektu
+            descriptor.Field(r => r.Id) // Odwołuje się do właściwości C# 'Id'
+                .Name("databaseId")     // Nazwa w schemacie GraphQL
+                .Type<NonNullType<UuidType>>();
 
             descriptor.Field(r => r.Rating).Type<NonNullType<IntType>>();
             descriptor.Field(r => r.Comment);
@@ -37,11 +29,26 @@ namespace BackendApp.GraphQL.Types
                 .Name("apartment")
                 .Type<ApartmentType>(); 
 
-            // --- POPRAWKA TUTAJ ---
-            descriptor.Field<ReviewResolvers>(r => r.GetUserForReviewAsync(default!, default!, default!)) // <-- DODANO TRZECI default!
+            descriptor.Field<ReviewResolvers>(r => r.GetUserForReviewAsync(default!, default!, default!))
                 .Name("user")
-                .Type<UserType>(); // Ustawione na nullowalny, jak ostatnio
-            // --- KONIEC POPRAWKI ---
+                .Type<UserType>(); 
+
+            // Dopiero na końcu definiujemy implementację interfejsu Node
+            descriptor.ImplementsNode()
+                .IdField(r => r.Id) // Mówi, że właściwość C# 'Id' jest podstawą dla globalnego ID
+                .ResolveNode(async (ctx, localId) =>
+                {
+                    var reviewService = ctx.Service<IReviewService>();
+                    string? userToken = null;
+                    // Poniższe pobieranie tokenu jest opcjonalne, jeśli GetReviewByIdAsync go nie wymaga
+                    // lub jeśli endpoint w ReviewServiceApp dla GET /api/reviews/{id} jest publiczny.
+                    IHttpContextAccessor? httpContextAccessor = ctx.Service<IHttpContextAccessor>();
+                    if (httpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        userToken = httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                    }
+                    return await reviewService.GetReviewByIdAsync(localId, userToken);
+                });
         }
 
         private class ReviewResolvers
@@ -49,9 +56,13 @@ namespace BackendApp.GraphQL.Types
             public async Task<Apartment?> GetApartmentForReviewAsync(
                 [Parent] Review review,
                 [Service] IApartmentService apartmentService,
-                [Service] ILogger<ReviewType> logger) // Tutaj ILogger był poprawnie dodany
+                [Service] ILogger<ReviewType> logger)
             {
                 logger.LogInformation("[ReviewType Resolver] GetApartmentForReviewAsync: Called for ReviewId {ReviewId}, trying to fetch Apartment by ApartmentId {ApartmentId}", review.Id, review.ApartmentId);
+                if (review.ApartmentId == Guid.Empty) {
+                    logger.LogWarning("[ReviewType Resolver] GetApartmentForReviewAsync: ApartmentId is Guid.Empty for ReviewId {ReviewId}", review.Id);
+                    return null;
+                }
                 var apartment = await apartmentService.GetApartmentByIdAsync(review.ApartmentId);
                 if (apartment == null)
                 {
@@ -67,7 +78,7 @@ namespace BackendApp.GraphQL.Types
             public async Task<User?> GetUserForReviewAsync(
                 [Parent] Review review,
                 [Service] IUserService userService,
-                [Service] ILogger<ReviewType> logger) // Upewnij się, że ILogger jest oznaczony [Service]
+                [Service] ILogger<ReviewType> logger)
             {
                 logger.LogInformation("[ReviewType Resolver] GetUserForReviewAsync: Called for ReviewId {ReviewId}, trying to fetch User by UserId {UserId}", review.Id, review.UserId);
                 if (review.UserId == Guid.Empty)

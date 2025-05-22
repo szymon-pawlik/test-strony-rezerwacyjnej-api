@@ -1,5 +1,4 @@
 ﻿using BackendApp.Models;
-// using BackendApp.Services; // PasswordHasher nie jest już tu potrzebny, jeśli hashe są zahardkodowane
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,12 +14,9 @@ namespace BackendApp.Data
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
         
-        // Przenieś UserRoles do osobnego pliku, np. Models/UserRoles.cs, jeśli jeszcze tego nie zrobiłeś
-        // public static class UserRoles 
-        // {
-        //     public const string Admin = "Admin";
-        //     public const string User = "User";
-        // }
+        // Zakładam, że UserRoles jest zdefiniowane w BackendApp.Models.UserRoles
+        // Jeśli jest zdefiniowane jako klasa zagnieżdżona tutaj, zmień na:
+        // public static class UserRoles ...
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,28 +32,28 @@ namespace BackendApp.Data
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Apartment)
-                .WithMany()
+                .WithMany() // Jeśli Apartment nie ma kolekcji Bookings
                 .HasForeignKey(b => b.ApartmentId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.User)
-                .WithMany()
+                .WithMany() // Jeśli User nie ma kolekcji Bookings
                 .HasForeignKey(b => b.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Apartment)
-                .WithMany()
+                .WithMany() // Jeśli Review nie ma kolekcji Reviews
                 .HasForeignKey(r => r.ApartmentId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
-                .WithMany()
+                .WithMany() // Jeśli Review nie ma kolekcji Reviews
                 .HasForeignKey(r => r.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
@@ -85,7 +81,6 @@ namespace BackendApp.Data
                 new Apartment(apartmentId3, "Charming Cottage by the Lake", "A peaceful cottage perfect for a weekend getaway.", "Lake Placid, NY", 3, 1, new List<string> { "WiFi", "Fireplace", "Lake Access", "Pet-friendly" }, false, 180m)
             );
             
-            // Użyj hashy, które ostatnio wygenerowałeś
             var janPasswordHash = "$2a$11$wC7o2pHNhMGQ1cLDpseDoOMy/7ZZsGLt/QzqcWCjuKwculby4dCVO";
             var annaPasswordHash = "$2a$11$vGyDothgKdabB30rloShAusA8AxUCtg5FMg.dxzs3Jmm.MVbfKNAW";
 
@@ -94,16 +89,64 @@ namespace BackendApp.Data
                 new User(userId2, "Anna Nowak", "anna.nowak@example.com", annaPasswordHash, Models.UserRoles.User)  // Anna jako Admin
             );
 
+            // Poprawiona sekcja HasData dla Booking i Review
+            // Zakładając, że Booking i Review to teraz klasy z publicznymi właściwościami i konstruktorem bezparametrowym
+            // lub używamy konstruktora parametryzowanego, jeśli został zdefiniowany
             modelBuilder.Entity<Booking>().HasData(
-                new Booking(bookingId1, apartmentId1, userId1, new DateTime(2025, 7, 10, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 7, 15, 0, 0, 0, DateTimeKind.Utc), 600.0, baseDate.AddDays(-30)),
-                new Booking(bookingId2, apartmentId2, userId2, new DateTime(2025, 8, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 8, 7, 0, 0, 0, DateTimeKind.Utc), 1500.0, baseDate.AddDays(-15)),
-                new Booking(bookingId3, apartmentId1, userId2, new DateTime(2025, 9, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 9, 10, 0, 0, 0, DateTimeKind.Utc), 600.0, baseDate.AddDays(-5))
+                new Booking {
+                    Id = bookingId1,
+                    ApartmentId = apartmentId1,
+                    UserId = userId1,
+                    CheckInDate = new DateTime(2025, 7, 10, 0,0,0, DateTimeKind.Utc), 
+                    CheckOutDate = new DateTime(2025, 7, 15, 0,0,0, DateTimeKind.Utc), 
+                    TotalPrice = 600.0, 
+                    BookingDate = baseDate.AddDays(-30)
+                },
+                new Booking {
+                    Id = bookingId2,
+                    ApartmentId = apartmentId2,
+                    UserId = userId2,
+                    CheckInDate = new DateTime(2025, 8, 1, 0,0,0, DateTimeKind.Utc),
+                    CheckOutDate = new DateTime(2025, 8, 7, 0,0,0, DateTimeKind.Utc),
+                    TotalPrice = 1500.0,
+                    BookingDate = baseDate.AddDays(-15)
+                },
+                new Booking {
+                    Id = bookingId3,
+                    ApartmentId = apartmentId1,
+                    UserId = userId2,
+                    CheckInDate = new DateTime(2025, 9, 5, 0,0,0, DateTimeKind.Utc),
+                    CheckOutDate = new DateTime(2025, 9, 10, 0,0,0, DateTimeKind.Utc),
+                    TotalPrice = 600.0,
+                    BookingDate = baseDate.AddDays(-5)
+                }
             );
 
             modelBuilder.Entity<Review>().HasData(
-                new Review(reviewId1, apartmentId1, userId1, 5, "Fantastic studio, great location and very clean. Highly recommended!", baseDate.AddDays(-25)),
-                new Review(reviewId2, apartmentId2, userId2, 4, "Loved the view and the space. The gym was a nice bonus. A bit noisy at times.", baseDate.AddDays(-10)),
-                new Review(reviewId3, apartmentId1, userId2, 4, "Good value for money, perfect for a short stay.", baseDate.AddDays(-2))
+                new Review {
+                    Id = reviewId1,
+                    ApartmentId = apartmentId1,
+                    UserId = userId1,
+                    Rating = 5,
+                    Comment = "Fantastic studio, great location and very clean. Highly recommended!",
+                    ReviewDate = baseDate.AddDays(-25)
+                },
+                new Review {
+                    Id = reviewId2,
+                    ApartmentId = apartmentId2,
+                    UserId = userId2,
+                    Rating = 4,
+                    Comment = "Loved the view and the space. The gym was a nice bonus. A bit noisy at times.",
+                    ReviewDate = baseDate.AddDays(-10)
+                },
+                new Review {
+                    Id = reviewId3,
+                    ApartmentId = apartmentId1,
+                    UserId = userId2,
+                    Rating = 4,
+                    Comment = "Good value for money, perfect for a short stay.",
+                    ReviewDate = baseDate.AddDays(-2)
+                }
             );
         }
     }

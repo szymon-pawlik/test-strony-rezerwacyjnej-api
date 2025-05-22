@@ -1,16 +1,32 @@
 ﻿using System;
+
 namespace BackendApp.Models
 {
-    public record Booking(
-        Guid Id,
-        Guid ApartmentId, 
-        Guid UserId,      
-        DateTime CheckInDate,
-        DateTime CheckOutDate,
-        double TotalPrice,
-        DateTime BookingDate)
+    public class Booking
     {
+        public Guid Id { get; set; }
+        public Guid ApartmentId { get; set; }
+        public Guid UserId { get; set; }
+        public DateTime CheckInDate { get; set; }
+        public DateTime CheckOutDate { get; set; }
+        public double TotalPrice { get; set; }
+        public DateTime BookingDate { get; set; }
+
         public Apartment? Apartment { get; set; }
         public User? User { get; set; }
+        public Guid LocalDatabaseId => Id;
+
+        public Booking() { }
+
+        public Booking(Guid id, Guid apartmentId, Guid userId, DateTime checkInDate, DateTime checkOutDate, double totalPrice, DateTime bookingDate)
+        {
+            Id = id;
+            ApartmentId = apartmentId;
+            UserId = userId;
+            CheckInDate = checkInDate;
+            CheckOutDate = checkOutDate;
+            TotalPrice = totalPrice;
+            BookingDate = bookingDate;
+        }
     }
 }

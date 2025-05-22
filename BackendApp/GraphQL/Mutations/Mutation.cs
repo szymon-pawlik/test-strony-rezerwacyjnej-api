@@ -89,21 +89,29 @@ namespace BackendApp.GraphQL.Mutations
             var userIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid authenticatedUserId))
             {
-                 return new BookingPayload(new BookingError("User not authenticated or token is invalid.", "AUTH_ERROR_ID"));
+                return new BookingPayload(new BookingError("User not authenticated or token is invalid.", "AUTH_ERROR_ID"));
             }
-            var booking = new Booking(
-                Guid.NewGuid(),
+            
+            // Tworzymy DTO dla serwisu na podstawie GraphQL input
+            // Zakładamy, że AddBookingInput ma odpowiednie pola (ApartmentId, CheckInDate, CheckOutDate, TotalPrice)
+            var bookingDto = new CreateBookingDto(
                 input.ApartmentId,
-                authenticatedUserId, 
                 input.CheckInDate,
                 input.CheckOutDate,
-                input.TotalPrice,
-                DateTime.UtcNow
+                input.TotalPrice
             );
-            var createdBooking =  await bookingService.CreateBookingAsync(booking);
-            if (createdBooking == null) {
-                return new BookingPayload(new BookingError("Failed to create booking.", "BOOKING_CREATION_FAILED"));
+            
+            // Wywołujemy serwis, który zwraca krotkę
+            var (createdBooking, errorMessage) =  await bookingService.CreateBookingAsync(authenticatedUserId, bookingDto);
+
+            // --- POPRAWKA TUTAJ ---
+            // Sprawdzamy, czy jest błąd LUB czy obiekt rezerwacji jest null
+            if (!string.IsNullOrEmpty(errorMessage) || createdBooking == null) 
+            {
+                return new BookingPayload(new BookingError(errorMessage ?? "Failed to create booking.", "BOOKING_CREATION_FAILED"));
             }
+            // --- KONIEC POPRAWKI ---
+
             return new BookingPayload(createdBooking);
         }
 
@@ -143,6 +151,44 @@ namespace BackendApp.GraphQL.Mutations
                 return new ReviewPayload(new ReviewError("Failed to create review via microservice.", "REVIEW_CREATION_FAILED"));
             }
             return new ReviewPayload(createdReview);
+        }
+        
+        [Authorize(BackendApp.Models.UserRoles.Admin)]
+        public async Task<bool> DeleteReview(
+            [ID(nameof(Review))] Guid id, 
+            [Service] IReviewService reviewService
+        )
+        {
+            // Jeśli ClaimsPrincipal jest nadal potrzebny (np. do logowania kto usuwa):
+            var claimsPrincipal = _httpContextAccessor.HttpContext?.User; // Pobierz ClaimsPrincipal z HttpContext
+            var adminName = claimsPrincipal?.Identity?.Name ?? "Unknown Admin";
+            _logger.LogInformation("GraphQL Mutation DeleteReview called for decoded local ReviewId: {ReviewId} by Admin: {AdminName}", id, adminName);
+
+            string? adminAccessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(adminAccessToken))
+            {
+                _logger.LogWarning("DeleteReview: Admin access token is missing from HttpContext (this shouldn't happen if [Authorize] works).");
+                return false; 
+            }
+        
+            return await reviewService.DeleteReviewAsync(id, adminAccessToken);
+        }
+        
+        [Authorize(BackendApp.Models.UserRoles.Admin)]
+        public async Task<bool> DeleteBooking(
+            Guid id, // ID rezerwacji do usunięcia
+            [Service] IBookingService bookingService,
+            ClaimsPrincipal claimsPrincipal)
+        {
+            var adminUserIdString = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(adminUserIdString) || !Guid.TryParse(adminUserIdString, out Guid adminId))
+            {
+                _logger.LogError("DeleteBooking: Failed to get admin ID from claims.");
+                return false;
+            }
+            _logger.LogInformation("GraphQL Mutation DeleteBooking called for ID: {BookingId} by AdminID: {AdminId}", id, adminId);
+            return await bookingService.DeleteBookingAsync(id, adminId);
         }
 
         [Authorize]

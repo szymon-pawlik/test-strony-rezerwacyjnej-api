@@ -4,65 +4,130 @@ body {
     padding: 0;
     line-height: 1.6;
     color: #4a4a4a;
-    background-color: #f4f6f8;
+    background-color: #f4f6f8; /* Jasnoszare tło strony */
 }
 
 header {
-    background: #34495e;
+    background: #34495e; /* Ciemnoniebieski/szary - główny kolor nagłówka */
     color: #ffffff;
-    padding: 1rem 1rem; /* Zmniejszony padding dla zwięzłości */
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0.75rem 2rem; /* Dopasowany padding */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky; /* Przyklejony nagłówek */
+    top: 0;
+    z-index: 1000; /* Aby był na wierzchu */
 }
 
 header h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.7rem; /* Nieco mniejszy dla kompaktowości */
 }
 
+/* Stylizacja nawigacji */
 nav {
-    /* Można usunąć lub zintegrować z headerem, jeśli nie ma linków */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Odstęp między linkami */
+}
+
+nav a {
+    color: #ecf0f1; /* Jaśniejszy tekst na ciemnym tle nagłówka */
+    text-decoration: none;
+    padding: 0.6rem 1rem; /* Wygodny obszar klikalny */
+    border-radius: 6px; /* Zaokrąglenie pasujące do innych elementów */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Subtelne podświetlenie przy najechaniu */
+    color: #ffffff;
+}
+
+/* Styl dla aktywnego linku w nawigacji */
+nav a.active-nav-link {
+    background-color: #e74c3c; /* Główny kolor akcentu */
+    color: #ffffff;
+    font-weight: 600;
 }
 
 main {
     padding: 20px;
-    max-width: 900px; /* Lekko zmniejszone dla lepszego wyglądu na średnich ekranach */
+    max-width: 900px;
     margin: 20px auto;
 }
 
-.container {
-    background: #ffffff;
-    padding: 20px 25px; /* Dopasowany padding */
+/* Zmodyfikowany styl dla kontenera statusu autoryzacji (jeśli jest w <main>) */
+#authStatusContainer {
+    background: #ffffff; /* Czyste białe tło */
+    padding: 1rem 1.5rem;
     margin-bottom: 25px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e0e6ed; /* Subtelna ramka */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04); /* Bardzo delikatny cień */
+    display: flex;
+    justify-content: space-between; /* Rozłożenie elementów */
+    align-items: center;
+    flex-wrap: wrap; /* Zawijanie na mniejszych ekranach */
+    gap: 1rem; /* Odstęp między elementami statusu */
+}
+
+#authStatusContainer p {
+    margin: 0;
+    color: #34495e; /* Tekst w kolorze nagłówka dla spójności */
+    font-size: 0.9rem;
+}
+#authStatusContainer p strong {
+    color: #2c3e50; /* Ciemniejszy dla wyróżnienia */
+    font-weight: 600;
+}
+#authStatusContainer #logoutButton {
+    padding: 0.5rem 1rem; /* Mniejszy przycisk, jeśli jest w tym kontenerze */
+    font-size: 0.85rem;
+}
+
+
+.container {
+    background: #ffffff;
+    padding: 25px 30px; /* Nieco więcej przestrzeni wewnętrznej */
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Bardziej wyrazisty, ale wciąż miękki cień */
+    border: 1px solid #e9e9e9; /* Delikatna ramka */
 }
 
 .container h2 {
     margin-top: 0;
-    color: #2c3e50;
-    border-bottom: 2px solid #e74c3c;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    color: #2c3e50; /* Ciemny, profesjonalny kolor */
+    border-bottom: 3px solid #e74c3c; /* Grubsza linia akcentu */
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
 }
 
 .container h3 {
-    margin-top: 20px;
-    font-size: 0.9rem;
+    margin-top: 25px;
+    font-size: 0.95rem;
     color: #555;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.75px; /* Większy letter-spacing dla "etykiet" */
+    border-bottom: 1px dashed #bdc3c7; /* Delikatna linia pod h3 */
+    padding-bottom: 8px;
+    margin-bottom: 15px;
 }
 
 form div {
-    margin-bottom: 15px; /* Odstęp między grupami label-input */
+    margin-bottom: 18px; /* Zwiększony odstęp */
 }
 
 label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px; /* Większy odstęp od inputu */
     font-weight: 600;
-    color: #333; /* Ciemniejszy dla lepszej czytelności etykiet */
+    color: #333;
 }
 
 input[type="email"],
@@ -70,131 +135,178 @@ input[type="password"],
 input[type="text"],
 input[type="number"],
 textarea,
-button,
-select {
-    width: 100%; /* Pełna szerokość w kontenerze formy */
-    padding: 12px;
-    border: 1px solid #ced4da;
+select { /* Usunięto 'button' - przyciski mają osobne style */
+    width: 100%;
+    padding: 12px 14px; /* Dopasowany padding */
+    border: 1px solid #dfe4ea; /* Jaśniejsza, neutralna ramka */
     border-radius: 6px;
     font-size: 1rem;
     box-sizing: border-box;
-    margin-top: 2px; /* Mały odstęp od etykiety */
+    margin-top: 2px;
+    background-color: #fdfdfd; /* Bardzo jasne tło dla pól */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 textarea {
-    resize: vertical; /* Pozwól na zmianę wysokości, ale nie szerokości */
+    resize: vertical;
+    min-height: 80px; /* Minimalna wysokość dla textarea */
 }
 
 input:focus, textarea:focus, select:focus {
-    border-color: #34495e;
-    box-shadow: 0 0 0 0.2rem rgba(52, 73, 94, 0.25);
+    border-color: #34495e; /* Kolor nagłówka jako akcent focusa */
+    background-color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(52, 73, 94, 0.15); /* Delikatniejszy cień focusa */
     outline: none;
 }
 
 button {
-    background: #e74c3c;
+    background: #e74c3c; /* Główny kolor akcji */
     color: #ffffff;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
     font-weight: 600;
-    padding: 12px 20px; /* Dopasowany padding dla przycisków */
+    padding: 12px 22px; /* Dopasowany padding */
+    border-radius: 6px; /* Spójne zaokrąglenie */
+    font-size: 1rem;
+    text-transform: uppercase; /* Opcjonalnie: dla bardziej "designerskiego" wyglądu */
+    letter-spacing: 0.5px;
 }
 
 button:hover {
-    background: #c0392b;
+    background: #c0392b; /* Ciemniejszy odcień przy najechaniu */
+    transform: translateY(-1px); /* Subtelny efekt podniesienia */
+}
+button:active {
+    transform: translateY(0px); /* Efekt wciśnięcia */
 }
 
-/* Dodatkowy styl dla przycisku "drugorzędnego" np. wyloguj */
 .action-button-secondary {
-    background-color: #7f8c8d;
+    background-color: #7f8c8d; /* Szary dla akcji drugorzędnych */
 }
 .action-button-secondary:hover {
-    background-color: #606f70;
+    background-color: #606f70; /* Ciemniejszy szary */
 }
 
 
 pre {
     background-color: #2c3e50; /* Ciemne tło dla JSON */
     color: #ecf0f1; /* Jasny tekst dla JSON */
-    padding: 15px;
+    padding: 18px; /* Więcej paddingu */
     border: 1px solid #273a4e;
     border-radius: 6px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-size: 0.85rem; /* Mniejszy font dla JSON */
-    max-height: 200px; /* Ograniczenie wysokości z przewijaniem */
+    font-size: 0.85rem;
+    max-height: 250px; /* Nieco większa maksymalna wysokość */
     overflow-y: auto;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); /* Wewnętrzny cień dla głębi */
 }
 
 .data-card {
-    background-color: #f9f9f9; /* Jaśniejsze tło dla kart z danymi */
-    border: 1px solid #e0e0e0;
+    background-color: #fdfdfd; /* Bardzo jasne tło */
+    border: 1px solid #e9e9e9; /* Dopasowana ramka */
+    border-left: 4px solid #3498db; /* Inny akcent dla odróżnienia od recenzji */
     border-radius: 6px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .data-card h4 {
     margin-top: 0;
-    color: #2c3e50;
-    font-size: 1.1rem;
+    color: #34495e;
+    font-size: 1.15rem; /* Nieco większe */
+    margin-bottom: 10px;
 }
 .data-card p {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-size: 0.95rem;
 }
 .data-card p strong {
-    color: #34495e;
+    color: #2c3e50;
 }
 
 .reviews-list {
-    margin-top: 10px;
-    margin-left: 0; /* Usunięty lewy margines, border-left wystarczy */
-    border-left: 3px solid #e74c3c; /* Akcentujący kolor dla listy recenzji */
-    padding-left: 15px;
+    margin-top: 15px;
+    border-left: 4px solid #e74c3c; /* Akcentujący kolor dla listy recenzji */
+    padding-left: 20px; /* Większe wcięcie */
     font-size: 0.9em;
 }
 .reviews-list h5 {
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     color: #34495e;
+    font-size: 1.1em;
 }
 
 .review-item {
     background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
+    border: 1px solid #f0f0f0; /* Jaśniejsza ramka */
+    border-radius: 6px; /* Spójne zaokrąglenie */
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 .review-item:last-child {
     margin-bottom: 0;
 }
 .review-item p {
-    margin: 5px 0;
+    margin: 6px 0;
+}
+.review-item p strong { /* Dla oceny */
+    color: #e74c3c;
+}
+.review-item em { /* Dla komentarza */
+    color: #555;
+}
+.review-item small { /* Dla autora */
+    color: #777;
+    font-style: italic;
 }
 
 
 .hidden-section {
-    display: none;
+    display: none !important; /* Użyj !important jeśli inne style nadpisują */
 }
 
 footer {
     text-align: center;
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    margin-top: 40px; /* Większy odstęp od treści */
+    padding: 25px;
+    background-color: #2c3e50; /* Ciemny kolor stopki */
+    color: #bdc3c7; /* Stonowany kolor tekstu w stopce */
     font-size: 0.9rem;
 }
 
+/* Dostosowania dla mniejszych ekranów */
 @media (max-width: 768px) {
+    header {
+        padding: 0.5rem 1rem; /* Mniejszy padding na mobilnych */
+        flex-direction: column; /* Ustawienie H1 nad nawigacją */
+        gap: 0.5rem;
+    }
+    header h1 {
+        font-size: 1.5rem;
+    }
+    nav {
+        width: 100%; /* Pełna szerokość dla linków */
+        justify-content: center; /* Wyśrodkowanie linków */
+        flex-wrap: wrap; /* Zawijanie linków, jeśli się nie mieszczą */
+    }
+    nav a {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.9rem;
+    }
+
     main {
         padding: 15px;
+        margin-top: 10px;
+    }
+    .container {
+        padding: 20px;
     }
     .container h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     input[type="email"],
     input[type="password"],
@@ -204,5 +316,28 @@ footer {
     button,
     select {
         font-size: 0.95rem;
+        padding: 10px 12px;
+    }
+    button {
+        padding: 10px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.3rem;
+    }
+    nav a {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.5rem;
+    }
+    #authStatusContainer {
+        flex-direction: column; /* Elementy statusu jeden pod drugim */
+        align-items: flex-start;
+    }
+    #authStatusContainer #logoutButton {
+        width: 100%; /* Przycisk wylogowania na całą szerokość */
+        margin-top: 0.5rem;
+        margin-left: 0;
     }
 }
