@@ -1,4 +1,4 @@
-namespace BackendApp.Services // lub BackendApp.Utilities
+namespace BackendApp.Services 
 {
     public static class PasswordHasher
     {

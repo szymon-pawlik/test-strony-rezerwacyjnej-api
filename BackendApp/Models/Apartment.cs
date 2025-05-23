@@ -24,7 +24,7 @@ namespace BackendApp.Models
         public Guid LocalDatabaseId => Id;
         
         public virtual ICollection<Review>? Reviews { get; set; } = new List<Review>();
-        public virtual ICollection<Booking>? Bookings { get; set; } = new List<Booking>(); // Jeśli również dla rezerwacji
+        public virtual ICollection<Booking>? Bookings { get; set; } = new List<Booking>(); 
         
     }
 }

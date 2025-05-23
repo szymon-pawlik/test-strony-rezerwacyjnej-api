@@ -18,7 +18,7 @@ namespace BackendApp.Validators
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Hasło jest wymagane.")
                 .MinimumLength(6).WithMessage("Hasło musi mieć co najmniej 6 znaków.");
-            // Możesz dodać bardziej złożone reguły dla hasła, np. wymaganie cyfr, znaków specjalnych itp.
+
 
             RuleFor(x => x.ConfirmPassword)
                 .NotEmpty().WithMessage("Potwierdzenie hasła jest wymagane.")

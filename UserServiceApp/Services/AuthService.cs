@@ -1,10 +1,10 @@
-// UserServiceApp/Services/AuthService.cs
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration; // Dla IConfiguration
-using Microsoft.IdentityModel.Tokens;     // Dla SymmetricSecurityKey i SigningCredentials
+using Microsoft.Extensions.Configuration; 
+using Microsoft.IdentityModel.Tokens;     
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;  // Dla JwtSecurityTokenHandler
+using System.IdentityModel.Tokens.Jwt;  
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +18,7 @@ namespace UserServiceApp.Services
     public class AuthService : IAuthService
     {
         private readonly UserDbContext _context;
-        private readonly IConfiguration _configuration; // Do odczytu ustawień JWT
+        private readonly IConfiguration _configuration; 
 
         public AuthService(UserDbContext context, IConfiguration configuration)
         {
@@ -30,7 +30,7 @@ namespace UserServiceApp.Services
         {
             if (await _context.Users.AnyAsync(u => u.Email == createUserDto.Email))
             {
-                return null; // Użytkownik już istnieje
+                return null; 
             }
 
             var user = new User
@@ -39,7 +39,7 @@ namespace UserServiceApp.Services
                 Name = createUserDto.Name,
                 Email = createUserDto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password),
-                Role = createUserDto.Role // Upewnij się, że rola jest poprawna/dozwolona
+                Role = createUserDto.Role 
             };
 
             _context.Users.Add(user);
@@ -53,10 +53,9 @@ namespace UserServiceApp.Services
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginRequestDto.Password, user.PasswordHash))
             {
-                return null; // Błędne dane logowania
+                return null; 
             }
 
-            // Generowanie tokenu JWT
             var tokenHandler = new JwtSecurityTokenHandler();
             var keyString = _configuration["JwtSettings:Key"];
             if (string.IsNullOrEmpty(keyString)) throw new InvalidOperationException("JWT Key is not configured.");
@@ -67,13 +66,13 @@ namespace UserServiceApp.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // ID użytkownika
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), 
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.Role), // Rola użytkownika
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unikalne ID tokenu
+                    new Claim(ClaimTypes.Role, user.Role), 
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) 
                 }),
-                Expires = DateTime.UtcNow.AddHours(1), // Czas życia tokenu (np. 1 godzina)
+                Expires = DateTime.UtcNow.AddHours(1), 
                 Issuer = _configuration["JwtSettings:Issuer"],
                 Audience = _configuration["JwtSettings:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

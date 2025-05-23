@@ -1,4 +1,4 @@
-// Program.cs
+
 using BackendApp.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +23,6 @@ app.ConfigureMiddlewarePipeline(app.Environment.IsDevelopment());
 
 app.MapControllers();
 app.MapGraphQL();
-//app.MapAllEndpoints();
+
 
 app.Run();

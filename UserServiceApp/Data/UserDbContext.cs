@@ -1,4 +1,4 @@
-// UserServiceApp/Data/UserDbContext.cs
+
 using Microsoft.EntityFrameworkCore;
 using UserServiceApp.Models;
 using System;
@@ -22,9 +22,8 @@ namespace UserServiceApp.Data
             var adminId = Guid.Parse("DEB7A6B0-09A3-464E-8F5A-4D8543E6A0C4");
             var adminRoleName = "Admin";
 
-            // Wygeneruj ten hash RAZ i wklej go tutaj jako stały string
-            // Np. uruchom Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("StrongP@ssw0rd!")); i skopiuj wynik
-            string adminPasswordHash = "$2a$11$XTJItk/.FRV4F9ECIFSXne16zGuSvZUQxCw3O8B9DILW7XCBV/skO"; // <<< ZASTĄP PRAWDZIWYM HASHEM
+
+            string adminPasswordHash = "$2a$11$XTJItk/.FRV4F9ECIFSXne16zGuSvZUQxCw3O8B9DILW7XCBV/skO"; 
 
             modelBuilder.Entity<User>().HasData(
                 new User

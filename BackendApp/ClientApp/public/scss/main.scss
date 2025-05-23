@@ -1,375 +1,497 @@
+@use 'sass:color'; // Import modułu Sass do manipulacji kolorami
 
-$font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-$text-color-base: #4a4a4a;
-$text-color-header: #ffffff;
-$text-color-nav-link: #ecf0f1;
-$text-color-dark-professional: #2c3e50;
-$text-color-medium: #333;
-$text-color-light: #555;
-$text-color-footer: #bdc3c7;
-$text-color-very-light: #777;
+// --- Zmienne globalne ---
 
-$bg-color-body: #f4f6f8;
-$bg-color-button-secondary-hover: #606f70;
-$bg-color-button-secondary: #7f8c8d;
-$bg-color-header: #34495e;
-$bg-color-container: #ffffff;
-$bg-color-input: #fdfdfd;
-$bg-color-pre: $text-color-dark-professional; // Używamy istniejącej zmiennej
-$bg-color-footer: $text-color-dark-professional;
+// Podstawowa rodzina czcionek
+$font-family-base: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-$accent-color-primary: #e74c3c;
-$accent-color-primary-darker: #c0392b;
-$accent-color-secondary: #3498db; // Dla .data-card border
+// Kolory tekstu
+$text-color-base: #4A5568; // Główny kolor tekstu
+$text-color-header: #ffffff; // Kolor tekstu w nagłówku
+$text-color-nav-link: #ecf0f1; // Kolor linków nawigacyjnych
+$text-color-dark-professional: #2D3748; // Ciemny, profesjonalny kolor tekstu
+$text-color-medium: #333333; // Średni kolor tekstu
+$text-color-footer: #abb8c3; // Kolor tekstu w stopce
+$text-color-very-light: #A0AEC0; // Bardzo jasny kolor tekstu
+$text-color-light: #718096; // Jasny kolor tekstu
+$color-text-light: #555555; // Alternatywny jasny kolor tekstu
 
-$border-color-subtle: #e0e6ed;
-$border-color-light: #e9e9e9;
-$border-color-input: #dfe4ea;
-$border-color-dashed: $text-color-footer; // Używamy istniejącej zmiennej
-$border-color-pre: #273a4e;
-$border-color-review-item: #f0f0f0;
+// Kolory tła
+$bg-color-footer: $text-color-dark-professional; // Kolor tła stopki
 
-// Zaokrąglenia
-$border-radius-small: 6px;
-$border-radius-medium: 8px;
+// Kolory podstawowe (marki/akcenty)
+$color-primary: #3498db; // Kolor główny
+$color-primary-dark: #2980b9; // Ciemniejszy odcień koloru głównego
+$color-secondary: #2ecc71; // Kolor drugorzędny/akcentowy
+$color-secondary-dark: #27ae60; // Ciemniejszy odcień koloru drugorzędnego
+
+// Kolory informacyjne (np. błędy)
+$color-danger: #e74c3c; // Kolor dla komunikatów o błędach/niebezpieczeństwie
+$color-danger-dark: #c0392b; // Ciemniejszy odcień koloru "danger"
+
+// Ogólne kolory tekstu
+$color-text-base: #4A5568; // Podstawowy kolor tekstu
+$color-text-headings: #2D3748; // Kolor dla nagłówków
+$color-text-muted: #718096; // Wyciszony kolor tekstu (dla mniej ważnych informacji)
+$color-text-inverted: #ffffff; // Kolor tekstu na ciemnym tle
+
+// Ogólne kolory tła
+$color-background-body: #f7f9fc; // Tło dla całej strony (body)
+$color-background-card: #ffffff; // Tło dla elementów typu "karta"
+$color-background-input: #ffffff; // Tło dla pól formularzy
+$color-background-header: $color-primary; // Tło dla nagłówka głównego
+$color-background-footer: $text-color-dark-professional; // Tło dla stopki
+
+// Kolory obramowań
+$color-border: #E2E8F0; // Podstawowy kolor obramowania
+$color-border-input: $color-border; // Kolor obramowania dla pól formularzy
+$color-border-input-focus: $color-primary; // Kolor obramowania dla aktywnego pola formularza
+
+// Właściwości czcionek
+$font-family-sans-serif: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; // Domyślna rodzina czcionek bezszeryfowych
+$font-size-base: 1rem; // Podstawowy rozmiar czcionki (często 16px)
+$font-weight-normal: 400; // Normalna grubość czcionki
+$font-weight-medium: 500; // Średnia grubość czcionki
+$font-weight-semibold: 600; // Półgruba grubość czcionki
+$font-weight-bold: 700; // Gruba czcionka
+$line-height-base: 1.6; // Podstawowa interlinia
+
+// Jednostki odstępów (marginesy, paddingi)
+$spacing-xs: 0.25rem; // Ekstra mały odstęp
+$spacing-sm: 0.5rem;  // Mały odstęp
+$spacing-md: 1rem;    // Średni (podstawowy) odstęp
+$spacing-lg: 1.5rem;  // Duży odstęp
+$spacing-xl: 2rem;    // Ekstra duży odstęp
+$spacing-xxl: 3rem;   // Bardzo ekstra duży odstęp
+
+// Promienie zaokrągleń dla narożników
+$border-radius-base: 0.375rem; // Podstawowy promień zaokrąglenia
+$border-radius-lg: 0.5rem;    // Duży promień zaokrąglenia
 
 // Cienie
-$box-shadow-subtle: 0 1px 3px rgba(0,0,0,0.04);
-$box-shadow-header: 0 2px 5px rgba(0,0,0,0.15);
-$box-shadow-container: 0 5px 15px rgba(0,0,0,0.08);
-$box-shadow-focus: 0 0 0 0.2rem rgba(52, 73, 94, 0.15);
-$box-shadow-pre-inset: inset 0 2px 4px rgba(0,0,0,0.2);
+$box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); // Mały cień
+$box-shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); // Podstawowy cień
+$box-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); // Średni cień
+$box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); // Duży cień
+$box-shadow-focus: 0 0 0 0.25rem rgba($color-primary, 0.25); // Cień dla elementów w stanie focus (np. input)
 
-// Rozmiary i odstępy (przykładowe, można dodać więcej)
-$padding-header: 0.75rem 2rem;
-$padding-container: 25px 30px;
-$margin-bottom-elements: 25px;
-$font-size-base: 1rem;
-$font-size-h2: 1.6rem;
+// --- Globalny reset i domyślne style ---
 
-// --- Style globalne ---
-body {
-    font-family: $font-family-base;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    color: $text-color-base;
-    background-color: $bg-color-body;
+*,
+*::before,
+*::after {
+    box-sizing: border-box; // Ustawia model pudełkowy na border-box dla wszystkich elementów
 }
 
+// Podstawowe style dla elementu body
+body {
+    font-family: $font-family-sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: $line-height-base;
+    color: $color-text-base;
+    background-color: $color-background-body;
+    font-size: $font-size-base;
+    -webkit-font-smoothing: antialiased; // Wygładzanie czcionek w WebKit
+    -moz-osx-font-smoothing: grayscale; // Wygładzanie czcionek w Firefox na macOS
+}
+
+// Style dla nagłówka strony
 header {
-    background: $bg-color-header;
-    color: $text-color-header;
-    padding: $padding-header;
-    box-shadow: $box-shadow-header;
+    background: $color-background-header;
+    color: $color-text-inverted;
+    padding: $spacing-md $spacing-xl;
+    box-shadow: $box-shadow-md;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    position: sticky; // Nagłówek "przyklejony" do góry ekranu
     top: 0;
-    z-index: 1000;
+    z-index: 1000; // Zapewnia, że nagłówek jest na wierzchu
 
     h1 {
         margin: 0;
-        font-size: 1.7rem;
+        font-size: 1.5rem; // Rozmiar czcionki dla głównego tytułu w nagłówku
+        font-weight: $font-weight-semibold;
     }
 }
 
+// Style dla nawigacji
 nav {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: $spacing-sm; // Odstęp między linkami nawigacji
 
     a {
-        color: $text-color-nav-link;
+        color: rgba($color-text-inverted, 0.85); // Kolor linków (lekko przezroczysty)
         text-decoration: none;
-        padding: 0.6rem 1rem;
-        border-radius: $border-radius-small;
-        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-        font-weight: 500;
-        font-size: 0.95rem;
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-base;
+        transition: background-color 0.2s ease, color 0.2s ease; // Płynne przejście dla hover
+        font-weight: $font-weight-medium;
+        font-size: 0.9rem;
 
         &:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            color: $text-color-header;
+            background-color: rgba($color-text-inverted, 0.1); // Tło linku po najechaniu
+            color: $color-text-inverted; // Kolor tekstu linku po najechaniu
         }
 
-        &.active-nav-link {
-            background-color: $accent-color-primary;
-            color: $text-color-header;
-            font-weight: 600;
+        &.active-nav-link { // Styl dla aktywnego linku w nawigacji
+            background-color: $color-secondary;
+            color: $color-text-inverted;
+            font-weight: $font-weight-semibold;
         }
     }
 }
 
+// Główna sekcja zawartości strony
 main {
-    padding: 20px;
-    max-width: 900px;
-    margin: 20px auto;
+    padding: $spacing-lg;
+    max-width: 960px; // Maksymalna szerokość kontenera głównego
+    margin: $spacing-lg auto; // Wyśrodkowanie na stronie
 }
 
+// Kontener statusu autoryzacji
 #authStatusContainer {
-    background: $bg-color-container;
-    padding: 1rem 1.5rem;
-    margin-bottom: $margin-bottom-elements;
-    border-radius: $border-radius-medium;
-    border: 1px solid $border-color-subtle;
-    box-shadow: $box-shadow-subtle;
+    background: $color-background-card;
+    padding: $spacing-md $spacing-lg;
+    margin-bottom: $spacing-xl;
+    border-radius: $border-radius-lg;
+    border: 1px solid $color-border;
+    box-shadow: $box-shadow-base;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
+    flex-wrap: wrap; // Zawijanie elementów w przypadku braku miejsca
+    gap: $spacing-md; // Odstęp między elementami w kontenerze
 
     p {
         margin: 0;
-        color: $bg-color-header; // Spójność z kolorem nagłówka
+        color: $color-text-headings;
         font-size: 0.9rem;
-
         strong {
-            color: $text-color-dark-professional;
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
         }
     }
-
-    #logoutButton { // Zagnieżdżony selektor ID, jeśli logoutButton jest zawsze w #authStatusContainer
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-        // Dziedziczy style z ogólnego 'button', można nadpisać jeśli trzeba
+    #logoutButton { // Styl przycisku wylogowania w kontenerze statusu
+        padding: $spacing-sm $spacing-md;
+        font-size: 0.875rem;
     }
 }
 
+// Ogólny kontener na sekcje treści
 .container {
-    background: $bg-color-container;
-    padding: $padding-container;
-    margin-bottom: $margin-bottom-elements;
-    border-radius: $border-radius-medium;
-    box-shadow: $box-shadow-container;
-    border: 1px solid $border-color-light;
+    background: $color-background-card;
+    padding: $spacing-xl;
+    margin-bottom: $spacing-xl;
+    border-radius: $border-radius-lg;
+    box-shadow: $box-shadow-base;
+    border: 1px solid $color-border;
 
     h2 {
         margin-top: 0;
-        color: $text-color-dark-professional;
-        border-bottom: 3px solid $accent-color-primary;
-        padding-bottom: 12px;
-        margin-bottom: $margin-bottom-elements;
-        font-size: $font-size-h2;
+        color: $color-text-headings;
+        font-size: 1.75rem;
+        font-weight: $font-weight-semibold;
+        padding-bottom: $spacing-md;
+        margin-bottom: $spacing-lg;
+        border-bottom: 1px solid $color-border; // Linia oddzielająca pod nagłówkiem h2
     }
 
     h3 {
-        margin-top: $margin-bottom-elements; // Używamy spójnego marginesu
-        font-size: 0.95rem;
-        color: $text-color-light;
-        text-transform: uppercase;
-        letter-spacing: 0.75px;
-        border-bottom: 1px dashed $border-color-dashed;
-        padding-bottom: 8px;
-        margin-bottom: 15px;
+        margin-top: $spacing-lg;
+        font-size: 0.9rem;
+        color: $color-text-muted;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase; // Tekst pisany wielkimi literami
+        letter-spacing: 0.05em; // Odstępy między literami
+        border-bottom: 1px solid color.scale($color-border, $lightness: 5%); // Delikatnie jaśniejsza linia
+        padding-bottom: $spacing-sm;
+        margin-bottom: $spacing-md;
     }
 }
 
-// --- Style formularzy ---
+// Style dla formularzy
 form {
-    div { // Ogólne dla div w formularzu, można by też użyć klasy
-        margin-bottom: 18px;
+    div { // Domyślny margines dolny dla grup pól formularza
+        margin-bottom: $spacing-lg;
     }
 }
 
+// Style dla etykiet pól formularza
 label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: $text-color-medium;
+    display: block; // Etykieta w osobnej linii
+    margin-bottom: $spacing-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-headings;
+    font-size: 0.875rem;
 }
 
-// Wspólne style dla inputów, textarea i select
+// Style dla pól tekstowych, haseł, textarea i select
 input[type="email"],
 input[type="password"],
 input[type="text"],
 input[type="number"],
 textarea,
 select {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid $border-color-input;
-    border-radius: $border-radius-small;
+    width: 100%; // Pełna szerokość kontenera nadrzędnego
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid $color-border-input;
+    border-radius: $border-radius-base;
     font-size: $font-size-base;
-    box-sizing: border-box;
-    margin-top: 2px;
-    background-color: $bg-color-input;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; // Padding i border wliczane w szerokość/wysokość
+    background-color: $color-background-input;
+    color: $color-text-base;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease; // Płynne przejścia dla focus
 
     &:focus {
-        border-color: $bg-color-header; // Kolor nagłówka jako akcent focusa
-        background-color: $bg-color-container;
-        box-shadow: $box-shadow-focus;
-        outline: none;
+        border-color: $color-border-input-focus; // Zmiana koloru ramki przy fokusie
+        background-color: $color-background-card; // Lekka zmiana tła dla lepszego kontrastu
+        box-shadow: $box-shadow-focus; // Dodanie cienia przy fokusie
+        outline: none; // Usunięcie domyślnego outline przeglądarki
     }
 }
-
-textarea { // Dodatkowe style dla textarea
-    resize: vertical;
-    min-height: 80px;
+// Styl dla placeholderów w polach input i textarea
+input::placeholder,
+textarea::placeholder {
+    color: color.scale($color-text-muted, $lightness: 15%); // Jaśniejszy, wyciszony kolor placeholderu
+    opacity: 1; // Zapewnia widoczność w niektórych przeglądarkach
 }
 
-// --- Style przycisków ---
-button {
-    background: $accent-color-primary;
-    color: $text-color-header;
+// Dodatkowe style dla textarea
+textarea {
+    resize: vertical; // Umożliwia tylko pionową zmianę rozmiaru
+    min-height: 100px; // Minimalna wysokość
+}
+
+// Dodatkowe style dla select
+select {
+    appearance: none; // Usunięcie domyślnego wyglądu przeglądarki
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E"); // Własna strzałka (SVG)
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center; // Pozycja strzałki
+    background-size: 1.5em 1.5em; // Wielkość tła (strzałki)
+    padding-right: $spacing-xl; // Dodatkowy padding z prawej strony, aby tekst nie nachodził na strzałkę
+}
+
+// Style dla checkboxów
+input[type="checkbox"] {
+    width: auto; // Szerokość dopasowana do zawartości
+    margin-right: $spacing-sm;
+    transform: scale(1.2); // Lekkie powiększenie checkboxa
+    accent-color: $color-primary; // Kolor zaznaczenia (nowoczesna właściwość CSS)
+}
+
+// Style dla przycisków i elementów o klasie .action-button
+button, .action-button {
+    display: inline-block;
+    background: $color-primary;
+    color: $color-text-inverted;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-    font-weight: 600;
-    padding: 12px 22px;
-    border-radius: $border-radius-small;
-    font-size: $font-size-base;
+    transition: background-color 0.2s ease, transform 0.1s ease; // Płynne przejścia
+    font-weight: $font-weight-medium;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $border-radius-base;
+    font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    line-height: $line-height-base;
 
     &:hover {
-        background: $accent-color-primary-darker;
-        transform: translateY(-1px);
+        background: $color-primary-dark; // Ciemniejszy odcień przy najechaniu
+        transform: translateY(-2px); // Lekkie uniesienie przycisku
+        box-shadow: $box-shadow-sm;
     }
-    &:active {
-        transform: translateY(0px);
+    &:active { // Styl przycisku podczas kliknięcia
+        transform: translateY(0px); // Powrót do pierwotnej pozycji
+        box-shadow: none;
+    }
+    &:disabled { // Styl nieaktywnego przycisku
+        background-color: color.scale($color-primary, $lightness: 20%); // Rozjaśniony kolor tła
+        color: rgba($color-text-inverted, 0.7); // Lekko przezroczysty tekst
+        cursor: not-allowed; // Zmiana kursora
+        transform: none;
+        box-shadow: none;
     }
 
-    // Modyfikator dla przycisków drugorzędnych
-    &.action-button-secondary {
-        background-color: $bg-color-button-secondary; // Użycie nowej zmiennej
+    &.action-button-secondary { // Modyfikator dla przycisku drugorzędnego
+        background-color: $color-text-muted;
         &:hover {
-            background-color: $bg-color-button-secondary-hover; // Użycie nowej zmiennej
+            background-color: color.scale($color-text-muted, $lightness: -10%); // Lekko przyciemniony
+        }
+        &:disabled {
+            background-color: color.scale($color-text-muted, $lightness: 20%);
+        }
+    }
+    &.action-button-danger { // Modyfikator dla przycisku "niebezpieczeństwo"
+        background-color: $color-danger;
+        &:hover {
+            background-color: $color-danger-dark;
+        }
+        &:disabled {
+            background-color: color.scale($color-danger, $lightness: 20%);
         }
     }
 }
 
-// --- Pozostałe style ---
+// Style dla bloków kodu (element pre)
 pre {
-    background-color: $bg-color-pre;
-    color: $text-color-nav-link; // Jasny tekst, pasuje do tła
-    padding: 18px;
-    border: 1px solid $border-color-pre;
-    border-radius: $border-radius-small;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-size: 0.85rem;
-    max-height: 250px;
-    overflow-y: auto;
-    box-shadow: $box-shadow-pre-inset;
+    background-color: $color-text-headings; // Ciemne tło dla kontrastu
+    color: #f1f1f1; // Jasny kolor tekstu kodu
+    padding: $spacing-md $spacing-lg;
+    border: 1px solid color.scale($color-text-headings, $lightness:5%); // Subtelna ramka
+    border-radius: $border-radius-base;
+    white-space: pre-wrap; // Zawijanie długich linii kodu
+    word-wrap: break-word; // Łamanie słów, jeśli konieczne
+    font-size: 0.8rem; // Mniejsza czcionka dla kodu
+    max-height: 300px; // Maksymalna wysokość, z przewijaniem
+    overflow-y: auto; // Włącza pionowe przewijanie w razie potrzeby
+    box-shadow: $box-shadow-sm;
 }
 
+// Style dla "kart danych" - np. do wyświetlania pojedynczych rekordów
 .data-card {
-    background-color: $bg-color-input; // Bardzo jasne tło
-    border: 1px solid $border-color-light;
-    border-left: 4px solid $accent-color-secondary;
-    border-radius: $border-radius-small;
-    padding: 18px;
-    margin-bottom: 18px;
-    box-shadow: $box-shadow-subtle;
+    background-color: $color-background-card;
+    border: 1px solid $color-border;
+    border-left: 5px solid $color-primary; // Akcent kolorystyczny z lewej strony
+    border-radius: $border-radius-base;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+    box-shadow: $box-shadow-base;
 
     h4 {
         margin-top: 0;
-        color: $bg-color-header;
-        font-size: 1.15rem;
-        margin-bottom: 10px;
+        color: $color-text-headings;
+        font-size: 1.25rem;
+        font-weight: $font-weight-semibold;
+        margin-bottom: $spacing-md;
     }
     p {
-        margin-bottom: 8px;
+        margin-bottom: $spacing-sm;
         font-size: 0.95rem;
+        line-height: 1.5;
         strong {
-            color: $text-color-dark-professional;
+            color: $color-text-headings;
+            font-weight: $font-weight-medium;
         }
     }
 }
 
-.reviews-list {
-    margin-top: 15px;
-    border-left: 4px solid $accent-color-primary;
-    padding-left: 20px;
-    font-size: 0.9em;
-
-    h5 {
-        margin-top: 0;
-        margin-bottom: 12px;
-        color: $bg-color-header;
-        font-size: 1.1em;
+// Style dla tabel administracyjnych
+.admin-table {
+    th, td { // Obramowanie dolne dla komórek nagłówka i danych
+        border-bottom: 1px solid $color-border;
+    }
+    th { // Styl nagłówków tabeli
+        background-color: color.scale($color-background-body, $lightness: -2%) !important; // Lekko ciemniejsze tło od body, !important dla nadpisania ewentualnych innych stylów
+        font-weight: $font-weight-semibold;
+        color: $color-text-headings;
+    }
+    td button { // Mniejsze przyciski wewnątrz komórek tabeli
+        padding: $spacing-xs $spacing-sm;
+        font-size: 0.8rem;
+        text-transform: none; // Brak wielkich liter
+        letter-spacing: normal; // Domyślne odstępy między literami
     }
 }
 
-.review-item {
-    background-color: $bg-color-container;
-    border: 1px solid $border-color-review-item;
-    border-radius: $border-radius-small;
-    padding: 12px 15px;
-    margin-bottom: 12px;
-    box-shadow: $box-shadow-subtle;
+// Style dla list recenzji i odpowiedzi na zgłoszenia
+.reviews-list, .ticket-replies-list {
+    margin-top: $spacing-lg;
+    padding-left: $spacing-lg; // Wcięcie dla listy
 
-    &:last-child {
+    h5 { // Nagłówek wewnątrz listy
+        margin-top: 0;
+        margin-bottom: $spacing-md;
+        color: $color-text-headings;
+        font-size: 1.1rem;
+        font-weight: $font-weight-semibold;
+    }
+}
+
+// Style dla pojedynczych elementów recenzji lub odpowiedzi
+.review-item, .ticket-reply {
+    background-color: color.scale($color-background-body, $lightness:2%); // Lekko jaśniejsze tło od body
+    border: 1px solid $color-border;
+    border-radius: $border-radius-base;
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    box-shadow: $box-shadow-sm;
+
+    &:last-child { // Usunięcie marginesu dolnego dla ostatniego elementu
         margin-bottom: 0;
     }
     p {
-        margin: 6px 0;
-        strong { // Dla oceny
-            color: $accent-color-primary;
+        margin: $spacing-sm 0;
+        line-height: 1.5;
+        strong { // Pogrubienie tekstu
+            font-weight: $font-weight-medium;
         }
-        em { // Dla komentarza
-            color: $text-color-light;
+        em { // Kursywa
+            color: $color-text-light;
         }
-        small { // Dla autora
-            color: $text-color-very-light;
+        small { // Mniejszy tekst, np. dla daty
+            color: $color-text-muted;
             font-style: italic;
         }
     }
 }
-
-.hidden-section {
-    display: none !important;
+.ticket-reply { // Specyficzne dostosowanie dla odpowiedzi na zgłoszenie
+    p strong {
+        color: $color-text-headings; // Mocniejsze wyróżnienie pogrubionego tekstu
+    }
 }
 
+// Klasa pomocnicza do ukrywania elementów
+.hidden-section {
+    display: none !important; // Ukrywa element (używać ostrożnie !important)
+}
+
+// Style dla stopki strony
 footer {
     text-align: center;
-    margin-top: 40px;
-    padding: 25px;
-    background-color: $bg-color-footer;
+    margin-top: $spacing-xxl;
+    padding: $spacing-xl;
+    background-color: $color-background-footer;
     color: $text-color-footer;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
 }
 
-// --- Media Queries ---
-// Zagnieżdżamy style wewnątrz media queries tam, gdzie to ma sens,
-// lub grupujemy zmiany dla konkretnych komponentów.
+// --- Media Queries (Style responsywne) ---
 
+// Dla ekranów o maksymalnej szerokości 768px (tablety)
 @media (max-width: 768px) {
     header {
-        padding: 0.5rem 1rem;
-        flex-direction: column;
-        gap: 0.5rem;
+        padding: $spacing-sm $spacing-md;
+        flex-direction: column; // Elementy w kolumnie
+        gap: $spacing-md;
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.25rem; // Mniejszy tytuł
         }
     }
     nav {
         width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
+        justify-content: center; // Wyśrodkowanie linków
+        flex-wrap: wrap; // Zawijanie linków
         a {
-            padding: 0.5rem 0.6rem;
-            font-size: 0.9rem;
+            padding: $spacing-sm 0.8rem;
+            font-size: 0.85rem; // Mniejsze linki
         }
     }
 
     main {
-        padding: 15px;
-        margin-top: 10px;
+        padding: $spacing-md;
+        margin-top: $spacing-md;
     }
     .container {
-        padding: 20px;
+        padding: $spacing-lg;
         h2 {
-            font-size: 1.4rem;
+            font-size: 1.5rem; // Mniejszy nagłówek sekcji
         }
     }
 
-    // Wspólne zmiany dla inputów i przycisków na mobilnych
+    // Zmniejszenie rozmiaru czcionki i paddingu dla elementów formularzy na mniejszych ekranach
     input[type="email"],
     input[type="password"],
     input[type="text"],
@@ -377,33 +499,34 @@ footer {
     textarea,
     button,
     select {
-        font-size: 0.95rem;
-        padding: 10px 12px;
+        font-size: 0.9rem;
+        padding: $spacing-sm;
     }
-    button { // Jeśli potrzebne dodatkowe nadpisanie dla button na mobilnych
-        padding: 10px 18px; // Może być dziedziczone z bloku wyżej
+    button {
+        padding: $spacing-sm $spacing-md; // Dostosowanie paddingu przycisków
     }
 }
 
+// Dla ekranów o maksymalnej szerokości 480px (telefony komórkowe)
 @media (max-width: 480px) {
-    header {
-        h1 {
-            font-size: 1.3rem;
+    header h1 {
+        font-size: 1.1rem; // Jeszcze mniejszy tytuł w nagłówku
+    }
+    nav a {
+        font-size: 0.8rem; // Jeszcze mniejsze linki nawigacyjne
+    }
+    #authStatusContainer { // Dostosowanie kontenera statusu autoryzacji
+        flex-direction: column; // Elementy w kolumnie
+        align-items: stretch; // Rozciągnięcie elementów do pełnej szerokości
+        #logoutButton {
+            width: 100%; // Przycisk wylogowania na całą szerokość
+            margin-top: $spacing-md;
         }
     }
-    nav {
-        a {
-            font-size: 0.85rem;
-            padding: 0.4rem 0.5rem;
-        }
-    }
-    #authStatusContainer {
-        flex-direction: column;
-        align-items: flex-start;
-        #logoutButton { 
-            width: 100%;
-            margin-top: 0.5rem;
-            margin-left: 0;
+    .admin-table { // Dostosowanie tabeli administracyjnej
+        th, td {
+            font-size: 0.8rem; // Mniejsza czcionka w tabeli
+            padding: $spacing-xs $spacing-sm; // Mniejszy padding w komórkach
         }
     }
 }

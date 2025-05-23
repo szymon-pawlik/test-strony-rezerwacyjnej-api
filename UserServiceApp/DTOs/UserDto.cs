@@ -1,4 +1,4 @@
-// UserServiceApp/DTOs/UserDto.cs
+
 using System;
 
 namespace UserServiceApp.DTOs

@@ -1,82 +1,88 @@
 using BackendApp.Models;
 using BackendApp.Services;
-// Upewnij się, że masz using dla ApartmentType i UserType, jeśli są w innym namespace
-// Np. using BackendApp.GraphQL.Types;
+
+
 using HotChocolate;
 using HotChocolate.Types;
-using HotChocolate.Types.Relay;
+using HotChocolate.Types.Relay; // Dla Node, ImplementsNode, [ID]
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http; // Nieużywane bezpośrednio, ale może być wstrzykiwane przez kontekst
+using Microsoft.Extensions.Logging; // Dla ILogger
 
 namespace BackendApp.GraphQL.Types
 {
+    /// <summary>
+    /// Definiuje typ GraphQL dla modelu Review.
+    /// Odpowiada za mapowanie właściwości modelu Review na pola w schemacie GraphQL.
+    /// </summary>
     public class ReviewType : ObjectType<Review>
     {
+        // Konfiguruje strukturę typu Review w schemacie GraphQL.
         protected override void Configure(IObjectTypeDescriptor<Review> descriptor)
         {
-            // Definiujemy wszystkie "zwykłe" pola obiektu
+            // Mapowanie podstawowych właściwości modelu Review na pola GraphQL.
             descriptor.Field(r => r.Id) // Odwołuje się do właściwości C# 'Id'
                 .Name("databaseId")     // Nazwa w schemacie GraphQL
-                .Type<NonNullType<UuidType>>();
+                .Type<NonNullType<UuidType>>(); // Typ pola: nie-nullowalny UUID
 
             descriptor.Field(r => r.Rating).Type<NonNullType<IntType>>();
-            descriptor.Field(r => r.Comment);
+            descriptor.Field(r => r.Comment); // Domyślnie StringType, może być null
             descriptor.Field(r => r.ReviewDate).Type<NonNullType<DateTimeType>>();
 
+            // Definicja pola 'apartment' jako obiektu ApartmentType, pobieranego przez resolver.
             descriptor.Field<ReviewResolvers>(r => r.GetApartmentForReviewAsync(default!, default!, default!))
                 .Name("apartment")
-                .Type<ApartmentType>(); 
+                .Type<ApartmentType>(); // Może być null, jeśli mieszkanie zostało usunięte
 
+            // Definicja pola 'user' jako obiektu UserType, pobieranego przez resolver.
             descriptor.Field<ReviewResolvers>(r => r.GetUserForReviewAsync(default!, default!, default!))
                 .Name("user")
-                .Type<UserType>(); 
+                .Type<UserType>(); // Może być null, jeśli użytkownik został usunięty
 
-            // Dopiero na końcu definiujemy implementację interfejsu Node
+            // Implementacja interfejsu Node dla globalnej identyfikacji obiektów.
             descriptor.ImplementsNode()
-                .IdField(r => r.Id) // Zakładamy, że Review.Id to Guid i jest to lokalne ID
-                .ResolveNode(async (ctx, id) => // 'id' powinno być tutaj przekazane przez HotChocolate jako Guid
+                .IdField(r => r.Id) // Wskazuje, że właściwość 'Id' modelu Review dostarcza lokalne ID.
+                .ResolveNode(async (ctx, id) => // Definiuje logikę pobierania obiektu Review na podstawie jego ID.
                 {
+                    // Ten resolver jest odpowiedzialny za odtworzenie obiektu Review.
                     var reviewService = ctx.Service<IReviewService>();
-                    // var logger = ctx.Service<ILogger<ReviewType>>(); // Opcjonalnie, dla logowania
 
-                    // Logika związana z userToken i HttpContext nie jest już potrzebna,
-                    // ponieważ GetReviewByIdAsync w serwisie nie wymaga tokenu.
-                    // Zakładamy, że jeśli recenzja istnieje, jest publicznie dostępna przez swój Node ID,
-                    // lub autoryzacja dostępu do konkretnej recenzji odbywa się na innym poziomie, jeśli jest wymagana.
-
+                    // Sprawdzenie, czy przekazane ID jest typu Guid.
                     if (id is Guid reviewGuid)
                     {
+                        // Sprawdzenie, czy ID nie jest puste.
                         if (reviewGuid == Guid.Empty)
                         {
-                            // logger?.LogWarning("ResolveNode for Review: Received an empty Guid.");
-                            // ctx.ReportError(...) // Opcjonalnie
+                            // Logowanie i zwracanie null, jeśli ID jest puste.
+                            // (Logger jest wstrzykiwany do resolverów, nie bezpośrednio tutaj, ale można by dodać)
+                            // ctx.Service<ILogger<ReviewType>>().LogWarning("ResolveNode for Review: Received an empty Guid.");
                             return null;
                         }
-                        // logger?.LogDebug("ResolveNode for Review: Attempting to fetch review with Guid: {ReviewGuid}", reviewGuid);
-                        return await reviewService.GetReviewByIdAsync(reviewGuid); // Wywołanie z jednym argumentem
+                        // Pobranie recenzji z serwisu.
+                        return await reviewService.GetReviewByIdAsync(reviewGuid);
                     }
                     else
                     {
+                        // Obsługa błędu nieprawidłowego formatu ID.
                         string idType = id == null ? "null" : id.GetType().FullName ?? "unknown";
-
                         ctx.ReportError(ErrorBuilder.New()
                             .SetMessage($"Invalid node ID format for Review. Expected Guid, got {idType}.")
                             .SetCode("INVALID_NODE_ID")
                             .Build());
-
                         return null;
                     }
                 });
         }
 
+        // Prywatna klasa wewnętrzna grupująca metody resolverów dla ReviewType.
         private class ReviewResolvers
         {
+            // Resolver dla pola 'apartment'.
             public async Task<Apartment?> GetApartmentForReviewAsync(
-                [Parent] Review review,
-                [Service] IApartmentService apartmentService,
-                [Service] ILogger<ReviewType> logger)
+                [Parent] Review review, // Obiekt nadrzędny (recenzja)
+                [Service] IApartmentService apartmentService, // Wstrzykiwany serwis mieszkań
+                [Service] ILogger<ReviewType> logger) // Wstrzykiwany logger
             {
                 logger.LogInformation("[ReviewType Resolver] GetApartmentForReviewAsync: Called for ReviewId {ReviewId}, trying to fetch Apartment by ApartmentId {ApartmentId}", review.Id, review.ApartmentId);
                 if (review.ApartmentId == Guid.Empty) {
@@ -95,10 +101,11 @@ namespace BackendApp.GraphQL.Types
                 return apartment;
             }
 
+            // Resolver dla pola 'user'.
             public async Task<User?> GetUserForReviewAsync(
-                [Parent] Review review,
-                [Service] IUserService userService,
-                [Service] ILogger<ReviewType> logger)
+                [Parent] Review review, // Obiekt nadrzędny (recenzja)
+                [Service] IUserService userService, // Wstrzykiwany serwis użytkowników
+                [Service] ILogger<ReviewType> logger) // Wstrzykiwany logger
             {
                 logger.LogInformation("[ReviewType Resolver] GetUserForReviewAsync: Called for ReviewId {ReviewId}, trying to fetch User by UserId {UserId}", review.Id, review.UserId);
                 if (review.UserId == Guid.Empty)

@@ -1,105 +1,103 @@
 using BackendApp.Models;
-using BackendApp.Services; // Upewnij się, że ten using jest obecny i wskazuje na namespace z IReviewService, IApartmentService, IBookingService
+using BackendApp.Services;
 using HotChocolate;
 using HotChocolate.Types;
-using HotChocolate.Types.Relay;
-using System; // Potrzebne dla Guid
+using HotChocolate.Types.Relay; // Dla Node, ImplementsNode, [ID]
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HotChocolate.Types.Pagination; // Dla PagingOptions
-using Microsoft.Extensions.Logging; // Opcjonalne, dla logowania w ResolveNode
+using Microsoft.Extensions.Logging;   // Dla ILogger, jeśli byłby tu używany bezpośrednio
 
 namespace BackendApp.GraphQL.Types
 {
+    /// <summary>
+    /// Definiuje typ GraphQL dla modelu Apartment.
+    /// Odpowiada za mapowanie właściwości modelu Apartment na pola w schemacie GraphQL.
+    /// </summary>
     public class ApartmentType : ObjectType<Apartment>
     {
+        // Konfiguruje strukturę typu Apartment w schemacie GraphQL.
         protected override void Configure(IObjectTypeDescriptor<Apartment> descriptor)
         {
-            descriptor.Description("Represents a rentable apartment.");
+            descriptor.Description("Reprezentuje mieszkanie do wynajęcia.");
 
-            // Pola modelu Apartment
+            // Mapowanie podstawowych właściwości modelu Apartment na pola GraphQL.
             descriptor.Field(a => a.LocalDatabaseId)
                 .Name("databaseId")
-                .Description("The unique database identifier of the apartment.")
+                .Description("Unikalny identyfikator mieszkania w bazie danych.")
                 .Type<NonNullType<UuidType>>();
 
             descriptor.Field(a => a.Name)
-                .Description("The name of the apartment.")
+                .Description("Nazwa mieszkania.")
                 .Type<NonNullType<StringType>>();
 
             descriptor.Field(a => a.Description)
-                .Description("A description of the apartment.")
+                .Description("Opis mieszkania.")
                 .Type<StringType>();
 
             descriptor.Field(a => a.Location)
-                .Description("The location of the apartment.")
+                .Description("Lokalizacja mieszkania.")
                 .Type<StringType>();
 
             descriptor.Field(a => a.NumberOfBedrooms)
-                .Description("The number of bedrooms in the apartment.");
+                .Description("Liczba sypialni w mieszkaniu.");
 
             descriptor.Field(a => a.NumberOfBathrooms)
-                .Description("The number of bathrooms in the apartment.");
+                .Description("Liczba łazienek w mieszkaniu.");
 
             descriptor.Field(a => a.Amenities)
-                .Description("A list of amenities available in the apartment.")
+                .Description("Lista udogodnień dostępnych w mieszkaniu.")
                 .Type<ListType<NonNullType<StringType>>>();
 
             descriptor.Field(a => a.IsAvailable)
-                .Description("Indicates if the apartment is currently available for booking.");
+                .Description("Wskazuje, czy mieszkanie jest aktualnie dostępne do rezerwacji.");
 
             descriptor.Field(a => a.PricePerNight)
-                .Description("The price per night for renting the apartment.")
-                .Type<DecimalType>(); // Lub NonNullType<DecimalType>() jeśli cena nie może być null
+                .Description("Cena za noc wynajmu mieszkania.")
+                .Type<DecimalType>();
 
-
-            // Relacje
+            // Definicja pola 'reviews' jako kolekcji z paginacją, filtrowaniem i sortowaniem.
             descriptor.Field<ApartmentResolvers>(r => r.GetReviewsForApartmentAsync(default!, default!))
                 .Name("reviews")
-                .Description("A list of reviews for this apartment.")
+                .Description("Lista recenzji dla tego mieszkania.")
                 .UsePaging<NonNullType<ReviewType>>(options: new PagingOptions { IncludeTotalCount = true })
                 .UseFiltering()
                 .UseSorting();
 
+            // Definicja pola 'bookings' jako listy z filtrowaniem i sortowaniem.
             descriptor.Field<ApartmentResolvers>(r => r.GetBookingsForApartmentAsync(default!, default!))
                 .Name("bookings")
-                .Description("A list of bookings for this apartment.")
-                .Type<ListType<NonNullType<BookingType>>>() // Rozważ paginację/filtrowanie/sortowanie
-                .UseFiltering() // Przykład dodania filtrowania
-                .UseSorting();  // Przykład dodania sortowania
+                .Description("Lista rezerwacji dla tego mieszkania.")
+                .Type<ListType<NonNullType<BookingType>>>()
+                .UseFiltering()
+                .UseSorting();
 
-
-            // Relay node interface
-descriptor.ImplementsNode()
-                .IdField(a => a.LocalDatabaseId) // Upewnij się, że to jest Twoja właściwość Guid w modelu Apartment
-                .ResolveNode(async (ctx, idFromRelay) =>   // idFromRelay jest typu 'object'
+            // Implementacja interfejsu Node dla globalnej identyfikacji obiektów.
+            descriptor.ImplementsNode()
+                .IdField(a => a.LocalDatabaseId) // Wskazuje, która właściwość dostarcza lokalne ID.
+                .ResolveNode(async (ctx, idFromRelay) => // Definiuje logikę pobierania obiektu na podstawie globalnego ID Relay.
                 {
-                    // Możesz wstrzyknąć ILogger<ApartmentType> do konstruktora ApartmentType, jeśli chcesz logować
-                    // var logger = ctx.Service<ILogger<ApartmentType>>();
-
+                    // Ten resolver jest odpowiedzialny za odtworzenie obiektu Apartment na podstawie jego globalnego ID.
                     var apartmentService = ctx.Service<IApartmentService>();
                     Guid apartmentGuidToFetch;
 
+                    // Próba konwersji otrzymanego ID na Guid.
                     if (idFromRelay is Guid directGuid)
                     {
-                        // HotChocolate przekazał już Guid (np. bo IdField wskazuje na Guid)
                         apartmentGuidToFetch = directGuid;
-                        // logger?.LogDebug("ResolveNode for Apartment: ID was already Guid: {ApartmentGuid}", apartmentGuidToFetch);
                     }
                     else
                     {
-                        // Jeśli idFromRelay nie jest Guid, spróbuj przekonwertować go na string i sparsować
-                        string? idString = idFromRelay != null ? idFromRelay.ToString() : null;// Bezpieczna konwersja na string, idFromRelay może być null
+                        string? idString = idFromRelay != null ? idFromRelay.ToString() : null;
                         if (idString != null && Guid.TryParse(idString, out Guid parsedGuid))
                         {
                             apartmentGuidToFetch = parsedGuid;
-                            // logger?.LogDebug("ResolveNode for Apartment: ID parsed from string '{IdString}' to Guid: {ApartmentGuid}", idString, apartmentGuidToFetch);
                         }
                         else
                         {
-                            // Nie udało się uzyskać Guid z idFromRelay
+                            // Obsługa błędu nieprawidłowego formatu ID.
                             string idTypeInfo = idFromRelay == null ? "null" : idFromRelay.GetType().FullName ?? "unknown";
-                            // logger?.LogWarning("ResolveNode for Apartment: Could not convert or parse node ID. Received type {IDType} with value '{IDValue}'.", idTypeInfo, idFromRelay);
                             ctx.ReportError(ErrorBuilder.New()
                                .SetMessage($"Invalid node ID format for Apartment. Expected Guid representation, got type {idTypeInfo} with value '{idFromRelay}'.")
                                .SetCode("INVALID_NODE_ID")
@@ -108,39 +106,36 @@ descriptor.ImplementsNode()
                         }
                     }
 
+                    // Sprawdzenie, czy ID nie jest puste.
                     if (apartmentGuidToFetch == Guid.Empty)
                     {
-                        // logger?.LogWarning("ResolveNode for Apartment: Received an empty Guid after parsing/conversion.");
-                        // Możesz chcieć zgłosić błąd lub po prostu zwrócić null, jeśli puste Guid jest nieprawidłowe
                         ctx.ReportError(ErrorBuilder.New()
                            .SetMessage("Invalid node ID for Apartment: ID cannot be an empty Guid.")
                            .SetCode("EMPTY_NODE_ID")
                            .Build());
                         return null;
                     }
-                    
-                    // Użyj poprawnej nazwy metody z interfejsu IApartmentService:
+                    // Pobranie mieszkania z serwisu.
                     return await apartmentService.GetApartmentByIdAsync(apartmentGuidToFetch);
                 });
         }
 
-        // Klasa z resolverami dla pól, jeśli wolisz takie podejście
-        // Alternatywnie, możesz użyć metod statycznych lub wstrzykiwać serwisy bezpośrednio w lambdach .Resolve()
+        // Prywatna klasa wewnętrzna grupująca metody resolverów dla ApartmentType.
         private class ApartmentResolvers
         {
+            // Resolver dla pola 'reviews'.
             public async Task<IEnumerable<Review>> GetReviewsForApartmentAsync(
                 [Parent] Apartment apartment,
-                [Service] IReviewService reviewService) // Używamy IReviewService (który jest teraz wewnętrzny)
+                [Service] IReviewService reviewService)
             {
-                // Upewnij się, że apartment.LocalDatabaseId to poprawne Guid, którego oczekuje serwis
                 return await reviewService.GetReviewsByApartmentIdAsync(apartment.LocalDatabaseId);
             }
 
+            // Resolver dla pola 'bookings'.
             public async Task<IEnumerable<Booking>> GetBookingsForApartmentAsync(
                 [Parent] Apartment apartment,
                 [Service] IBookingService bookingService)
             {
-                // Upewnij się, że apartment.LocalDatabaseId to poprawne Guid, którego oczekuje serwis
                 return await bookingService.GetBookingsByApartmentIdAsync(apartment.LocalDatabaseId);
             }
         }

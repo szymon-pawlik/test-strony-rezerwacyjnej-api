@@ -1,24 +1,30 @@
 ﻿using BackendApp.Data;
 using BackendApp.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging; // Dodaj ten using
+using Microsoft.EntityFrameworkCore; // Dla metod EF Core jak FindAsync, ToListAsync, AnyAsync
+using Microsoft.Extensions.Logging;  // Dla ILogger
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BackendApp.Services
 {
+    /// <summary>
+    /// Serwis odpowiedzialny za logikę biznesową związaną z mieszkaniami.
+    /// Implementuje interfejs IApartmentService.
+    /// </summary>
     public class ApartmentService : IApartmentService
     {
-        private readonly AppDbContext _context;
-        private readonly ILogger<ApartmentService> _logger; // Dodane pole loggera
+        private readonly AppDbContext _context; // Kontekst bazy danych
+        private readonly ILogger<ApartmentService> _logger; // Logger do zapisywania informacji
 
-        // Zmodyfikowany konstruktor do wstrzyknięcia ILogger
+        // Konstruktor wstrzykujący zależności (DbContext i Logger).
         public ApartmentService(AppDbContext context, ILogger<ApartmentService> logger)
         {
             _context = context;
-            _logger = logger; // Przypisanie loggera
+            _logger = logger;
         }
+
+        // --- Asynchroniczne metody CRUD dla mieszkań ---
 
         public async Task<Apartment?> GetApartmentByIdAsync(Guid id)
         {
@@ -60,6 +66,8 @@ namespace BackendApp.Services
                 return null;
             }
 
+            // Aktualizacja istniejącej encji przy użyciu wyrażenia 'with' (dla rekordów)
+            // i jawne zarządzanie stanem śledzenia przez EF Core.
             var updatedApartment = existingApartment with
             {
                 Name = apartment.Name,
@@ -71,26 +79,26 @@ namespace BackendApp.Services
                 IsAvailable = apartment.IsAvailable,
                 PricePerNight = apartment.PricePerNight
             };
-            
-            _context.Entry(existingApartment).State = EntityState.Detached;
-            updatedApartment = updatedApartment with { Id = id };
-            _context.Apartments.Update(updatedApartment);
+
+            _context.Entry(existingApartment).State = EntityState.Detached; // Odłączenie oryginalnej encji
+            updatedApartment = updatedApartment with { Id = id }; // Upewnienie się, że ID jest poprawne
+            _context.Apartments.Update(updatedApartment); // Rozpoczęcie śledzenia zaktualizowanej encji
 
             try
             {
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("[ApartmentService] Apartment with ID {ApartmentId} updated successfully.", id);
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException ex) // Obsługa konfliktów współbieżności
             {
                 _logger.LogError(ex, "[ApartmentService] Concurrency exception while updating apartment ID {ApartmentId}.", id);
-                if (!await _context.Apartments.AnyAsync(e => e.Id == id))
+                if (!await _context.Apartments.AnyAsync(e => e.Id == id)) // Sprawdzenie, czy encja nadal istnieje
                 {
-                    return null;
+                    return null; // Encja została usunięta przez inny proces
                 }
                 else
                 {
-                    throw;
+                    throw; // Rzucenie wyjątku dalej, jeśli encja istnieje, ale wystąpił inny błąd współbieżności
                 }
             }
             return updatedApartment;
@@ -112,8 +120,9 @@ namespace BackendApp.Services
             return true;
         }
 
-        // Synchroniczne metody - pozostawiam bez logowania dla zwięzłości,
-        // ale w razie potrzeby można dodać analogicznie
+        // --- Synchroniczne metody (potencjalnie starsze lub do specyficznych zastosowań) ---
+        // W aplikacjach webowych preferowane są metody asynchroniczne.
+
         public IEnumerable<Apartment> GetAllApartments()
         {
             return _context.Apartments.ToList();

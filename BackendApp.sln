@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendApp", "BackendApp\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserServiceApp", "UserServiceApp\UserServiceApp.csproj", "{838287A4-E632-4C33-A656-4D81791A974F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketServiceApp", "TicketServiceApp\TicketServiceApp.csproj", "{B6779D88-2B54-44FC-8ECD-B49F6F52C5D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{838287A4-E632-4C33-A656-4D81791A974F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{838287A4-E632-4C33-A656-4D81791A974F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{838287A4-E632-4C33-A656-4D81791A974F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6779D88-2B54-44FC-8ECD-B49F6F52C5D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6779D88-2B54-44FC-8ECD-B49F6F52C5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6779D88-2B54-44FC-8ECD-B49F6F52C5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6779D88-2B54-44FC-8ECD-B49F6F52C5D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

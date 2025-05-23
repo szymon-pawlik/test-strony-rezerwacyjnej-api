@@ -1,24 +1,24 @@
-// UserServiceApp/Controllers/UsersController.cs
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // Dla Include i FirstOrDefaultAsync, jeśli nie masz serwisu
+using Microsoft.EntityFrameworkCore; 
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using UserServiceApp.Data; // Dla UserDbContext
+using UserServiceApp.Data; 
 using UserServiceApp.DTOs;
-using UserServiceApp.Models; // Dla User
-// using UserServiceApp.Services; // Jeśli masz oddzielny UserService
+using UserServiceApp.Models; 
+
 
 namespace UserServiceApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Cały kontroler domyślnie chroniony
+    [Authorize] 
     public class UsersController : ControllerBase
     {
-        private readonly UserDbContext _context; // Dla uproszczenia, bezpośredni dostęp. W większej aplikacji użyj serwisu.
+        private readonly UserDbContext _context; 
         private readonly ILogger<UsersController> _logger;
 
         public UsersController(UserDbContext context, ILogger<UsersController> logger)
@@ -30,8 +30,8 @@ namespace UserServiceApp.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<UserDto>> GetUserById(Guid id)
         {
-            // Twoja logika pobierania użytkownika
-            var user = await _context.Users.FindAsync(id); // _context to Twój UserDbContext
+
+            var user = await _context.Users.FindAsync(id); 
 
             if (user == null)
             {
@@ -42,7 +42,7 @@ namespace UserServiceApp.Controllers
             return Ok(new UserDto(user.Id, user.Name, user.Email, user.Role));
         }
 
-        [HttpGet("me")] // Endpoint do pobierania danych o sobie
+        [HttpGet("me")] 
         public async Task<ActionResult<UserDto>> GetMe()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -64,7 +64,7 @@ namespace UserServiceApp.Controllers
 
 
         [HttpPut("{id}/role")]
-        [Authorize(Roles = "Admin")] // Tylko admin może zmieniać role
+        [Authorize(Roles = "Admin")] 
         public async Task<IActionResult> UpdateUserRole(Guid id, [FromBody] UpdateUserRoleDto updateUserRoleDto)
         {
             if (updateUserRoleDto == null || string.IsNullOrWhiteSpace(updateUserRoleDto.Role))
@@ -79,7 +79,6 @@ namespace UserServiceApp.Controllers
                 return NotFound(new { message = "User not found." });
             }
 
-            // TODO: Dodaj walidację, czy updateUserRoleDto.Role jest jedną z dozwolonych ról
             user.Role = updateUserRoleDto.Role;
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
@@ -87,10 +86,9 @@ namespace UserServiceApp.Controllers
             _logger.LogInformation("User {UserId} role updated to {NewRole} by admin {AdminId}",
                 user.Id, user.Role, User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            return NoContent(); // Lub Ok(new UserDto(...)) jeśli chcesz zwrócić zaktualizowanego użytkownika
+            return NoContent(); 
         }
     }
 
-    // Dodaj to DTO, jeśli go nie masz
     public record UpdateUserRoleDto(string Role);
 }

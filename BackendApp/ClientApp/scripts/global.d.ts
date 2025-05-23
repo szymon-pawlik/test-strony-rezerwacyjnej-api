@@ -1,40 +1,37 @@
-// ClientApp/src/global.d.ts
-import { Apartment } from './types.js'; // Zaimportuj typ Apartment, jeśli jest używany
+// Import typu Apartment, jeśli jest potrzebny w deklaracjach globalnych
+import { Apartment } from './types.js';
 
+// Rozszerzenie globalnego interfejsu Window o funkcje dostępne w całej aplikacji
 declare global {
     interface Window {
-        // Funkcje z authService
-        loginUser?: () => Promise<void>;
-        logoutUser?: () => void;
-        submitRegistration?: () => Promise<void>;
+        // --- Funkcje związane z autoryzacją (z authService.js) ---
+        loginUser?: () => Promise<void>;               // Obsługuje logowanie użytkownika
+        logoutUser?: () => void;                      // Obsługuje wylogowywanie użytkownika
+        submitRegistration?: () => Promise<void>;     // Obsługuje proces rejestracji nowego użytkownika
 
-        // Funkcje z apartmentService
-        // fetchApartments?: () => Promise<void>; // Wywoływane przez router
-        submitNewApartment?: () => Promise<void>;
-        prepareEditApartmentForm?: (apartmentData: Apartment) => void; // apartmentData przychodzi jako obiekt
-        cancelEditApartment?: () => void;
-        submitUpdateApartment?: () => Promise<void>;
-        confirmDeleteApartment?: (apartmentDbId: string, apartmentName: string) => void;
-        // fetchApartmentsForSelect?: () => Promise<void>; // Raczej wywoływane wewnętrznie
+        // --- Funkcje ogólne / paginacja (prawdopodobnie z uiService.js lub router.js) ---
+        handleGenericPageChange?: (page: number, containerId: string) => void; // Obsługuje zmianę strony dla generycznych list paginowanych
 
-        // Funkcje z bookingService
-        calculateTotalPrice?: () => void;
-        submitBooking?: () => Promise<void>;
-        confirmDeleteBooking?: (bookingLocalGuid: string, bookingDescription: string) => void;
-        // fetchAndDisplayAllAdminBookings?: () => Promise<void>; // Wywoływane przez router
+        // --- Funkcje związane z mieszkaniami (z apartmentService.js) ---
+        submitNewApartment?: () => Promise<void>;      // Obsługuje dodawanie nowego mieszkania
+        prepareEditApartmentForm?: (apartmentData: Apartment) => void; // Przygotowuje formularz edycji danymi mieszkania
+        cancelEditApartment?: () => void;             // Anuluje edycję mieszkania
+        submitUpdateApartment?: () => Promise<void>;   // Obsługuje aktualizację danych mieszkania
+        confirmDeleteApartment?: (apartmentDbId: string, apartmentName: string) => void; // Potwierdza i inicjuje usunięcie mieszkania
 
-        // Funkcje z reviewService
-        submitReview?: () => Promise<void>;
-        confirmDeleteReview?: (reviewGlobalRelayId: string, reviewCommentSnippet: string) => void;
+        // --- Funkcje związane z rezerwacjami (z bookingService.js) ---
+        calculateTotalPrice?: () => void;             // Oblicza całkowitą cenę rezerwacji
+        submitBooking?: () => Promise<void>;          // Obsługuje tworzenie nowej rezerwacji
+        confirmDeleteBooking?: (bookingLocalGuid: string, bookingDescription: string) => void; // Potwierdza i inicjuje usunięcie rezerwacji
 
-        // Funkcje z profileService
-        // fetchMyProfile?: () => Promise<void>; // Wywoływane przez router
+        // --- Funkcje związane z recenzjami (prawdopodobnie z reviewService.js) ---
+        submitReview?: () => Promise<void>;           // Obsługuje dodawanie nowej recenzji
+        confirmDeleteReview?: (reviewGlobalRelayId: string, reviewCommentSnippet: string) => void; // Potwierdza i inicjuje usunięcie recenzji
 
-        // Funkcje z routera nie muszą być globalne, bo są wywoływane przez event listener hashchange
+        // --- Funkcje związane ze zgłoszeniami (ticketami) (prawdopodobnie z ticketService.js) ---
+        viewTicketDetails?: (ticketId: string) => void; // Wyświetla szczegóły zgłoszenia (dla admina)
+        viewMyTicketDetails?: (ticketId: string) => void; // Wyświetla szczegóły zgłoszenia (dla użytkownika)
+        
     }
 }
-
-// Ten pusty export jest potrzebny, aby TypeScript traktował ten plik jako moduł,
-// co jest konieczne, jeśli importujesz typy jak 'Apartment'.
-// Jeśli nie importujesz niczego w tym pliku, możesz to pominąć.
 export {};
