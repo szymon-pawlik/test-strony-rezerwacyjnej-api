@@ -1,0 +1,8 @@
+{
+  "id": "1c2543f7-cad3-4d10-a98d-b1642498ef79",
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "userId": "0d8d8a90-9d14-4c6f-84e8-ea278e7a2311",
+  "rating": 5,
+  "comment": "This is a test review from ReviewServiceApp using Rider HTTP Client!",
+  "reviewDate": "2025-05-20T15:46:02.4293806Z"
+}

@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "p/ZeaXKx4sqpCQoavBnVo/r+Z48HEf75AxyF5lBM3HE=",
+  "Source": "UserServiceApp",
+  "BasePath": "_content/UserServiceApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

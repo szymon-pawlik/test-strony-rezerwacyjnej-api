@@ -1,0 +1,13 @@
+{
+  "data": {
+    "addReview": {
+      "review": null,
+      "errors": [
+        {
+          "message": "User not authenticated or token is invalid.",
+          "code": "AUTH_ERROR"
+        }
+      ]
+    }
+  }
+}

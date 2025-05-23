@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "wDZEmPqHTjrVbg4VQ1yhZ39xeM2ronf2US14/6I77oI=",
+  "Source": "TicketServiceApp",
+  "BasePath": "_content/TicketServiceApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

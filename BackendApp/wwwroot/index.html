@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend dla BackendApp - Platforma Rezerwacyjna</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>Platforma Rezerwacyjna (Test API)</h1>
+    <nav>
+        <a href="#/" id="navLogin">Logowanie</a>
+        <a href="#/rejestracja" id="navRegister">Rejestracja</a>
+        <a href="#/mieszkania" id="navApartments">Mieszkania</a>
+        <a href="#/profil" id="navMyProfile" class="hidden-section">Mój Profil</a>
+        <a href="#/dodaj-recenzje" id="navAddReview" class="hidden-section">Dodaj Recenzję</a>
+        <a href="#/rezerwuj" id="navBookApartment" class="hidden-section">Zarezerwuj</a>
+        <a href="#/zglos-problem" id="navSubmitTicket" class="hidden-section">Zgłoś Problem</a>
+        <a href="#/moje-zgloszenia" id="navMyTickets" class="hidden-section">Moje Zgłoszenia</a>
+        <a href="#/dodaj-mieszkanie" id="navAddApartment" class="hidden-section admin-only">Dodaj Mieszkanie (Admin)</a>
+        <a href="#/admin/rezerwacje" id="navAdminBookings" class="hidden-section admin-only">Zarządzaj Rezerwacjami (Admin)</a>
+        <a href="#/admin/tickety" id="navAdminTickets" class="hidden-section admin-only">Zarządzaj Ticketami (Admin)</a>
+    </nav>
+</header>
+
+<main>
+    <div class="container" id="authStatusContainer">
+        <p>Status: <strong id="loginStatus">Niezalogowany</strong></p>
+        <p>Rola: <strong id="userRoleDisplay">-</strong></p>
+        <button id="logoutButton" class="hidden-section action-button-secondary">Wyloguj</button>
+    </div>
+
+    <div id="loginSectionContainer" class="container hidden-section">
+        <h2>Logowanie (REST API)</h2>
+        <form id="loginForm">
+            <div id="loginUserMessage" style="color: red; margin-bottom: 10px;"></div>
+            <label for="loginEmail">Email:</label><br>
+            <input type="email" id="loginEmail" value="jan.kowalski@example.com"><br>
+            <label for="loginPassword">Hasło:</label><br>
+            <input type="password" id="loginPassword" value="PasswordJan123!"><br>
+            <button type="submit" id="loginButton">Zaloguj</button>
+        </form>
+        <div class="admin-json-container">
+            <h3>Odpowiedź Logowania (JSON):</h3>
+            <pre id="loginResponseRaw">Tutaj pojawi się surowa odpowiedź logowania...</pre>
+        </div>
+    </div>
+
+    <div id="registerSection" class="container hidden-section">
+        <h2>Rejestracja Użytkownika (REST API)</h2>
+        <form id="registerForm">
+            <div>
+                <label for="registerName">Imię/Nazwa:</label><br>
+                <input type="text" id="registerName" required><br>
+            </div>
+            <div>
+                <label for="registerEmail">Email:</label><br>
+                <input type="email" id="registerEmail" required><br>
+            </div>
+            <div>
+                <label for="registerPassword">Hasło (min. 6 znaków):</label><br>
+                <input type="password" id="registerPassword" required><br>
+            </div>
+            <div>
+                <label for="registerConfirmPassword">Potwierdź Hasło:</label><br>
+                <input type="password" id="registerConfirmPassword" required><br>
+            </div>
+            <button type="submit">Zarejestruj</button>
+        </form>
+        <div class="admin-json-container">
+            <h3>Odpowiedź - Rejestracja:</h3>
+            <pre id="registerResponse">Tutaj pojawi się odpowiedź rejestracji...</pre>
+        </div>
+    </div>
+
+    <div id="submitTicketSection" class="container hidden-section">
+        <h2>Zgłoś Problem / Zadaj Pytanie</h2>
+        <form id="submitTicketForm">
+            <div>
+                <label for="ticketSubject">Temat:</label><br>
+                <input type="text" id="ticketSubject" required maxlength="200"><br>
+            </div>
+            <div>
+                <label for="ticketDescription">Opis Problemu/Pytania:</label><br>
+                <textarea id="ticketDescription" rows="5" required></textarea><br>
+            </div>
+            <button type="submit">Wyślij Zgłoszenie</button>
+        </form>
+        <div id="submitTicketResponse" style="margin-top: 15px;"></div>
+    </div>
+
+    <div id="adminManageTicketsSection" class="container hidden-section admin-only">
+        <h2>Zarządzanie Zgłoszeniami (Admin)</h2>
+        <div id="adminTicketsListFormatted" style="margin-top: 20px;">...</div>
+        <div id="adminTicketsPaginationControls"></div>
+    </div>
+
+    <div id="addApartmentSection" class="container hidden-section admin-only">
+        <h2>Dodaj Nowe Mieszkanie (GraphQL - Admin)</h2>
+        <form id="addApartmentForm">
+            <div>
+                <label for="apartmentName">Nazwa Mieszkania:</label><br>
+                <input type="text" id="apartmentName" required><br>
+            </div>
+            <div>
+                <label for="apartmentDescription">Opis:</label><br>
+                <textarea id="apartmentDescription" rows="3" required></textarea><br>
+            </div>
+            <div>
+                <label for="apartmentLocation">Lokalizacja:</label><br>
+                <input type="text" id="apartmentLocation" required><br>
+            </div>
+            <div>
+                <label for="apartmentBedrooms">Liczba Sypialni:</label><br>
+                <input type="number" id="apartmentBedrooms" min="0" value="1" required><br>
+            </div>
+            <div>
+                <label for="apartmentBathrooms">Liczba Łazienek:</label><br>
+                <input type="number" id="apartmentBathrooms" min="0" value="1" required><br>
+            </div>
+            <div>
+                <label for="apartmentAmenities">Udogodnienia (oddzielone przecinkami):</label><br>
+                <input type="text" id="apartmentAmenities" value="WiFi,Kuchnia,TV"><br>
+            </div>
+            <div>
+                <label for="apartmentIsAvailable">Dostępne:</label><br>
+                <input type="checkbox" id="apartmentIsAvailable" checked><br>
+            </div>
+            <div>
+                <label for="apartmentPrice">Cena za Noc:</label><br>
+                <input type="number" id="apartmentPrice" step="0.01" min="0" value="100" required><br>
+            </div>
+            <button type="submit">Dodaj Mieszkanie</button>
+        </form>
+        <div class="admin-json-container">
+            <h3>Odpowiedź - Dodawanie Mieszkania:</h3>
+            <pre id="addApartmentResponse">Tutaj pojawi się odpowiedź dodawania mieszkania...</pre>
+        </div>
+    </div>
+
+    <div id="editApartmentSection" class="container hidden-section">
+        <h2>Edytuj Mieszkanie (GraphQL - Admin)</h2>
+        <form id="editApartmentForm">
+            <input type="hidden" id="editApartmentId">
+            <div>
+                <label for="editApartmentName">Nazwa Mieszkania:</label><br>
+                <input type="text" id="editApartmentName" required><br>
+            </div>
+            <div>
+                <label for="editApartmentDescription">Opis:</label><br>
+                <textarea id="editApartmentDescription" rows="3" required></textarea><br>
+            </div>
+            <div>
+                <label for="editApartmentLocation">Lokalizacja:</label><br>
+                <input type="text" id="editApartmentLocation" required><br>
+            </div>
+            <div>
+                <label for="editApartmentBedrooms">Liczba Sypialni:</label><br>
+                <input type="number" id="editApartmentBedrooms" min="0" required><br>
+            </div>
+            <div>
+                <label for="editApartmentBathrooms">Liczba Łazienek:</label><br>
+                <input type="number" id="editApartmentBathrooms" min="0" required><br>
+            </div>
+            <div>
+                <label for="editApartmentAmenities">Udogodnienia (oddzielone przecinkami):</label><br>
+                <input type="text" id="editApartmentAmenities"><br>
+            </div>
+            <div>
+                <label for="editApartmentIsAvailable">Dostępne:</label><br>
+                <input type="checkbox" id="editApartmentIsAvailable"><br>
+            </div>
+            <div>
+                <label for="editApartmentPrice">Cena za Noc:</label><br>
+                <input type="number" id="editApartmentPrice" step="0.01" min="0" required><br>
+            </div>
+            <button type="submit">Zapisz Zmiany</button>
+            <button type="button" id="cancelEditApartmentButton" class="action-button-secondary" style="margin-left: 10px;">Anuluj</button>
+        </form>
+        <div class="admin-json-container">
+            <h3>Odpowiedź - Aktualizacja Mieszkania:</h3>
+            <pre id="editApartmentResponse">Tutaj pojawi się odpowiedź aktualizacji mieszkania...</pre>
+        </div>
+    </div>
+
+    <div id="addReviewSection" class="container hidden-section">
+        <h2>Dodaj Recenzję (GraphQL)</h2>
+        <form id="addReviewForm">
+            <div>
+                <label for="reviewApartmentSelect">Wybierz Mieszkanie:</label><br>
+                <select id="reviewApartmentSelect" required>
+                    <option value="">Ładowanie mieszkań...</option>
+                </select><br>
+            </div>
+            <div>
+                <label for="reviewRating">Ocena (1-5):</label><br>
+                <input type="number" id="reviewRating" min="1" max="5" value="5" required><br>
+            </div>
+            <div>
+                <label for="reviewComment">Komentarz:</label><br>
+                <textarea id="reviewComment" rows="3">To jest świetne mieszkanie z frontendu!</textarea><br>
+            </div>
+            <button type="submit">Dodaj Recenzję</button>
+        </form>
+        <div class="admin-json-container">
+            <h3>Odpowiedź - Dodawanie Recenzji:</h3>
+            <pre id="addReviewResponse">Tutaj pojawi się odpowiedź dodawania recenzji...</pre>
+        </div>
+    </div>
+
+    <div id="addBookingSection" class="container hidden-section">
+        <h2>Zarezerwuj Mieszkanie (REST API)</h2>
+        <form id="addBookingForm">
+            <div>
+                <label for="bookingApartmentSelect">Wybierz Mieszkanie:</label><br>
+                <select id="bookingApartmentSelect" required onchange="calculateTotalPrice()">
+                    <option value="">Ładowanie mieszkań...</option>
+                </select><br>
+            </div>
+            <div>
+                <label for="bookingCheckInDate">Data Zameldowania:</label><br>
+                <input type="date" id="bookingCheckInDate" required onchange="calculateTotalPrice()"><br>
+            </div>
+            <div>
+                <label for="bookingCheckOutDate">Data Wymeldowania:</label><br>
+                <input type="date" id="bookingCheckOutDate" required onchange="calculateTotalPrice()"><br>
+            </div>
+            <div>
+                <label for="bookingTotalPrice">Całkowita Cena:</label><br>
+                <input type="number" id="bookingTotalPrice" step="0.01" min="0" readonly required><br>
+            </div>
+            <button type="submit">Zarezerwuj</button>
+        </form>
+        <div class="admin-json-container">
+            <h3>Odpowiedź - Tworzenie Rezerwacji:</h3>
+            <pre id="addBookingResponse">Tutaj pojawi się odpowiedź tworzenia rezerwacji...</pre>
+        </div>
+    </div>
+
+    <div id="myProfileSection" class="container hidden-section">
+        <h2>Mój Profil (GraphQL)</h2>
+        <div id="myProfileFormatted">Tutaj pojawi się sformatowany profil użytkownika...</div>
+        <div class="admin-json-container">
+            <h3>Odpowiedź - Mój Profil (JSON):</h3>
+            <pre id="myProfileResponseRaw">Tutaj pojawi się surowy profil użytkownika...</pre>
+        </div>
+    </div>
+
+    <div id="apartmentsViewSection" class="container hidden-section">
+        <h2>Lista Mieszkań (graphql)</h2>
+        <div id="apartmentsListFormatted">Tutaj pojawi się sformatowana lista mieszkań...</div>
+        <div id="apartmentsPaginationControls"></div>
+        <div class="admin-json-container">
+            <h3>Odpowiedź-Mieszkania (JSON):</h3>
+            <pre id="apartmentsResponseRaw">Tutaj pojawi się surowa lista mieszkań...</pre>
+        </div>
+    </div>
+
+    <div id="adminManageBookingsSection" class="container hidden-section admin-only">
+        <h2>Zarządzanie Wszystkimi Rezerwacjami (Admin)</h2>
+        <div id="adminBookingsListFormatted" style="margin-top: 20px;">
+            <p style="text-align:center;">Proszę czekać, ładuję dane...</p>
+        </div>
+        <div class="admin-json-container">
+            <h3 style="margin-top: 30px;">Surowa Odpowiedź Serwera (JSON):</h3>
+            <pre id="adminBookingsResponseRaw" >Tutaj pojawi się surowa odpowiedź z listą wszystkich rezerwacji...</pre>
+        </div>
+    </div>
+
+    <div id="adminManageUsersSection" class="container hidden-section admin-only">
+        <h2>Zarządzanie Użytkownikami (Admin)</h2>
+        <div id="adminUsersListFormatted" style="margin-top: 20px;">
+            <p style="text-align:center;">Funkcjonalność w przygotowaniu...</p>
+        </div>
+        <div class="admin-json-container">
+            <h3 style="margin-top: 30px;">Surowa Odpowiedź Serwera (JSON):</h3>
+            <pre id="adminUsersResponseRaw" >Tutaj pojawi się surowa odpowiedź z listą użytkowników...</pre>
+        </div>
+    </div>
+
+    <div id="adminTicketDetailSection" class="container hidden-section admin-only">
+        <h2>Szczegóły Zgłoszenia (Admin)</h2>
+        <button id="backToTicketsListBtn" class="action-button-secondary" style="margin-bottom: 15px;">&laquo; Powrót do listy</button>
+        <div id="adminTicketDetailFormatted">
+            <p style="text-align:center;">Ładowanie szczegółów zgłoszenia...</p>
+        </div>
+        <div style="margin-top: 20px;">
+            <h3>Odpowiedz na zgłoszenie</h3>
+            <form id="adminReplyToTicketForm">
+                <input type="hidden" id="replyTicketId">
+                <div>
+                    <label for="adminTicketReplyText">Twoja odpowiedź:</label><br>
+                    <textarea id="adminTicketReplyText" rows="4" required></textarea>
+                </div>
+                <button type="submit">Wyślij Odpowiedź</button>
+            </form>
+            <div id="adminReplyTicketResponse" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="myTicketsSection" class="container hidden-section">
+        <h2>Moje Zgłoszenia</h2>
+        <div id="myTicketsListFormatted">
+            <p style="text-align:center;">Ładowanie Twoich zgłoszeń...</p>
+        </div>
+        <div id="myTicketsPaginationControls"></div>
+    </div>
+
+    <div id="myTicketDetailSection" class="container hidden-section">
+        <h2>Szczegóły Mojego Zgłoszenia</h2>
+        <button id="backToMyTicketsListBtn" class="action-button-secondary" style="margin-bottom: 15px;">&laquo; Powrót do moich zgłoszeń</button>
+        <div id="myTicketDetailFormatted">
+            <p style="text-align:center;">Ładowanie szczegółów zgłoszenia...</p>
+        </div>
+        <div style="margin-top: 20px;">
+            <h3>Odpowiedz na zgłoszenie</h3>
+            <form id="userReplyToTicketForm">
+                <input type="hidden" id="userReplyTicketId">
+                <div>
+                    <label for="userTicketReplyText">Twoja odpowiedź:</label><br>
+                    <textarea id="userTicketReplyText" rows="4" required></textarea>
+                </div>
+                <button type="submit">Wyślij Odpowiedź</button>
+            </form>
+            <div id="userReplyTicketResponse" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Platforma Rezerwacyjna</p>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

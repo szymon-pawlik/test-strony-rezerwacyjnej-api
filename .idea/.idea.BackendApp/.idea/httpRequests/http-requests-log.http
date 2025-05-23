@@ -1,0 +1,650 @@
+POST http://localhost:5235/api/users/login
+Authorization: Bearer eyJhbGciOiJIUzI1NifdfsfsdfIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI0OTJhNjNmOS00OTAxLTRlYjItYjgzYi1iNDNlOTMzOTcwY2UiLCJuYmYiOjE3NDc3NTQ1MDYsImV4cCI6MTc0Nzc1ODEwNiwiaWF0IjoxNzQ3NzU0NTA2LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.in0ULhaPU08dtxtCh1gUydJW1Awmpth0rDKBknatZXw
+Content-Type: application/json
+Content-Length: 65
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "avatar22321@gmail.com",
+  "password": "Admin123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 65
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "avatar22321@gmail.com",
+  "password": "Admin123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 65
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "avatar22321@gmail.com",
+  "password": "Admin123!"
+}
+
+###
+
+POST http://localhost:5235/graphql
+Content-Type: application/json
+Authorization: Bearer 
+Content-Length: 428
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "query": "mutation DodajRecenzjePrzezGraphQL ($input: AddReviewInput!) { addReview(input: $input) { review { id comment rating reviewDate user { id name } apartment { id name } } errors { message code } } }",
+  "variables": {
+    "input": {
+      "apartmentId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "rating": 4,
+      "comment": "Test recenzji przez GraphQL -> BackendApp -> ReviewServiceApp z tokenem!"
+    }
+  }
+}
+
+<> 2025-05-20T200611.200.json
+
+###
+
+POST http://localhost:5235/graphql
+Content-Type: application/json
+Authorization: Bearer 
+Content-Length: 428
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "query": "mutation DodajRecenzjePrzezGraphQL ($input: AddReviewInput!) { addReview(input: $input) { review { id comment rating reviewDate user { id name } apartment { id name } } errors { message code } } }",
+  "variables": {
+    "input": {
+      "apartmentId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "rating": 4,
+      "comment": "Test recenzji przez GraphQL -> BackendApp -> ReviewServiceApp z tokenem!"
+    }
+  }
+}
+
+<> 2025-05-20T200015.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T200011.200.json
+
+###
+
+POST http://localhost:5235/graphql
+Content-Type: application/json
+Authorization: Bearer 
+Content-Length: 488
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "query": "mutation DodajRecenzjePrzezGraphQL ($input: AddReviewInput!) { addReview(input: $input) { review { id comment rating reviewDate user { id name } apartment { id name } } errors { message code } } }",
+  "variables": {
+    "input": {
+      "apartmentId": "f47ac10b-58cc-4372-a567-0e02b2c3d479", # Użyj ID mieszkania, dla którego chcesz dodać recenzję
+      "rating": 4,
+      "comment": "Test recenzji przez GraphQL -> BackendApp -> ReviewServiceApp z tokenem!"
+    }
+  }
+}
+
+<> 2025-05-20T194018.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T194008.200.json
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI3ZGY0ZmU4NS0wNzE0LTQ1NTEtOWVmZC1jN2IwNzk3ZWRmNzQiLCJuYmYiOjE3NDc3NjI0NzAsImV4cCI6MTc0Nzc2NjA3MCwiaWF0IjoxNzQ3NzYyNDcwLCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.9GrEu23QJWxq9fYT7hh6_ar4V8JfwcBLJfyt4dpQwHI
+Content-Length: 115
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "F47AC10B-58CC-4372-A567-0E02B2C3D479",
+  "rating": 3,
+  "comment": "shitty with manual token"
+}
+
+<> 2025-05-20T193451.201.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T193430.200.json
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsI...itd...Twój_Pełny_Token_Tutaj
+Content-Length: 115
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "F47AC10B-58CC-4372-A567-0E02B2C3D479",
+  "rating": 3,
+  "comment": "shitty with manual token"
+}
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer 
+Content-Length: 97
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "F47AC10B-58CC-4372-A567-0E02B2C3D479",
+  "rating": 3,
+  "comment": "shitty"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T193335.200.json
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Content-Length: 149
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "F47AC10B-58CC-4372-A567-0E02B2C3D479",
+  "userId": "0d8d8a90-9d14-4c6f-84e8-ea278e7a2311",
+  "rating": 3,
+  "comment": "shitty"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T183838.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T181131.200.json
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI2ZjQ0MjhiOS0wMGRjLTRmOTItODY5NC1iMmNlZTNlOThjYWIiLCJuYmYiOjE3NDc3NTY0NzcsImV4cCI6MTc0Nzc2MDA3NywiaWF0IjoxNzQ3NzU2NDc3LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.qCnTJNsY6mp2334E8ZF55FOdsp8mNwuD-em4awLG7y0
+Content-Length: 164
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "rating": 5,
+  "comment": "Testing protected endpoint in ReviewServiceApp with token from BackendApp"
+}
+
+<> 2025-05-20T175824.201.json
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsgdfgdgInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI2ZjQ0MjhiOS0wMGRjLTRmOTItODY5NC1iMmNlZTNlOThjYWIiLCJuYmYiOjE3NDc3NTY0NzcsImV4cCI6MTc0Nzc2MDA3NywiaWF0IjoxNzQ3NzU2NDc3LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.qCnTJNsY6mp2334E8ZF55FOdsp8mNwuD-em4awLG7y0
+Content-Length: 164
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "rating": 5,
+  "comment": "Testing protected endpoint in ReviewServiceApp with token from BackendApp"
+}
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI2ZjQ0MjhiOS0wMGRjLTRmOTItODY5NC1iMmNlZTNlOThjYWIiLCJuYmYiOjE3NDc3NTY0NzcsImV4cCI6MTc0Nzc2MDA3NywiaWF0IjoxNzQ3NzU2NDc3LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.qCnTJNsY6mp2334E8ZF55FOdsp8mNwuD-em4awLG7y0
+Content-Length: 164
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "rating": 5,
+  "comment": "Testing protected endpoint in ReviewServiceApp with token from BackendApp"
+}
+
+<> 2025-05-20T175753.201.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T175437.200.json
+
+###
+
+POST http://localhost:5007/api/reviews
+Content-Type: application/json
+Content-Length: 211
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "userId": "0d8d8a90-9d14-4c6f-84e8-ea278e7a2311",
+  "rating": 5,
+  "comment": "This is a test review from ReviewServiceApp using Rider HTTP Client!"
+}
+
+<> 2025-05-20T174603.201.json
+
+###
+
+GET http://localhost:5235/api/apartments
+Authorization: Bearer eyJhbGciOiJIUzI1NifdfsfsdfIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI0OTJhNjNmOS00OTAxLTRlYjItYjgzYi1iNDNlOTMzOTcwY2UiLCJuYmYiOjE3NDc3NTQ1MDYsImV4cCI6MTc0Nzc1ODEwNiwiaWF0IjoxNzQ3NzU0NTA2LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.in0ULhaPU08dtxtCh1gUydJW1Awmpth0rDKBknatZXw
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+###
+
+GET http://localhost:5235/api/apartments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDhkOGE5MC05ZDE0LTRjNmYtODRlOC1lYTI3OGU3YTIzMTEiLCJlbWFpbCI6Imphbi5rb3dhbHNraUBleGFtcGxlLmNvbSIsIm5hbWUiOiJKYW4gS293YWxza2kiLCJqdGkiOiI0OTJhNjNmOS00OTAxLTRlYjItYjgzYi1iNDNlOTMzOTcwY2UiLCJuYmYiOjE3NDc3NTQ1MDYsImV4cCI6MTc0Nzc1ODEwNiwiaWF0IjoxNzQ3NzU0NTA2LCJpc3MiOiJodHRwczovL2Rldi5yZXplcnd1ai5jb20iLCJhdWQiOiJodHRwczovL2FwaS5kZXYucmV6ZXJ3dWouY29tIn0.in0ULhaPU08dtxtCh1gUydJW1Awmpth0rDKBknatZXw
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2025-05-20T172517.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T172146.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T171954.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T171158.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T170024.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T165518.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T165021.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T164328.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T164047.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+<> 2025-05-20T163034.200.json
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 73
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "anna.nowak@example.com",
+  "password": "PasswordAnna456!"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 119
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "$2a$11$/.7eynCJjJq6kQTb.lVkRe.mbR1GF6fKg59tJCRVlxSJSHxGVw3xC"
+}
+
+###
+
+POST http://localhost:5235/api/users/login
+Content-Type: application/json
+Content-Length: 74
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.2.8
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "jan.kowalski@example.com",
+  "password": "PasswordJan123!"
+}
+
+###
+

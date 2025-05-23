@@ -1,0 +1,149 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\apartmentService.js",
+      "PackagePath": "staticwebassets\\js\\apartmentService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\apartmentService.js.map",
+      "PackagePath": "staticwebassets\\js\\apartmentService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\authService.js",
+      "PackagePath": "staticwebassets\\js\\authService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\authService.js.map",
+      "PackagePath": "staticwebassets\\js\\authService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\bookingService.js",
+      "PackagePath": "staticwebassets\\js\\bookingService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\bookingService.js.map",
+      "PackagePath": "staticwebassets\\js\\bookingService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\config.js",
+      "PackagePath": "staticwebassets\\js\\config.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\config.js.map",
+      "PackagePath": "staticwebassets\\js\\config.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\main.js",
+      "PackagePath": "staticwebassets\\js\\main.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\main.js.map",
+      "PackagePath": "staticwebassets\\js\\main.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\profileService.js",
+      "PackagePath": "staticwebassets\\js\\profileService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\profileService.js.map",
+      "PackagePath": "staticwebassets\\js\\profileService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\reviewService.js",
+      "PackagePath": "staticwebassets\\js\\reviewService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\reviewService.js.map",
+      "PackagePath": "staticwebassets\\js\\reviewService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\router.js",
+      "PackagePath": "staticwebassets\\js\\router.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\router.js.map",
+      "PackagePath": "staticwebassets\\js\\router.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\state.js",
+      "PackagePath": "staticwebassets\\js\\state.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\state.js.map",
+      "PackagePath": "staticwebassets\\js\\state.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\ticketApiService.js",
+      "PackagePath": "staticwebassets\\js\\ticketApiService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\ticketApiService.js.map",
+      "PackagePath": "staticwebassets\\js\\ticketApiService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\ticketService.js",
+      "PackagePath": "staticwebassets\\js\\ticketService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\ticketService.js.map",
+      "PackagePath": "staticwebassets\\js\\ticketService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\types.js",
+      "PackagePath": "staticwebassets\\js\\types.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\types.js.map",
+      "PackagePath": "staticwebassets\\js\\types.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\uiService.js",
+      "PackagePath": "staticwebassets\\js\\uiService.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\uiService.js.map",
+      "PackagePath": "staticwebassets\\js\\uiService.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\utils.js",
+      "PackagePath": "staticwebassets\\js\\utils.js"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\js\\utils.js.map",
+      "PackagePath": "staticwebassets\\js\\utils.js.map"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\styles.css",
+      "PackagePath": "staticwebassets\\styles.css"
+    },
+    {
+      "Id": "C:\\Users\\avata\\RiderProjects\\BackendApp\\BackendApp\\wwwroot\\styles.css.map",
+      "PackagePath": "staticwebassets\\styles.css.map"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.BackendApp.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.BackendApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.BackendApp.props",
+      "PackagePath": "build\\BackendApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.BackendApp.props",
+      "PackagePath": "buildMultiTargeting\\BackendApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.BackendApp.props",
+      "PackagePath": "buildTransitive\\BackendApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

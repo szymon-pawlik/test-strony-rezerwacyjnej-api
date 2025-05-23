@@ -1,0 +1,32 @@
+{
+  "name": "clientapp",
+  "version": "1.0.0",
+  "description": "Frontend application",
+  "main": "dist/js/main.js", 
+  "scripts": {
+    "build:ts": "npx tsc",
+    "watch:ts": "npx tsc --watch",
+
+    "copy:html": "copyfiles -V -f public/index.html ../wwwroot",
+    "copy:images": "copyfiles -V public/images/**/*.* ../wwwroot/images", 
+    
+    "build:scss": "sass public/scss/main.scss ../wwwroot/styles.css --style=compressed",
+    "watch:scss": "sass --watch public/scss/main.scss:../wwwroot/styles.css",
+
+    "build:static": "npm run copy:html && npm run copy:images",
+
+    "watch:html": "onchange \"public/index.html\" -- npm run copy:html",
+    "watch:images": "onchange \"public/images/**/*.*\" -- npm run copy:images", 
+    
+    "dev": "concurrently \"npm:watch:ts\" \"npm:watch:html\" \"npm:watch:images\" \"npm:watch:scss\"",
+    "build": "npm run build:ts && npm run build:scss && npm run build:static",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "copyfiles": "^2.4.1",
+    "onchange": "^7.1.0",
+    "sass": "^1.70.0",
+    "typescript": "^5.3.3"
+  }
+}

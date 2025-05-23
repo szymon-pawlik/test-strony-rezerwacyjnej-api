@@ -1,0 +1,49 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "Cozy Studio in Downtown",
+    "description": "A cozy studio apartment in the heart of the city.",
+    "location": "New York, NY",
+    "numberOfBedrooms": 1,
+    "numberOfBathrooms": 1,
+    "amenities": [
+      "WiFi",
+      "Kitchen",
+      "TV"
+    ],
+    "isAvailable": true,
+    "pricePerNight": 120
+  },
+  {
+    "id": "98f1b22d-6f82-4c07-9e13-29a2a20d3b41",
+    "name": "Charming Cottage by the Lake",
+    "description": "A peaceful cottage perfect for a weekend getaway.",
+    "location": "Lake Placid, NY",
+    "numberOfBedrooms": 3,
+    "numberOfBathrooms": 1,
+    "amenities": [
+      "WiFi",
+      "Fireplace",
+      "Lake Access",
+      "Pet-friendly"
+    ],
+    "isAvailable": false,
+    "pricePerNight": 180
+  },
+  {
+    "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "name": "Sunny Loft with River View",
+    "description": "Spacious and bright loft with a beautiful view of the river.",
+    "location": "Brooklyn, NY",
+    "numberOfBedrooms": 2,
+    "numberOfBathrooms": 2,
+    "amenities": [
+      "WiFi",
+      "Air Conditioning",
+      "Balcony",
+      "Gym Access"
+    ],
+    "isAvailable": true,
+    "pricePerNight": 250
+  }
+]

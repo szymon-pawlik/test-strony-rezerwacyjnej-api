@@ -1,0 +1,8 @@
+{
+  "id": "9623616f-3851-4b14-95c4-e3cce8c7b44d",
+  "apartmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "userId": "0d8d8a90-9d14-4c6f-84e8-ea278e7a2311",
+  "rating": 5,
+  "comment": "Testing protected endpoint in ReviewServiceApp with token from BackendApp",
+  "reviewDate": "2025-05-20T15:58:23.9995365Z"
+}
