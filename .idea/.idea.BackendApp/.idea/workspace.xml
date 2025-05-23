@@ -20,92 +20,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cc5fda0-ac0f-4d91-9a9b-e17a83355d0d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/ticketApiService.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/ticketService.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/ApartmentMutations.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/BookingMutations.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/ReviewMutations.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/UserMutations.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Controllers/TicketsController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/DTOs/CreateTicketDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/DTOs/CreateTicketReplyDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/DTOs/TicketDetailDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/DTOs/TicketReplyDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/TicketDbContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/TicketDbContextFactory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Model/Ticket.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Model/TicketReply.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Model/UserRoles.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/20250523000503_InitialTicketSchema.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/20250523000503_InitialTicketSchema.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/20250523011910_AddTicketReplies.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/20250523011910_AddTicketReplies.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/20250523014134_AddTicketReplies2.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/20250523014134_AddTicketReplies2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Data/Migrations/TicketDbContextModelSnapshot.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Program.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/Properties/launchSettings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/TicketServiceApp.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/appsettings.Development.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/appsettings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TicketServiceApp/tickets.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BackendApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp.sln" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/BackendApp.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/public/scss/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/public/scss/main.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/apartmentService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/apartmentService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/authService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/bookingService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/bookingService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/global.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/global.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/profileService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/profileService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/reviewService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/reviewService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/router.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/state.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/state.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/uiService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/uiService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/ClientApp/scripts/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Controllers/ApartmentsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Controllers/ApartmentsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Controllers/BookingsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Controllers/BookingsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Controllers/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Controllers/UsersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/ApartmentDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/ApartmentDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/BookingDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/BookingDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/CreateBookingDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/CreateBookingDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/DTOs/RegisterUserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/DTOs/RegisterUserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Data/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Data/DataStore.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Extensions/AuthenticationSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Extensions/AuthenticationSetup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Extensions/AuthorizationSetupExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Extensions/AuthorizationSetupExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Extensions/DependencyInjection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Extensions/DependencyInjection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Extensions/GraphQLSetupExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Extensions/GraphQLSetupExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Extensions/MiddlewarePipelineSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Extensions/MiddlewarePipelineSetup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/ApartmentInputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/ApartmentInputs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/BookingInputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/BookingInputs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/UserInputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Inputs/UserInputs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Mutation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Mutations/Mutation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Payloads/ReviewPayloads.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Payloads/ReviewPayloads.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Queries/Query.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Queries/Query.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ApartmentType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ApartmentType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/BookingType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/BookingType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ReviewType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/ReviewType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/GraphQL/Types/UserType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/GraphQL/Types/UserType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Models/Apartment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Apartment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Models/Review.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Models/Review.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/ApartmentService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/ApartmentService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/BookingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/BookingService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/PasswordHasher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/PasswordHasher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/ReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/ReviewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/TokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/Validators/RegisterUserDtoValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/Validators/RegisterUserDtoValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/interface/IBookingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/interface/IBookingService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackendApp/interface/IReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackendApp/interface/IReviewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/Controllers/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/Controllers/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/Controllers/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/Controllers/UsersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/DTOs/CreateUserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/DTOs/CreateUserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/DTOs/LoginRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/DTOs/LoginRequestDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/DTOs/LoginResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/DTOs/LoginResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/DTOs/UserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/DTOs/UserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/Data/UserDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/Data/UserDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/Services/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/Services/AuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserServiceApp/Services/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/UserServiceApp/Services/IAuthService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager" show_ignored="true" />
   <component name="DpaMonitoringSettings">
     <option name="autoShow" value="false" />
   </component>
@@ -163,7 +98,8 @@
     &quot;.NET Launch Settings Profile.BackendApp.executor&quot;: &quot;Run&quot;,
     &quot;.NET Launch Settings Profile.BackendApp: IIS Express.executor&quot;: &quot;Run&quot;,
     &quot;.NET Launch Settings Profile.BackendApp: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.ReviewServiceApp: http.executor&quot;: &quot;Debug&quot;,
+    &quot;.NET Launch Settings Profile.ReviewServiceApp: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.TicketServiceApp: http.executor&quot;: &quot;Run&quot;,
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Compound.Run Full Project.executor&quot;: &quot;Debug&quot;,
@@ -194,6 +130,7 @@
   <component name="RunManager" selected="Compound.Run Full Project">
     <configuration name="Run Full Project" type="CompoundRunConfigurationType">
       <toRun name="BackendApp: http" type="LaunchSettings" />
+      <toRun name="TicketServiceApp: http" type="LaunchSettings" />
       <toRun name="ClientApp Dev" type="js.build_tools.npm" />
       <method v="2" />
     </configuration>
@@ -351,7 +288,7 @@
       </method>
     </configuration>
     <configuration name="TicketServiceApp: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/TicketServiceApp /TicketServiceApp.csproj" />
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/TicketServiceApp/TicketServiceApp.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
       <option name="LAUNCH_PROFILE_NAME" value="http" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -491,7 +428,8 @@
       <workItem from="1747874608865" duration="13195000" />
       <workItem from="1747915828553" duration="27377000" />
       <workItem from="1747955954785" duration="2388000" />
-      <workItem from="1747958358636" duration="15803000" />
+      <workItem from="1747958358636" duration="16420000" />
+      <workItem from="1747994552929" duration="300000" />
     </task>
     <task id="LOCAL-00001" summary="lab 5 i 6">
       <option name="closed" value="true" />
@@ -533,7 +471,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747943329331</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="ticket system + comments final">
+      <option name="closed" value="true" />
+      <created>1747974480679</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747974480679</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -555,6 +501,7 @@
     <MESSAGE value="wersja 1.0" />
     <MESSAGE value="v2" />
     <MESSAGE value="v2.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.0" />
+    <MESSAGE value="ticket system + comments final" />
+    <option name="LAST_COMMIT_MESSAGE" value="ticket system + comments final" />
   </component>
 </project>
